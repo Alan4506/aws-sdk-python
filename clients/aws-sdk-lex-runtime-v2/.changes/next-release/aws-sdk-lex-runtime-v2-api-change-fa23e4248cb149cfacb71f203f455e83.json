@@ -1,0 +1,4 @@
+{
+  "type": "api-change",
+  "description": "Initial client release with support for current Amazon Lex Runtime V2 operations."
+}
