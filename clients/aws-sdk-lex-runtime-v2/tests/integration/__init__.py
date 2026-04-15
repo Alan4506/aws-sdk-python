@@ -1,16 +1,14 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import os
-
 from smithy_aws_core.identity import EnvironmentCredentialsResolver
 
 from aws_sdk_lex_runtime_v2.client import LexRuntimeV2Client
 from aws_sdk_lex_runtime_v2.config import Config
 
-BOT_ID = os.environ["LEX_BOT_ID"]
 BOT_ALIAS_ID = "TSTALIASID"
 LOCALE_ID = "en_US"
+REGION = "us-east-1"
 
 
 def create_lex_client(region: str) -> LexRuntimeV2Client:

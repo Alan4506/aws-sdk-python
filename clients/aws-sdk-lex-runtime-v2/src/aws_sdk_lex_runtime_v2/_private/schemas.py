@@ -2920,3 +2920,11 @@ ELICIT_SUB_SLOT.members["subSlotToElicit"] = Schema.member(
     target=ELICIT_SUB_SLOT,
     index=1,
 )
+
+SLOT.members["values"] = Schema.member(
+    id=SLOT.id.with_member("values"), target=VALUES, index=2
+)
+
+SLOT.members["subSlots"] = Schema.member(
+    id=SLOT.id.with_member("subSlots"), target=SLOTS, index=3
+)
