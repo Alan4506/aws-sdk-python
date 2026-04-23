@@ -9,14 +9,16 @@ test session. All integration tests receive the bot_id via the
 """
 
 import json
+import uuid
 
 import boto3
 import pytest
 
 from . import LOCALE_ID, REGION
 
-ROLE_NAME = "LexRuntimeV2IntegrationTestRole"
-BOT_NAME = "smithy-python-integ-test-bot"
+_UNIQUE_SUFFIX = uuid.uuid4().hex
+ROLE_NAME = f"LexRuntimeV2IntegTestRole-{_UNIQUE_SUFFIX}"
+BOT_NAME = f"smithy-python-integ-test-bot-{_UNIQUE_SUFFIX}"
 
 
 def _create_lex_bot() -> str:
