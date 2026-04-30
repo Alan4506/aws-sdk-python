@@ -1,22 +1,11 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Test non-streaming output type handling.
-
-This test requires AWS resources (an IAM role and an S3 bucket).
-To set them up locally, run:
-
-    uv run scripts/setup_resources.py
-
-Then export the environment variables shown in the output.
-"""
+"""Test non-streaming output type handling using Medical Scribe."""
 
 import asyncio
-import os
 import time
 import uuid
-
-import pytest
 
 from aws_sdk_transcribe_streaming.models import (
     ClinicalNoteGenerationSettings,
@@ -43,12 +32,11 @@ CHANNEL_NUMS = 1
 CHUNK_SIZE = 1024 * 8
 
 
-async def test_get_medical_scribe_stream() -> None:
-    role_arn = os.environ.get("HEALTHSCRIBE_ROLE_ARN")
-    s3_bucket = os.environ.get("HEALTHSCRIBE_S3_BUCKET")
-
-    if not role_arn or not s3_bucket:
-        pytest.fail("HEALTHSCRIBE_ROLE_ARN or HEALTHSCRIBE_S3_BUCKET not set")
+async def test_get_medical_scribe_stream(
+    healthscribe_resources: tuple[str, str],
+) -> None:
+    """Test non-streaming GetMedicalScribeStream operation."""
+    role_arn, s3_bucket = healthscribe_resources
 
     transcribe_client = create_transcribe_client("us-east-1")
     session_id = str(uuid.uuid4())
