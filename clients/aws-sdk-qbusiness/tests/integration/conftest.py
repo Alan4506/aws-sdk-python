@@ -138,12 +138,14 @@ def _create_qbusiness_app() -> str:
     return app_id
 
 
-def _delete_qbusiness_app(app_id: str) -> None:
+def _delete_qbusiness_app(app_id: str | None) -> None:
     """Delete a Q Business application.
 
     Args:
-        app_id: The application ID to delete.
+        app_id: The application ID to delete, or None if creation failed.
     """
+    if not app_id:
+        return
     qbusiness = boto3.client("qbusiness", region_name=REGION)
     qbusiness.delete_application(applicationId=app_id)
 
@@ -151,6 +153,9 @@ def _delete_qbusiness_app(app_id: str) -> None:
 @pytest.fixture(scope="session")
 def qbusiness_app():
     """Create a Q Business application for the test session and delete it after."""
-    app_id = _create_qbusiness_app()
-    yield app_id
-    _delete_qbusiness_app(app_id)
+    app_id = None
+    try:
+        app_id = _create_qbusiness_app()
+        yield app_id
+    finally:
+        _delete_qbusiness_app(app_id)

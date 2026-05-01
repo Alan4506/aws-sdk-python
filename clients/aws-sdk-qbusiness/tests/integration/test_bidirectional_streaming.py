@@ -45,6 +45,8 @@ async def _send_chat_events(
         ChatInputStreamEndOfInputEvent(value=EndOfInputEvent())
     )
 
+    # Brief delay before closing the stream to ensure the service has time
+    # to process all input events and begin generating output.
     await asyncio.sleep(1)
     await stream.input_stream.close()
 
