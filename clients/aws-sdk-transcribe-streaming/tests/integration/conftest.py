@@ -112,6 +112,8 @@ def _delete_healthscribe_resources() -> None:
 @pytest.fixture(scope="session")
 def healthscribe_resources():
     """Create HealthScribe resources for the test session and delete them after."""
-    role_arn, bucket_name = _create_healthscribe_resources()
-    yield role_arn, bucket_name
-    _delete_healthscribe_resources()
+    try:
+        role_arn, bucket_name = _create_healthscribe_resources()
+        yield role_arn, bucket_name
+    finally:
+        _delete_healthscribe_resources()
