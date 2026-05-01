@@ -111,16 +111,17 @@ def _create_lex_bot() -> str:
     return bot_id
 
 
-def _delete_lex_bot(bot_id: str) -> None:
+def _delete_lex_bot(bot_id: str | None) -> None:
     """Delete a Lex V2 bot and its associated IAM role.
 
     Args:
-        bot_id: The bot ID to delete.
+        bot_id: The bot ID to delete, or None if creation failed.
     """
     lex = boto3.client("lexv2-models", region_name=REGION)
     iam = boto3.client("iam")
 
-    lex.delete_bot(botId=bot_id, skipResourceInUseCheck=True)
+    if bot_id:
+        lex.delete_bot(botId=bot_id, skipResourceInUseCheck=True)
 
     try:
         iam.delete_role(RoleName=ROLE_NAME)
@@ -131,6 +132,9 @@ def _delete_lex_bot(bot_id: str) -> None:
 @pytest.fixture(scope="session")
 def lex_bot():
     """Create a Lex bot for the test session and delete it after."""
-    bot_id = _create_lex_bot()
-    yield bot_id
-    _delete_lex_bot(bot_id)
+    bot_id = None
+    try:
+        bot_id = _create_lex_bot()
+        yield bot_id
+    finally:
+        _delete_lex_bot(bot_id)
