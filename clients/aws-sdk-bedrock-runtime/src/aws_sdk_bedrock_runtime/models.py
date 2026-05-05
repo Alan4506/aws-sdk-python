@@ -461,7 +461,9 @@ class _AsyncInvokeOutputDataConfigDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    AsyncInvokeOutputDataConfigUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: AsyncInvokeOutputDataConfig) -> None:
         if self._result is not None:
@@ -1662,7 +1664,9 @@ class _GuardrailImageSourceDeserializer:
                 self._set_result(GuardrailImageSourceBytes.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    GuardrailImageSourceUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: GuardrailImageSource) -> None:
         if self._result is not None:
@@ -1905,7 +1909,9 @@ class _GuardrailContentBlockDeserializer:
                 self._set_result(GuardrailContentBlockImage.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    GuardrailContentBlockUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: GuardrailContentBlock) -> None:
         if self._result is not None:
@@ -3739,7 +3745,11 @@ class _GuardrailAutomatedReasoningFindingDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    GuardrailAutomatedReasoningFindingUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: GuardrailAutomatedReasoningFinding) -> None:
         if self._result is not None:
@@ -6106,7 +6116,7 @@ class _AudioSourceDeserializer:
                 self._set_result(AudioSourceS3Location.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(AudioSourceUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: AudioSource) -> None:
         if self._result is not None:
@@ -6766,7 +6776,9 @@ class _CitationLocationDeserializer:
                 self._set_result(CitationLocationSearchResultLocation.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    CitationLocationUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: CitationLocation) -> None:
         if self._result is not None:
@@ -6850,7 +6862,9 @@ class _CitationSourceContentDeserializer:
                 self._set_result(CitationSourceContentText.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    CitationSourceContentUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: CitationSourceContent) -> None:
         if self._result is not None:
@@ -7074,7 +7088,9 @@ class _CitationGeneratedContentDeserializer:
                 self._set_result(CitationGeneratedContentText.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    CitationGeneratedContentUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: CitationGeneratedContent) -> None:
         if self._result is not None:
@@ -7305,7 +7321,9 @@ class _DocumentContentBlockDeserializer:
                 self._set_result(DocumentContentBlockText.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    DocumentContentBlockUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: DocumentContentBlock) -> None:
         if self._result is not None:
@@ -7493,7 +7511,7 @@ class _DocumentSourceDeserializer:
                 self._set_result(DocumentSourceContent.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(DocumentSourceUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: DocumentSource) -> None:
         if self._result is not None:
@@ -7683,7 +7701,9 @@ class _GuardrailConverseImageSourceDeserializer:
                 self._set_result(GuardrailConverseImageSourceBytes.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    GuardrailConverseImageSourceUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: GuardrailConverseImageSource) -> None:
         if self._result is not None:
@@ -7944,7 +7964,11 @@ class _GuardrailConverseContentBlockDeserializer:
                 self._set_result(GuardrailConverseContentBlockImage.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    GuardrailConverseContentBlockUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: GuardrailConverseContentBlock) -> None:
         if self._result is not None:
@@ -8053,7 +8077,7 @@ class _ImageSourceDeserializer:
                 self._set_result(ImageSourceS3Location.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ImageSourceUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: ImageSource) -> None:
         if self._result is not None:
@@ -8273,7 +8297,9 @@ class _ReasoningContentBlockDeserializer:
                 self._set_result(ReasoningContentBlockRedactedContent.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ReasoningContentBlockUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ReasoningContentBlock) -> None:
         if self._result is not None:
@@ -8528,7 +8554,7 @@ class _VideoSourceDeserializer:
                 self._set_result(VideoSourceS3Location.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(VideoSourceUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: VideoSource) -> None:
         if self._result is not None:
@@ -8784,7 +8810,9 @@ class _ToolResultContentBlockDeserializer:
                 self._set_result(ToolResultContentBlockSearchResult.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ToolResultContentBlockUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ToolResultContentBlock) -> None:
         if self._result is not None:
@@ -9323,7 +9351,7 @@ class _ContentBlockDeserializer:
                 self._set_result(ContentBlockSearchResult.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ContentBlockUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: ContentBlock) -> None:
         if self._result is not None:
@@ -9585,7 +9613,9 @@ class _OutputFormatStructureDeserializer:
                 self._set_result(OutputFormatStructureJsonSchema.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    OutputFormatStructureUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: OutputFormatStructure) -> None:
         if self._result is not None:
@@ -9809,7 +9839,9 @@ class _PromptVariableValuesDeserializer:
                 self._set_result(PromptVariableValuesText.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    PromptVariableValuesUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: PromptVariableValues) -> None:
         if self._result is not None:
@@ -10049,7 +10081,9 @@ class _SystemContentBlockDeserializer:
                 self._set_result(SystemContentBlockCachePoint.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    SystemContentBlockUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: SystemContentBlock) -> None:
         if self._result is not None:
@@ -10311,7 +10345,7 @@ class _ToolChoiceDeserializer:
                 self._set_result(ToolChoiceTool.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ToolChoiceUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: ToolChoice) -> None:
         if self._result is not None:
@@ -10432,7 +10466,9 @@ class _ToolInputSchemaDeserializer:
                 self._set_result(ToolInputSchemaJson.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ToolInputSchemaUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ToolInputSchema) -> None:
         if self._result is not None:
@@ -10628,7 +10664,7 @@ class _ToolDeserializer:
                 self._set_result(ToolCachePoint.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ToolUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: Tool) -> None:
         if self._result is not None:
@@ -11106,7 +11142,7 @@ class _ConverseOutputDeserializer:
                 self._set_result(ConverseOutputMessage.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ConverseOutputUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: ConverseOutput) -> None:
         if self._result is not None:
@@ -12648,7 +12684,9 @@ class _ReasoningContentBlockDeltaDeserializer:
                 self._set_result(ReasoningContentBlockDeltaSignature.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ReasoningContentBlockDeltaUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ReasoningContentBlockDelta) -> None:
         if self._result is not None:
@@ -12764,7 +12802,9 @@ class _ToolResultBlockDeltaDeserializer:
                 self._set_result(ToolResultBlockDeltaJson.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ToolResultBlockDeltaUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ToolResultBlockDelta) -> None:
         if self._result is not None:
@@ -13034,7 +13074,9 @@ class _ContentBlockDeltaDeserializer:
                 self._set_result(ContentBlockDeltaImage.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ContentBlockDeltaUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ContentBlockDelta) -> None:
         if self._result is not None:
@@ -13380,7 +13422,9 @@ class _ContentBlockStartDeserializer:
                 self._set_result(ContentBlockStartImage.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ContentBlockStartUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ContentBlockStart) -> None:
         if self._result is not None:
@@ -14139,7 +14183,9 @@ class _ConverseStreamOutputDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ConverseStreamOutputUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ConverseStreamOutput) -> None:
         if self._result is not None:
@@ -14712,7 +14758,11 @@ class _InvokeModelWithBidirectionalStreamInputDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    InvokeModelWithBidirectionalStreamInputUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: InvokeModelWithBidirectionalStreamInput) -> None:
         if self._result is not None:
@@ -15096,7 +15146,11 @@ class _InvokeModelWithBidirectionalStreamOutputDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    InvokeModelWithBidirectionalStreamOutputUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: InvokeModelWithBidirectionalStreamOutput) -> None:
         if self._result is not None:
@@ -15704,7 +15758,7 @@ class _ResponseStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(ResponseStreamUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: ResponseStream) -> None:
         if self._result is not None:
@@ -16101,7 +16155,9 @@ class _CountTokensInputDeserializer:
                 self._set_result(CountTokensInputConverse.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    CountTokensInputUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: CountTokensInput) -> None:
         if self._result is not None:

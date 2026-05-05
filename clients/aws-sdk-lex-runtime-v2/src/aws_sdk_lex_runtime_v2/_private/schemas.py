@@ -2901,14 +2901,14 @@ AWS_DEEP_SENSE_RUN_TIME_SERVICE_API2_0 = Schema(
     ],
 )
 
-SLOT.members["values"] = Schema.member(
-    id=SLOT.id.with_member("values"), target=VALUES, index=2
-)
-
 RUNTIME_HINT_DETAILS.members["subSlotHints"] = Schema.member(
     id=RUNTIME_HINT_DETAILS.id.with_member("subSlotHints"),
     target=SLOT_HINTS_SLOT_MAP,
     index=1,
+)
+
+SLOT.members["values"] = Schema.member(
+    id=SLOT.id.with_member("values"), target=VALUES, index=2
 )
 
 SLOT.members["subSlots"] = Schema.member(
