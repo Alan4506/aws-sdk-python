@@ -329,7 +329,9 @@ class _RequestStreamEventDeserializer:
                 self._set_result(RequestStreamEventPayloadPart.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    RequestStreamEventUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: RequestStreamEvent) -> None:
         if self._result is not None:
@@ -690,7 +692,9 @@ class _ResponseStreamEventDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    ResponseStreamEventUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: ResponseStreamEvent) -> None:
         if self._result is not None:

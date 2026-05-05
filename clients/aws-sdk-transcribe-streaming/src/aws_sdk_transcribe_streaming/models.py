@@ -964,7 +964,7 @@ class _AudioStreamDeserializer:
                 self._set_result(AudioStreamConfigurationEvent.deserialize(de))
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(AudioStreamUnknown(tag=schema.expect_member_name()))
 
     def _set_result(self, value: AudioStream) -> None:
         if self._result is not None:
@@ -2474,7 +2474,11 @@ class _CallAnalyticsTranscriptResultStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    CallAnalyticsTranscriptResultStreamUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: CallAnalyticsTranscriptResultStream) -> None:
         if self._result is not None:
@@ -4816,7 +4820,9 @@ class _MedicalScribeInputStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    MedicalScribeInputStreamUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: MedicalScribeInputStream) -> None:
         if self._result is not None:
@@ -5391,7 +5397,9 @@ class _MedicalScribeResultStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    MedicalScribeResultStreamUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: MedicalScribeResultStream) -> None:
         if self._result is not None:
@@ -5739,7 +5747,11 @@ class _MedicalTranscriptResultStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    MedicalTranscriptResultStreamUnknown(
+                        tag=schema.expect_member_name()
+                    )
+                )
 
     def _set_result(self, value: MedicalTranscriptResultStream) -> None:
         if self._result is not None:
@@ -8792,7 +8804,9 @@ class _TranscriptResultStreamDeserializer:
                 )
 
             case _:
-                logger.debug("Unexpected member schema: %s", schema)
+                self._set_result(
+                    TranscriptResultStreamUnknown(tag=schema.expect_member_name())
+                )
 
     def _set_result(self, value: TranscriptResultStream) -> None:
         if self._result is not None:
