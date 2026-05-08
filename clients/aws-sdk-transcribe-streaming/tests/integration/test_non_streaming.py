@@ -8,6 +8,7 @@ import time
 import uuid
 
 from aws_sdk_transcribe_streaming.models import (
+    BadRequestException,
     ClinicalNoteGenerationSettings,
     GetMedicalScribeStreamInput,
     GetMedicalScribeStreamOutput,
@@ -31,13 +32,14 @@ BYTES_PER_SAMPLE = 2
 CHANNEL_NUMS = 1
 CHUNK_SIZE = 1024 * 8
 
+# Maximum time to wait for IAM role propagation across services.
+ROLE_PROPAGATION_TIMEOUT = 300
+# Delay between retries while waiting for IAM role propagation.
+ROLE_PROPAGATION_RETRY_DELAY = 5
 
-async def test_get_medical_scribe_stream(
-    healthscribe_resources: tuple[str, str],
-) -> None:
-    """Test non-streaming GetMedicalScribeStream operation."""
-    role_arn, s3_bucket = healthscribe_resources
 
+async def _run_medical_scribe_session(role_arn: str, s3_bucket: str) -> None:
+    """Run a full Medical Scribe streaming session and verify its completion."""
     transcribe_client = create_transcribe_client("us-east-1")
     session_id = str(uuid.uuid4())
 
@@ -109,3 +111,23 @@ async def test_get_medical_scribe_stream(
     assert details.language_code == "en-US"
     assert details.media_encoding == "pcm"
     assert details.media_sample_rate_hertz == SAMPLE_RATE
+
+
+async def test_get_medical_scribe_stream(
+    healthscribe_resources: tuple[str, str],
+) -> None:
+    """Test non-streaming GetMedicalScribeStream operation.
+
+    IAM is eventually consistent, so Transcribe may not be able to assume the
+    newly created role immediately. Retry on BadRequestException until the
+    role has propagated, or until the timeout is reached.
+    """
+    role_arn, s3_bucket = healthscribe_resources
+
+    async with asyncio.timeout(ROLE_PROPAGATION_TIMEOUT):
+        while True:
+            try:
+                await _run_medical_scribe_session(role_arn, s3_bucket)
+                return
+            except BadRequestException:
+                await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)

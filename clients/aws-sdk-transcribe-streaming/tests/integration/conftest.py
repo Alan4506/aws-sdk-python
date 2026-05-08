@@ -9,7 +9,6 @@ fixture provides the role ARN and bucket name.
 """
 
 import json
-import time
 import uuid
 from typing import Any
 
@@ -17,13 +16,16 @@ import boto3
 import pytest
 
 REGION = "us-east-1"
-_UNIQUE_SUFFIX = uuid.uuid4().hex
-ROLE_NAME = f"HealthScribeIntegTestRole-{_UNIQUE_SUFFIX}"
-BUCKET_NAME = f"healthscribe-integ-test-{_UNIQUE_SUFFIX}"
 
 
 def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
-    """Create an IAM role with S3 PutObject access for Transcribe Streaming."""
+    """Create an IAM role with S3 PutObject access for Transcribe Streaming.
+
+    Args:
+        iam_client: A boto3 IAM client.
+        role_name: The name of the IAM role to create.
+        bucket_name: The name of the S3 bucket the role is allowed to write to.
+    """
     trust_policy = {
         "Version": "2012-10-17",
         "Statement": [
@@ -63,57 +65,84 @@ def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
     )
 
 
-def _create_healthscribe_resources() -> tuple[str, str]:
+def _create_healthscribe_resources(
+    iam_client: Any, s3_client: Any, sts_client: Any, role_name: str, bucket_name: str
+) -> str:
     """Create an IAM role and S3 bucket for medical scribe tests.
 
+    Args:
+        iam_client: A boto3 IAM client.
+        s3_client: A boto3 S3 client.
+        sts_client: A boto3 STS client.
+        role_name: The name of the IAM role to create.
+        bucket_name: The name of the S3 bucket to create.
+
     Returns:
-        Tuple of (role_arn, bucket_name).
+        The IAM role ARN.
     """
-    iam = boto3.client("iam")
-    s3 = boto3.client("s3", region_name=REGION)
-    sts = boto3.client("sts")
+    account_id = sts_client.get_caller_identity()["Account"]
 
-    account_id = sts.get_caller_identity()["Account"]
+    s3_client.create_bucket(Bucket=bucket_name)
+    _create_iam_role(iam_client, role_name, bucket_name)
 
-    s3.create_bucket(Bucket=BUCKET_NAME)
-    _create_iam_role(iam, ROLE_NAME, BUCKET_NAME)
-
-    # Wait for IAM role to propagate across services.
-    time.sleep(10)
-
-    role_arn = f"arn:aws:iam::{account_id}:role/{ROLE_NAME}"
-    return role_arn, BUCKET_NAME
+    return f"arn:aws:iam::{account_id}:role/{role_name}"
 
 
-def _delete_healthscribe_resources() -> None:
-    """Delete the IAM role and S3 bucket created for tests."""
-    iam = boto3.client("iam")
+def _delete_healthscribe_resources(
+    iam_client: Any, s3_client: Any, role_name: str, bucket_name: str
+) -> None:
+    """Delete the IAM role and S3 bucket created for tests.
 
-    # Delete bucket and all its objects
-    bucket = boto3.resource("s3").Bucket(BUCKET_NAME)
+    Args:
+        iam_client: A boto3 IAM client.
+        s3_client: A boto3 S3 client.
+        role_name: The name of the IAM role to delete.
+        bucket_name: The name of the S3 bucket to delete.
+    """
+    # Empty and delete the bucket
     try:
-        bucket.objects.all().delete()
-        bucket.delete()
-    except bucket.meta.client.exceptions.NoSuchBucket:
+        paginator = s3_client.get_paginator("list_objects_v2")
+        for page in paginator.paginate(Bucket=bucket_name):
+            objects = page.get("Contents")
+            if not objects:
+                continue
+            s3_client.delete_objects(
+                Bucket=bucket_name,
+                Delete={"Objects": [{"Key": o["Key"]} for o in objects]},
+            )
+        s3_client.delete_bucket(Bucket=bucket_name)
+    except s3_client.exceptions.NoSuchBucket:
         pass
 
     # Delete inline policy then role
     try:
-        iam.delete_role_policy(RoleName=ROLE_NAME, PolicyName="HealthScribeS3Access")
-    except iam.exceptions.NoSuchEntityException:
+        iam_client.delete_role_policy(
+            RoleName=role_name, PolicyName="HealthScribeS3Access"
+        )
+    except iam_client.exceptions.NoSuchEntityException:
         pass
 
     try:
-        iam.delete_role(RoleName=ROLE_NAME)
-    except iam.exceptions.NoSuchEntityException:
+        iam_client.delete_role(RoleName=role_name)
+    except iam_client.exceptions.NoSuchEntityException:
         pass
 
 
 @pytest.fixture(scope="session")
 def healthscribe_resources():
     """Create HealthScribe resources for the test session and delete them after."""
+    unique_suffix = uuid.uuid4().hex
+    role_name = f"HealthScribeIntegTestRole-{unique_suffix}"
+    bucket_name = f"healthscribe-integ-test-{unique_suffix}"
+
+    iam_client = boto3.client("iam")
+    s3_client = boto3.client("s3", region_name=REGION)
+    sts_client = boto3.client("sts")
+
     try:
-        role_arn, bucket_name = _create_healthscribe_resources()
+        role_arn = _create_healthscribe_resources(
+            iam_client, s3_client, sts_client, role_name, bucket_name
+        )
         yield role_arn, bucket_name
     finally:
-        _delete_healthscribe_resources()
+        _delete_healthscribe_resources(iam_client, s3_client, role_name, bucket_name)
