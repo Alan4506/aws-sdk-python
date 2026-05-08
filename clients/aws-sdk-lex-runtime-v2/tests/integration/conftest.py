@@ -10,29 +10,31 @@ test session. All integration tests receive the bot_id via the
 
 import json
 import uuid
+from typing import Any
 
 import boto3
 import pytest
 
 from . import LOCALE_ID, REGION
 
-_UNIQUE_SUFFIX = uuid.uuid4().hex
-ROLE_NAME = f"LexRuntimeV2IntegTestRole-{_UNIQUE_SUFFIX}"
-BOT_NAME = f"smithy-python-integ-test-bot-{_UNIQUE_SUFFIX}"
 
-
-def _create_lex_bot() -> str:
+def _create_lex_bot(
+    iam_client: Any, lex_client: Any, sts_client: Any, role_name: str, bot_name: str
+) -> str:
     """Create a Lex V2 bot with a Greeting intent.
+
+    Args:
+        iam_client: A boto3 IAM client.
+        lex_client: A boto3 lexv2-models client.
+        sts_client: A boto3 STS client.
+        role_name: The name of the IAM role to create for the bot.
+        bot_name: The name of the Lex bot to create.
 
     Returns:
         The bot ID.
     """
-    iam = boto3.client("iam")
-    lex = boto3.client("lexv2-models", region_name=REGION)
-    sts = boto3.client("sts")
-
-    account_id = sts.get_caller_identity()["Account"]
-    role_arn = f"arn:aws:iam::{account_id}:role/{ROLE_NAME}"
+    account_id = sts_client.get_caller_identity()["Account"]
+    role_arn = f"arn:aws:iam::{account_id}:role/{role_name}"
 
     # Create IAM role for the bot
     trust_policy = {
@@ -46,25 +48,25 @@ def _create_lex_bot() -> str:
         ],
     }
     try:
-        iam.create_role(
-            RoleName=ROLE_NAME, AssumeRolePolicyDocument=json.dumps(trust_policy)
+        iam_client.create_role(
+            RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
         )
-    except iam.exceptions.EntityAlreadyExistsException:
+    except iam_client.exceptions.EntityAlreadyExistsException:
         pass
 
     # Create bot
-    response = lex.create_bot(
-        botName=BOT_NAME,
+    response = lex_client.create_bot(
+        botName=bot_name,
         roleArn=role_arn,
         dataPrivacy={"childDirected": False},
         # 5-minute idle timeout is sufficient for integration tests.
         idleSessionTTLInSeconds=300,
     )
     bot_id = response["botId"]
-    lex.get_waiter("bot_available").wait(botId=bot_id)
+    lex_client.get_waiter("bot_available").wait(botId=bot_id)
 
     # Create locale
-    lex.create_bot_locale(
+    lex_client.create_bot_locale(
         botId=bot_id,
         botVersion="DRAFT",
         localeId=LOCALE_ID,
@@ -73,12 +75,12 @@ def _create_lex_bot() -> str:
         # 0.40 is a reasonable value for a simple test bot.
         nluIntentConfidenceThreshold=0.40,
     )
-    lex.get_waiter("bot_locale_created").wait(
+    lex_client.get_waiter("bot_locale_created").wait(
         botId=bot_id, botVersion="DRAFT", localeId=LOCALE_ID
     )
 
     # Create intent
-    lex.create_intent(
+    lex_client.create_intent(
         intentName="Greeting",
         botId=bot_id,
         botVersion="DRAFT",
@@ -103,38 +105,50 @@ def _create_lex_bot() -> str:
     )
 
     # Build locale
-    lex.build_bot_locale(botId=bot_id, botVersion="DRAFT", localeId=LOCALE_ID)
-    lex.get_waiter("bot_locale_built").wait(
+    lex_client.build_bot_locale(botId=bot_id, botVersion="DRAFT", localeId=LOCALE_ID)
+    lex_client.get_waiter("bot_locale_built").wait(
         botId=bot_id, botVersion="DRAFT", localeId=LOCALE_ID
     )
 
     return bot_id
 
 
-def _delete_lex_bot(bot_id: str | None) -> None:
+def _delete_lex_bot(
+    iam_client: Any, lex_client: Any, role_name: str, bot_id: str | None
+) -> None:
     """Delete a Lex V2 bot and its associated IAM role.
 
     Args:
+        iam_client: A boto3 IAM client.
+        lex_client: A boto3 lexv2-models client.
+        role_name: The name of the IAM role to delete.
         bot_id: The bot ID to delete, or None if creation failed.
     """
-    lex = boto3.client("lexv2-models", region_name=REGION)
-    iam = boto3.client("iam")
-
     if bot_id:
-        lex.delete_bot(botId=bot_id, skipResourceInUseCheck=True)
+        lex_client.delete_bot(botId=bot_id, skipResourceInUseCheck=True)
 
     try:
-        iam.delete_role(RoleName=ROLE_NAME)
-    except iam.exceptions.NoSuchEntityException:
+        iam_client.delete_role(RoleName=role_name)
+    except iam_client.exceptions.NoSuchEntityException:
         pass
 
 
 @pytest.fixture(scope="session")
 def lex_bot():
     """Create a Lex bot for the test session and delete it after."""
+    unique_suffix = uuid.uuid4().hex
+    role_name = f"LexRuntimeV2IntegTestRole-{unique_suffix}"
+    bot_name = f"LexRuntimeV2IntegTestBot-{unique_suffix}"
+
+    iam_client = boto3.client("iam")
+    lex_client = boto3.client("lexv2-models", region_name=REGION)
+    sts_client = boto3.client("sts")
+
     bot_id = None
     try:
-        bot_id = _create_lex_bot()
+        bot_id = _create_lex_bot(
+            iam_client, lex_client, sts_client, role_name, bot_name
+        )
         yield bot_id
     finally:
-        _delete_lex_bot(bot_id)
+        _delete_lex_bot(iam_client, lex_client, role_name, bot_id)
