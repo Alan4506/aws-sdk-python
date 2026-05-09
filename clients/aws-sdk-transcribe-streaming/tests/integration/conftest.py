@@ -37,12 +37,9 @@ def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
         ],
     }
 
-    try:
-        iam_client.create_role(
-            RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
-        )
-    except iam_client.exceptions.EntityAlreadyExistsException:
-        pass
+    iam_client.create_role(
+        RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
+    )
 
     permissions_policy = {
         "Version": "2012-10-17",

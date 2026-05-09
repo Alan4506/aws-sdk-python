@@ -124,10 +124,16 @@ async def test_get_medical_scribe_stream(
     """
     role_arn, s3_bucket = healthscribe_resources
 
-    async with asyncio.timeout(ROLE_PROPAGATION_TIMEOUT):
-        while True:
-            try:
-                await _run_medical_scribe_session(role_arn, s3_bucket)
-                return
-            except BadRequestException:
-                await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+    last_error: BadRequestException | None = None
+    try:
+        async with asyncio.timeout(ROLE_PROPAGATION_TIMEOUT):
+            while True:
+                try:
+                    await _run_medical_scribe_session(role_arn, s3_bucket)
+                    return
+                except BadRequestException as e:
+                    last_error = e
+                    await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+    except TimeoutError:
+        assert last_error is not None
+        raise last_error
