@@ -47,12 +47,9 @@ def _create_lex_bot(
             }
         ],
     }
-    try:
-        iam_client.create_role(
-            RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
-        )
-    except iam_client.exceptions.EntityAlreadyExistsException:
-        pass
+    iam_client.create_role(
+        RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
+    )
 
     # Create bot
     response = lex_client.create_bot(
