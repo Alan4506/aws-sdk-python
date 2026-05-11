@@ -17,6 +17,10 @@ import pytest
 
 from . import LOCALE_ID, REGION
 
+# Tags applied to all resources so orphaned resources from interrupted
+# test runs can be discovered and cleaned up.
+_TAGS = [{"Key": "Purpose", "Value": "IntegTest"}]
+
 
 def _create_lex_bot(
     iam_client: Any, lex_client: Any, sts_client: Any, role_name: str, bot_name: str
@@ -48,7 +52,9 @@ def _create_lex_bot(
         ],
     }
     iam_client.create_role(
-        RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
+        RoleName=role_name,
+        AssumeRolePolicyDocument=json.dumps(trust_policy),
+        Tags=_TAGS,
     )
 
     # Create bot
@@ -58,6 +64,7 @@ def _create_lex_bot(
         dataPrivacy={"childDirected": False},
         # 5-minute idle timeout is sufficient for integration tests.
         idleSessionTTLInSeconds=300,
+        botTags={t["Key"]: t["Value"] for t in _TAGS},
     )
     bot_id = response["botId"]
     lex_client.get_waiter("bot_available").wait(botId=bot_id)
@@ -133,9 +140,9 @@ def _delete_lex_bot(
 @pytest.fixture(scope="session")
 def lex_bot():
     """Create a Lex bot for the test session and delete it after."""
-    unique_suffix = uuid.uuid4().hex
-    role_name = f"LexRuntimeV2IntegTestRole-{unique_suffix}"
-    bot_name = f"LexRuntimeV2IntegTestBot-{unique_suffix}"
+    unique_suffix = uuid.uuid4().hex[:16]
+    role_name = f"integ-test-lex-runtime-v2-role-{unique_suffix}"
+    bot_name = f"integ-test-lex-runtime-v2-bot-{unique_suffix}"
 
     iam_client = boto3.client("iam")
     lex_client = boto3.client("lexv2-models", region_name=REGION)
