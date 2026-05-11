@@ -17,6 +17,10 @@ import pytest
 
 REGION = "us-east-1"
 
+# Tags applied to all resources so orphaned resources from interrupted
+# test runs can be discovered and cleaned up.
+_TAGS = [{"Key": "Purpose", "Value": "IntegTest"}]
+
 
 def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
     """Create an IAM role with S3 PutObject access for Transcribe Streaming.
@@ -38,7 +42,9 @@ def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
     }
 
     iam_client.create_role(
-        RoleName=role_name, AssumeRolePolicyDocument=json.dumps(trust_policy)
+        RoleName=role_name,
+        AssumeRolePolicyDocument=json.dumps(trust_policy),
+        Tags=_TAGS,
     )
 
     permissions_policy = {
@@ -57,7 +63,7 @@ def _create_iam_role(iam_client: Any, role_name: str, bucket_name: str) -> None:
 
     iam_client.put_role_policy(
         RoleName=role_name,
-        PolicyName="HealthScribeS3Access",
+        PolicyName="healthscribe-s3-access",
         PolicyDocument=json.dumps(permissions_policy),
     )
 
@@ -80,6 +86,7 @@ def _create_healthscribe_resources(
     account_id = sts_client.get_caller_identity()["Account"]
 
     s3_client.create_bucket(Bucket=bucket_name)
+    s3_client.put_bucket_tagging(Bucket=bucket_name, Tagging={"TagSet": _TAGS})
     _create_iam_role(iam_client, role_name, bucket_name)
 
     return f"arn:aws:iam::{account_id}:role/{role_name}"
@@ -114,7 +121,7 @@ def _delete_healthscribe_resources(
     # Delete inline policy then role
     try:
         iam_client.delete_role_policy(
-            RoleName=role_name, PolicyName="HealthScribeS3Access"
+            RoleName=role_name, PolicyName="healthscribe-s3-access"
         )
     except iam_client.exceptions.NoSuchEntityException:
         pass
@@ -128,9 +135,10 @@ def _delete_healthscribe_resources(
 @pytest.fixture(scope="session")
 def healthscribe_resources():
     """Create HealthScribe resources for the test session and delete them after."""
-    unique_suffix = uuid.uuid4().hex
-    role_name = f"HealthScribeIntegTestRole-{unique_suffix}"
-    bucket_name = f"healthscribe-integ-test-{unique_suffix}"
+    # Shortened UUID to keep IAM role name under the 64-character limit.
+    unique_suffix = uuid.uuid4().hex[:16]
+    role_name = f"integ-test-transcribe-streaming-role-{unique_suffix}"
+    bucket_name = f"integ-test-transcribe-streaming-bucket-{unique_suffix}"
 
     iam_client = boto3.client("iam")
     s3_client = boto3.client("s3", region_name=REGION)
