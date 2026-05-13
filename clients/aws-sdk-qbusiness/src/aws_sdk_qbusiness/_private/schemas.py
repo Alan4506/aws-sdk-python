@@ -11966,14 +11966,14 @@ EXPERT_Q = Schema(
     ],
 )
 
-ATTRIBUTE_FILTER.members["notFilter"] = Schema.member(
-    id=ATTRIBUTE_FILTER.id.with_member("notFilter"), target=ATTRIBUTE_FILTER, index=2
-)
-
 ATTRIBUTE_FILTER.members["orAllFilters"] = Schema.member(
     id=ATTRIBUTE_FILTER.id.with_member("orAllFilters"),
     target=ATTRIBUTE_FILTERS,
     index=1,
+)
+
+ATTRIBUTE_FILTER.members["notFilter"] = Schema.member(
+    id=ATTRIBUTE_FILTER.id.with_member("notFilter"), target=ATTRIBUTE_FILTER, index=2
 )
 
 ATTRIBUTE_FILTER.members["andAllFilters"] = Schema.member(

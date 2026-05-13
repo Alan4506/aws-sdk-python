@@ -16,10 +16,9 @@ from botocore.waiter import WaiterModel, create_waiter_with_client
 
 from . import REGION
 
-_UNIQUE_SUFFIX = uuid.uuid4().hex
-APP_NAME = f"smithy-python-integ-test-{_UNIQUE_SUFFIX}"
-INDEX_NAME = "integ-test-index"
-RETRIEVER_NAME = "integ-test-retriever"
+# Tags applied to all resources so orphaned resources from interrupted
+# test runs can be discovered and cleaned up.
+_TAGS = [{"key": "Purpose", "value": "IntegTest"}]
 
 # Custom waiter configs for Q Business resources.
 # Q Business does not provide built-in boto3 waiters.
@@ -101,8 +100,13 @@ _WAITER_CONFIG = {
 _waiter_model = WaiterModel(_WAITER_CONFIG)
 
 
-def _create_qbusiness_app() -> str:
+def _create_qbusiness_app(app_name: str, index_name: str, retriever_name: str) -> str:
     """Create a Q Business application with index and retriever.
+
+    Args:
+        app_name: The name of the Q Business application to create.
+        index_name: The name of the index to create.
+        retriever_name: The name of the retriever to create.
 
     Returns:
         The application ID.
@@ -110,14 +114,18 @@ def _create_qbusiness_app() -> str:
     qbusiness = boto3.client("qbusiness", region_name=REGION)
 
     # Create application
-    resp = qbusiness.create_application(displayName=APP_NAME, identityType="ANONYMOUS")
+    resp = qbusiness.create_application(
+        displayName=app_name, identityType="ANONYMOUS", tags=_TAGS
+    )
     app_id = resp["applicationId"]
     create_waiter_with_client("ApplicationActive", _waiter_model, qbusiness).wait(
         applicationId=app_id
     )
 
     # Create index
-    resp = qbusiness.create_index(applicationId=app_id, displayName=INDEX_NAME)
+    resp = qbusiness.create_index(
+        applicationId=app_id, displayName=index_name, tags=_TAGS
+    )
     index_id = resp["indexId"]
     create_waiter_with_client("IndexActive", _waiter_model, qbusiness).wait(
         applicationId=app_id, indexId=index_id
@@ -126,9 +134,10 @@ def _create_qbusiness_app() -> str:
     # Create retriever
     resp = qbusiness.create_retriever(
         applicationId=app_id,
-        displayName=RETRIEVER_NAME,
+        displayName=retriever_name,
         type="NATIVE_INDEX",
         configuration={"nativeIndexConfiguration": {"indexId": index_id}},
+        tags=_TAGS,
     )
     retriever_id = resp["retrieverId"]
     create_waiter_with_client("RetrieverActive", _waiter_model, qbusiness).wait(
@@ -140,6 +149,8 @@ def _create_qbusiness_app() -> str:
 
 def _delete_qbusiness_app(app_id: str | None) -> None:
     """Delete a Q Business application.
+
+    Deleting the application cascades to its index and retriever.
 
     Args:
         app_id: The application ID to delete, or None if creation failed.
@@ -153,9 +164,14 @@ def _delete_qbusiness_app(app_id: str | None) -> None:
 @pytest.fixture(scope="session")
 def qbusiness_app():
     """Create a Q Business application for the test session and delete it after."""
+    unique_suffix = uuid.uuid4().hex[:16]
+    app_name = f"integ-test-qbusiness-app-{unique_suffix}"
+    index_name = f"integ-test-qbusiness-index-{unique_suffix}"
+    retriever_name = f"integ-test-qbusiness-retriever-{unique_suffix}"
+
     app_id = None
     try:
-        app_id = _create_qbusiness_app()
+        app_id = _create_qbusiness_app(app_name, index_name, retriever_name)
         yield app_id
     finally:
         _delete_qbusiness_app(app_id)
