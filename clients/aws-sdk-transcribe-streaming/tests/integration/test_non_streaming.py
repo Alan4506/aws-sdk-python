@@ -7,12 +7,15 @@ import asyncio
 import time
 import uuid
 
+from smithy_core.exceptions import CallError
+
 from aws_sdk_transcribe_streaming.models import (
     BadRequestException,
     ClinicalNoteGenerationSettings,
     GetMedicalScribeStreamInput,
     GetMedicalScribeStreamOutput,
     LanguageCode,
+    LimitExceededException,
     MedicalScribeAudioEvent,
     MedicalScribeConfigurationEvent,
     MedicalScribeInputStreamAudioEvent,
@@ -120,20 +123,34 @@ async def test_get_medical_scribe_stream(
 
     IAM is eventually consistent, so Transcribe may not be able to assume the
     newly created role immediately. Retry on BadRequestException until the
-    role has propagated, or until the timeout is reached.
+    role has propagated, or until the timeout is reached. Also retries on
+    LimitExceededException (post-stream analytics job quota) and
+    ThrottlingException (concurrent session limit) which can occur when
+    multiple test runs execute in parallel.
     """
     role_arn, s3_bucket = healthscribe_resources
 
-    last_error: BadRequestException | None = None
+    last_error: BadRequestException | LimitExceededException | CallError | None = None
     try:
         async with asyncio.timeout(ROLE_PROPAGATION_TIMEOUT):
             while True:
                 try:
                     await _run_medical_scribe_session(role_arn, s3_bucket)
                     return
-                except BadRequestException as e:
+                except (BadRequestException, LimitExceededException) as e:
+                    # BadRequestException: IAM role not yet propagated.
+                    # LimitExceededException: post-stream analytics job quota exceeded
                     last_error = e
                     await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+                except CallError as e:
+                    # ThrottlingException is not modeled in the error registry,
+                    # so it surfaces as a generic CallError with
+                    # is_throttling_error=False. Match by error id in message.
+                    if "ThrottlingException" in str(e):
+                        last_error = e
+                        await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+                    else:
+                        raise
     except TimeoutError:
         assert last_error is not None
         raise last_error
