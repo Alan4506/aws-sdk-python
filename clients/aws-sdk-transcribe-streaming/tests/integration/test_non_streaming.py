@@ -1,28 +1,21 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Test non-streaming output type handling.
-
-This test requires AWS resources (an IAM role and an S3 bucket).
-To set them up locally, run:
-
-    uv run scripts/setup_resources.py
-
-Then export the environment variables shown in the output.
-"""
+"""Test non-streaming output type handling using Medical Scribe."""
 
 import asyncio
-import os
 import time
 import uuid
 
-import pytest
+from smithy_core.exceptions import CallError
 
 from aws_sdk_transcribe_streaming.models import (
+    BadRequestException,
     ClinicalNoteGenerationSettings,
     GetMedicalScribeStreamInput,
     GetMedicalScribeStreamOutput,
     LanguageCode,
+    LimitExceededException,
     MedicalScribeAudioEvent,
     MedicalScribeConfigurationEvent,
     MedicalScribeInputStreamAudioEvent,
@@ -42,14 +35,14 @@ BYTES_PER_SAMPLE = 2
 CHANNEL_NUMS = 1
 CHUNK_SIZE = 1024 * 8
 
+# Maximum time to wait for IAM role propagation across services.
+ROLE_PROPAGATION_TIMEOUT = 300
+# Delay between retries while waiting for IAM role propagation.
+ROLE_PROPAGATION_RETRY_DELAY = 5
 
-async def test_get_medical_scribe_stream() -> None:
-    role_arn = os.environ.get("HEALTHSCRIBE_ROLE_ARN")
-    s3_bucket = os.environ.get("HEALTHSCRIBE_S3_BUCKET")
 
-    if not role_arn or not s3_bucket:
-        pytest.fail("HEALTHSCRIBE_ROLE_ARN or HEALTHSCRIBE_S3_BUCKET not set")
-
+async def _run_medical_scribe_session(role_arn: str, s3_bucket: str) -> None:
+    """Run a full Medical Scribe streaming session and verify its completion."""
     transcribe_client = create_transcribe_client("us-east-1")
     session_id = str(uuid.uuid4())
 
@@ -121,3 +114,43 @@ async def test_get_medical_scribe_stream() -> None:
     assert details.language_code == "en-US"
     assert details.media_encoding == "pcm"
     assert details.media_sample_rate_hertz == SAMPLE_RATE
+
+
+async def test_get_medical_scribe_stream(
+    healthscribe_resources: tuple[str, str],
+) -> None:
+    """Test non-streaming GetMedicalScribeStream operation.
+
+    IAM is eventually consistent, so Transcribe may not be able to assume the
+    newly created role immediately. Retry on BadRequestException until the
+    role has propagated, or until the timeout is reached. Also retries on
+    LimitExceededException (post-stream analytics job quota) and
+    ThrottlingException (concurrent session limit) which can occur when
+    multiple test runs execute in parallel.
+    """
+    role_arn, s3_bucket = healthscribe_resources
+
+    last_error: BadRequestException | LimitExceededException | CallError | None = None
+    try:
+        async with asyncio.timeout(ROLE_PROPAGATION_TIMEOUT):
+            while True:
+                try:
+                    await _run_medical_scribe_session(role_arn, s3_bucket)
+                    return
+                except (BadRequestException, LimitExceededException) as e:
+                    # BadRequestException: IAM role not yet propagated.
+                    # LimitExceededException: post-stream analytics job quota exceeded
+                    last_error = e
+                    await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+                except CallError as e:
+                    # ThrottlingException is not modeled in the error registry,
+                    # so it surfaces as a generic CallError with
+                    # is_throttling_error=False. Match by error id in message.
+                    if "ThrottlingException" in str(e):
+                        last_error = e
+                        await asyncio.sleep(ROLE_PROPAGATION_RETRY_DELAY)
+                    else:
+                        raise
+    except TimeoutError:
+        assert last_error is not None
+        raise last_error
