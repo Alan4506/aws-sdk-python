@@ -8,157 +8,127 @@ plus an S3 bucket once per test session. The ``connecthealth_resources``
 fixture provides ``(domain_id, subscription_id, output_s3_uri)``.
 """
 
+import asyncio
 import uuid
 from typing import Any
 
 import boto3
 import pytest
-from botocore.waiter import WaiterModel, create_waiter_with_client
 
-from . import REGION
+from aws_sdk_connecthealth.client import ConnectHealthClient
+from aws_sdk_connecthealth.models import (
+    CreateDomainInput,
+    CreateSubscriptionInput,
+    DeactivateSubscriptionInput,
+    DeleteDomainInput,
+    GetSubscriptionInput,
+    SubscriptionStatus,
+)
+
+from . import REGION, create_connecthealth_client
 
 # Tags applied to all resources so orphaned resources from interrupted
 # test runs can be discovered and cleaned up.
-_TAGS = [{"Key": "Purpose", "Value": "IntegTest"}]
+_TAGS = {"Purpose": "IntegTest"}
 
-_WAITER_CONFIG = {
-    "version": 2,
-    "waiters": {
-        "DomainActive": {
-            "operation": "GetDomain",
-            "delay": 5,
-            "maxAttempts": 60,
-            "acceptors": [
-                {
-                    "matcher": "path",
-                    "expected": "ACTIVE",
-                    "argument": "status",
-                    "state": "success",
-                },
-                {
-                    "matcher": "path",
-                    "expected": "DELETING",
-                    "argument": "status",
-                    "state": "failure",
-                },
-                {
-                    "matcher": "path",
-                    "expected": "DELETED",
-                    "argument": "status",
-                    "state": "failure",
-                },
-            ],
-        },
-        "SubscriptionActive": {
-            "operation": "GetSubscription",
-            "delay": 5,
-            "maxAttempts": 60,
-            "acceptors": [
-                {
-                    "matcher": "path",
-                    "expected": "ACTIVE",
-                    "argument": "subscription.status",
-                    "state": "success",
-                },
-                {
-                    "matcher": "path",
-                    "expected": "DELETED",
-                    "argument": "subscription.status",
-                    "state": "failure",
-                },
-            ],
-        },
-        "SubscriptionInactive": {
-            "operation": "GetSubscription",
-            "delay": 5,
-            "maxAttempts": 60,
-            "acceptors": [
-                {
-                    "matcher": "path",
-                    "expected": "INACTIVE",
-                    "argument": "subscription.status",
-                    "state": "success",
-                },
-                {
-                    "matcher": "path",
-                    "expected": "DELETED",
-                    "argument": "subscription.status",
-                    "state": "failure",
-                },
-            ],
-        },
-    },
-}
-_waiter_model = WaiterModel(_WAITER_CONFIG)
+_SUBSCRIPTION_POLL_INTERVAL_SECONDS = 5
+_SUBSCRIPTION_POLL_TIMEOUT_SECONDS = 300
 
 
-def _create_connecthealth_resources(
-    s3_client: Any,
-    connecthealth_client: Any,
-    domain_name: str,
-    bucket_name: str,
-) -> tuple[str, str]:
-    """Create an S3 bucket, ConnectHealth Domain, and ACTIVE Subscription.
+async def _wait_for_subscription_inactive(
+    client: ConnectHealthClient, domain_id: str, subscription_id: str
+) -> None:
+    """Wait for a Subscription to report INACTIVE.
+
+    DeleteDomain rejects a Domain whose Subscription is not yet deactivated.
 
     Args:
-        s3_client: A boto3 S3 client.
-        connecthealth_client: A boto3 ConnectHealth client.
+        client: A ConnectHealth client.
+        domain_id: The parent Domain ID.
+        subscription_id: The Subscription ID to poll.
+    """
+    deadline = asyncio.get_event_loop().time() + _SUBSCRIPTION_POLL_TIMEOUT_SECONDS
+    while asyncio.get_event_loop().time() < deadline:
+        response = await client.get_subscription(
+            input=GetSubscriptionInput(
+                domain_id=domain_id, subscription_id=subscription_id
+            )
+        )
+        if (
+            response.subscription is not None
+            and response.subscription.status == SubscriptionStatus.INACTIVE
+        ):
+            return
+        await asyncio.sleep(_SUBSCRIPTION_POLL_INTERVAL_SECONDS)
+    raise TimeoutError(f"Subscription {subscription_id} did not reach INACTIVE in time")
+
+
+async def _create_connecthealth_resources(
+    client: ConnectHealthClient, domain_name: str
+) -> tuple[str, str]:
+    """Create a ConnectHealth Domain and an ACTIVE Subscription.
+
+    Args:
+        client: A ConnectHealth client.
         domain_name: The name of the Domain to create.
-        bucket_name: The name of the S3 bucket to create.
 
     Returns:
         Tuple of (domain_id, subscription_id).
     """
-    s3_client.create_bucket(Bucket=bucket_name)
-    s3_client.put_bucket_tagging(Bucket=bucket_name, Tagging={"TagSet": _TAGS})
-
-    response = connecthealth_client.create_domain(
-        name=domain_name,
-        tags={t["Key"]: t["Value"] for t in _TAGS},
+    domain_response = await client.create_domain(
+        input=CreateDomainInput(name=domain_name, tags=_TAGS)
     )
-    domain_id = response["domainId"]
-    create_waiter_with_client(
-        "DomainActive", _waiter_model, connecthealth_client
-    ).wait(domainId=domain_id)
+    domain_id = domain_response.domain_id
 
-    response = connecthealth_client.create_subscription(domainId=domain_id)
-    subscription_id = response["subscriptionId"]
-    create_waiter_with_client(
-        "SubscriptionActive", _waiter_model, connecthealth_client
-    ).wait(domainId=domain_id, subscriptionId=subscription_id)
-
-    return domain_id, subscription_id
+    subscription_response = await client.create_subscription(
+        input=CreateSubscriptionInput(domain_id=domain_id)
+    )
+    return domain_id, subscription_response.subscription_id
 
 
-def _delete_connecthealth_resources(
-    s3_client: Any,
-    connecthealth_client: Any,
-    domain_id: str | None,
-    subscription_id: str | None,
-    bucket_name: str,
+async def _delete_connecthealth_resources(
+    client: ConnectHealthClient, domain_id: str | None, subscription_id: str | None
 ) -> None:
-    """Deactivate the Subscription, then delete the Domain and S3 bucket.
+    """Deactivate the Subscription, then delete the Domain.
 
     Args:
-        s3_client: A boto3 S3 client.
-        connecthealth_client: A boto3 ConnectHealth client.
+        client: A ConnectHealth client.
         domain_id: The Domain ID to delete, or None if creation failed.
         subscription_id: The Subscription ID to deactivate, or None if
             creation failed.
-        bucket_name: The name of the S3 bucket to delete.
     """
     if domain_id and subscription_id:
-        connecthealth_client.deactivate_subscription(
-            domainId=domain_id, subscriptionId=subscription_id
+        await client.deactivate_subscription(
+            input=DeactivateSubscriptionInput(
+                domain_id=domain_id, subscription_id=subscription_id
+            )
         )
-        create_waiter_with_client(
-            "SubscriptionInactive", _waiter_model, connecthealth_client
-        ).wait(domainId=domain_id, subscriptionId=subscription_id)
-
+        await _wait_for_subscription_inactive(client, domain_id, subscription_id)
     if domain_id:
-        connecthealth_client.delete_domain(domainId=domain_id)
+        await client.delete_domain(input=DeleteDomainInput(domain_id=domain_id))
 
-    # Empty and delete the bucket
+
+def _create_s3_bucket(s3_client: Any, bucket_name: str) -> None:
+    """Create and tag the S3 bucket used by the streaming session.
+
+    Args:
+        s3_client: A boto3 S3 client.
+        bucket_name: The name of the S3 bucket to create.
+    """
+    s3_client.create_bucket(Bucket=bucket_name)
+    s3_client.put_bucket_tagging(
+        Bucket=bucket_name,
+        Tagging={"TagSet": [{"Key": k, "Value": v} for k, v in _TAGS.items()]},
+    )
+
+
+def _delete_s3_bucket(s3_client: Any, bucket_name: str) -> None:
+    """Empty and delete the S3 bucket.
+
+    Args:
+        s3_client: A boto3 S3 client.
+        bucket_name: The name of the S3 bucket to delete.
+    """
     try:
         paginator = s3_client.get_paginator("list_objects_v2")
         for page in paginator.paginate(Bucket=bucket_name):
@@ -175,24 +145,24 @@ def _delete_connecthealth_resources(
 
 
 @pytest.fixture(scope="session")
-def connecthealth_resources():
+async def connecthealth_resources():
     """Create ConnectHealth resources for the test session and delete them after."""
     unique_suffix = uuid.uuid4().hex[:16]
     domain_name = f"integ-test-connecthealth-domain-{unique_suffix}"
     bucket_name = f"integ-test-connecthealth-bucket-{unique_suffix}"
 
     s3_client = boto3.client("s3", region_name=REGION)
-    connecthealth_client = boto3.client("connecthealth", region_name=REGION)
+    client = create_connecthealth_client(REGION)
 
-    domain_id = None
-    subscription_id = None
+    domain_id: str | None = None
+    subscription_id: str | None = None
     try:
-        domain_id, subscription_id = _create_connecthealth_resources(
-            s3_client, connecthealth_client, domain_name, bucket_name
+        _create_s3_bucket(s3_client, bucket_name)
+        domain_id, subscription_id = await _create_connecthealth_resources(
+            client, domain_name
         )
         output_s3_uri = f"s3://{bucket_name}/clinical-notes/"
         yield domain_id, subscription_id, output_s3_uri
     finally:
-        _delete_connecthealth_resources(
-            s3_client, connecthealth_client, domain_id, subscription_id, bucket_name
-        )
+        await _delete_connecthealth_resources(client, domain_id, subscription_id)
+        _delete_s3_bucket(s3_client, bucket_name)
