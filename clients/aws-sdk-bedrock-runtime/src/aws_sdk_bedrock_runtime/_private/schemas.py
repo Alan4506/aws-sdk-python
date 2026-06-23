@@ -2149,6 +2149,722 @@ APPLY_GUARDRAIL = Schema(
     ],
 )
 
+GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterCategory"),
+    shape_type=ShapeType.ENUM,
+    members={
+        "VIOLENCE": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="VIOLENCE")],
+        },
+        "HATE": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="HATE")],
+        },
+        "SEXUAL": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="SEXUAL")],
+        },
+        "MISCONDUCT": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="MISCONDUCT")
+            ],
+        },
+        "INSULTS": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="INSULTS")],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY_CONFIG = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksContentFilterCategoryConfig"
+    ),
+    members={
+        "category": {
+            "target": GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY_CONFIG_LIST = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksContentFilterCategoryConfigList"
+    ),
+    shape_type=ShapeType.LIST,
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.api#length"),
+            value=MappingProxyType({"min": 1, "max": 5}),
+        )
+    ],
+    members={"member": {"target": GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY_CONFIG}},
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_CONFIG = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterConfig"),
+    members={
+        "categories": {
+            "target": GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY_CONFIG_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackCategory"),
+    shape_type=ShapeType.ENUM,
+    members={
+        "JAILBREAK": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="JAILBREAK")
+            ],
+        },
+        "PROMPT_INJECTION": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="PROMPT_INJECTION")
+            ],
+        },
+        "PROMPT_LEAKAGE": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="PROMPT_LEAKAGE")
+            ],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY_CONFIG = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackCategoryConfig"
+    ),
+    members={
+        "category": {
+            "target": GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY_CONFIG_LIST = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackCategoryConfigList"
+    ),
+    shape_type=ShapeType.LIST,
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.api#length"),
+            value=MappingProxyType({"min": 1, "max": 3}),
+        )
+    ],
+    members={"member": {"target": GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY_CONFIG}},
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_CONFIG = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackConfig"),
+    members={
+        "categories": {
+            "target": GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY_CONFIG_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_TYPE = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationEntityType"
+    ),
+    shape_type=ShapeType.ENUM,
+    members={
+        "ADDRESS": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="ADDRESS")],
+        },
+        "AGE": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="AGE")],
+        },
+        "AWS_ACCESS_KEY": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="AWS_ACCESS_KEY")
+            ],
+        },
+        "AWS_SECRET_KEY": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="AWS_SECRET_KEY")
+            ],
+        },
+        "CA_HEALTH_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="CA_HEALTH_NUMBER")
+            ],
+        },
+        "CA_SOCIAL_INSURANCE_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="CA_SOCIAL_INSURANCE_NUMBER",
+                )
+            ],
+        },
+        "CREDIT_DEBIT_CARD_CVV": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="CREDIT_DEBIT_CARD_CVV"
+                )
+            ],
+        },
+        "CREDIT_DEBIT_CARD_EXPIRY": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="CREDIT_DEBIT_CARD_EXPIRY"
+                )
+            ],
+        },
+        "CREDIT_DEBIT_CARD_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="CREDIT_DEBIT_CARD_NUMBER"
+                )
+            ],
+        },
+        "DRIVER_ID": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="DRIVER_ID")
+            ],
+        },
+        "EMAIL": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="EMAIL")],
+        },
+        "INTERNATIONAL_BANK_ACCOUNT_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="INTERNATIONAL_BANK_ACCOUNT_NUMBER",
+                )
+            ],
+        },
+        "IP_ADDRESS": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="IP_ADDRESS")
+            ],
+        },
+        "LICENSE_PLATE": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="LICENSE_PLATE")
+            ],
+        },
+        "MAC_ADDRESS": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="MAC_ADDRESS")
+            ],
+        },
+        "NAME": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="NAME")],
+        },
+        "PASSWORD": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="PASSWORD")],
+        },
+        "PHONE": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="PHONE")],
+        },
+        "PIN": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="PIN")],
+        },
+        "SWIFT_CODE": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="SWIFT_CODE")
+            ],
+        },
+        "UK_NATIONAL_HEALTH_SERVICE_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="UK_NATIONAL_HEALTH_SERVICE_NUMBER",
+                )
+            ],
+        },
+        "UK_NATIONAL_INSURANCE_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="UK_NATIONAL_INSURANCE_NUMBER",
+                )
+            ],
+        },
+        "UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER",
+                )
+            ],
+        },
+        "URL": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="URL")],
+        },
+        "USERNAME": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="USERNAME")],
+        },
+        "US_BANK_ACCOUNT_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="US_BANK_ACCOUNT_NUMBER"
+                )
+            ],
+        },
+        "US_BANK_ROUTING_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="US_BANK_ROUTING_NUMBER"
+                )
+            ],
+        },
+        "US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER",
+                )
+            ],
+        },
+        "US_PASSPORT_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"), value="US_PASSPORT_NUMBER"
+                )
+            ],
+        },
+        "US_SOCIAL_SECURITY_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="US_SOCIAL_SECURITY_NUMBER",
+                )
+            ],
+        },
+        "VEHICLE_IDENTIFICATION_NUMBER": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#enumValue"),
+                    value="VEHICLE_IDENTIFICATION_NUMBER",
+                )
+            ],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_CONFIG = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationEntityConfig"
+    ),
+    members={
+        "type": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_TYPE,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_CONFIG_LIST = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationEntityConfigList"
+    ),
+    shape_type=ShapeType.LIST,
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.api#length"),
+            value=MappingProxyType({"min": 1, "max": 31}),
+        )
+    ],
+    members={
+        "member": {"target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_CONFIG}
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_CONFIG = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationConfig"
+    ),
+    members={
+        "entities": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_CONFIG_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_CONFIG = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksConfig"),
+    members={
+        "contentFilter": {"target": GUARDRAIL_CHECKS_CONTENT_FILTER_CONFIG},
+        "promptAttack": {"target": GUARDRAIL_CHECKS_PROMPT_ATTACK_CONFIG},
+        "sensitiveInformation": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_CONFIG
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_TEXT_CONTENT = Schema(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksTextContent"),
+    shape_type=ShapeType.STRING,
+    traits=[
+        Trait.new(id=ShapeID("smithy.api#length"), value=MappingProxyType({"min": 1})),
+        Trait.new(id=ShapeID("smithy.api#sensitive")),
+    ],
+)
+
+GUARDRAIL_CHECKS_CONTENT_BLOCK = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentBlock"),
+    shape_type=ShapeType.UNION,
+    members={"text": {"target": GUARDRAIL_CHECKS_TEXT_CONTENT}},
+)
+
+GUARDRAIL_CHECKS_CONTENT_BLOCK_LIST = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentBlockList"),
+    shape_type=ShapeType.LIST,
+    traits=[
+        Trait.new(id=ShapeID("smithy.api#length"), value=MappingProxyType({"min": 1}))
+    ],
+    members={"member": {"target": GUARDRAIL_CHECKS_CONTENT_BLOCK}},
+)
+
+GUARDRAIL_CHECKS_ROLE = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksRole"),
+    shape_type=ShapeType.ENUM,
+    members={
+        "USER": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="user")],
+        },
+        "ASSISTANT": {
+            "target": UNIT,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#enumValue"), value="assistant")
+            ],
+        },
+        "SYSTEM": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="system")],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_MESSAGE = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksMessage"),
+    members={
+        "role": {
+            "target": GUARDRAIL_CHECKS_ROLE,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "content": {
+            "target": GUARDRAIL_CHECKS_CONTENT_BLOCK_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_MESSAGE_LIST = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksMessageList"),
+    shape_type=ShapeType.LIST,
+    traits=[
+        Trait.new(id=ShapeID("smithy.api#length"), value=MappingProxyType({"min": 1}))
+    ],
+    members={"member": {"target": GUARDRAIL_CHECKS_MESSAGE}},
+)
+
+INVOKE_GUARDRAIL_CHECKS_INPUT = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#InvokeGuardrailChecksInput"),
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.synthetic#originalShapeId"),
+            value="com.amazonaws.bedrockruntime#InvokeGuardrailChecksRequest",
+        ),
+        Trait.new(id=ShapeID("smithy.api#input")),
+    ],
+    members={
+        "messages": {
+            "target": GUARDRAIL_CHECKS_MESSAGE_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "checks": {
+            "target": GUARDRAIL_CHECKS_CONFIG,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT_ENTRY = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterResultEntry"),
+    members={
+        "category": {
+            "target": GUARDRAIL_CHECKS_CONTENT_FILTER_CATEGORY,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "severityScore": {
+            "target": DOUBLE,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"),
+                    value=MappingProxyType({"min": 0.0, "max": 1.0}),
+                ),
+            ],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT_LIST = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterResultList"),
+    shape_type=ShapeType.LIST,
+    members={"member": {"target": GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT_ENTRY}},
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterResult"),
+    members={
+        "results": {
+            "target": GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT_ENTRY = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackResultEntry"),
+    members={
+        "category": {
+            "target": GUARDRAIL_CHECKS_PROMPT_ATTACK_CATEGORY,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "severityScore": {
+            "target": DOUBLE,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"),
+                    value=MappingProxyType({"min": 0.0, "max": 1.0}),
+                ),
+            ],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT_LIST = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackResultList"),
+    shape_type=ShapeType.LIST,
+    members={"member": {"target": GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT_ENTRY}},
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackResult"),
+    members={
+        "results": {
+            "target": GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT_ENTRY = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationResultEntry"
+    ),
+    members={
+        "type": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_ENTITY_TYPE,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "confidenceScore": {
+            "target": DOUBLE,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"),
+                    value=MappingProxyType({"min": 0.0, "max": 1.0}),
+                ),
+            ],
+        },
+        "beginOffset": {
+            "target": INTEGER,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"), value=MappingProxyType({"min": 0})
+                ),
+            ],
+        },
+        "endOffset": {
+            "target": INTEGER,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"), value=MappingProxyType({"min": 0})
+                ),
+            ],
+        },
+        "messageIndex": {
+            "target": INTEGER,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"), value=MappingProxyType({"min": 0})
+                ),
+            ],
+        },
+        "contentIndex": {
+            "target": INTEGER,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#required")),
+                Trait.new(
+                    id=ShapeID("smithy.api#range"), value=MappingProxyType({"min": 0})
+                ),
+            ],
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT_LIST = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationResultList"
+    ),
+    shape_type=ShapeType.LIST,
+    members={"member": {"target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT_ENTRY}},
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT = Schema.collection(
+    id=ShapeID(
+        "com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationResult"
+    ),
+    members={
+        "results": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT_LIST,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "truncated": {"target": BOOLEAN},
+    },
+)
+
+GUARDRAIL_CHECKS_RESULTS = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksResults"),
+    members={
+        "contentFilter": {"target": GUARDRAIL_CHECKS_CONTENT_FILTER_RESULT},
+        "promptAttack": {"target": GUARDRAIL_CHECKS_PROMPT_ATTACK_RESULT},
+        "sensitiveInformation": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_RESULT
+        },
+    },
+)
+
+GUARDRAIL_CHECKS_CONTENT_FILTER_USAGE = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksContentFilterUsage"),
+    members={
+        "textUnits": {
+            "target": INTEGER,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_PROMPT_ATTACK_USAGE = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksPromptAttackUsage"),
+    members={
+        "textUnits": {
+            "target": INTEGER,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_USAGE = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksSensitiveInformationUsage"),
+    members={
+        "textUnits": {
+            "target": INTEGER,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        }
+    },
+)
+
+GUARDRAIL_CHECKS_USAGE_RESULTS = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#GuardrailChecksUsageResults"),
+    members={
+        "contentFilter": {"target": GUARDRAIL_CHECKS_CONTENT_FILTER_USAGE},
+        "promptAttack": {"target": GUARDRAIL_CHECKS_PROMPT_ATTACK_USAGE},
+        "sensitiveInformation": {
+            "target": GUARDRAIL_CHECKS_SENSITIVE_INFORMATION_USAGE
+        },
+    },
+)
+
+INVOKE_GUARDRAIL_CHECKS_OUTPUT = Schema.collection(
+    id=ShapeID("com.amazonaws.bedrockruntime#InvokeGuardrailChecksOutput"),
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.synthetic#originalShapeId"),
+            value="com.amazonaws.bedrockruntime#InvokeGuardrailChecksResponse",
+        ),
+        Trait.new(id=ShapeID("smithy.api#output")),
+    ],
+    members={
+        "results": {
+            "target": GUARDRAIL_CHECKS_RESULTS,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+        "usage": {
+            "target": GUARDRAIL_CHECKS_USAGE_RESULTS,
+            "traits": [Trait.new(id=ShapeID("smithy.api#required"))],
+        },
+    },
+)
+
+INVOKE_GUARDRAIL_CHECKS = Schema(
+    id=ShapeID("com.amazonaws.bedrockruntime#InvokeGuardrailChecks"),
+    shape_type=ShapeType.OPERATION,
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.api#http"),
+            value=MappingProxyType(
+                {"code": 200, "method": "POST", "uri": "/guardrail-checks/invoke"}
+            ),
+        )
+    ],
+)
+
 GUARDRAIL_TRACE = Schema.collection(
     id=ShapeID("com.amazonaws.bedrockruntime#GuardrailTrace"),
     shape_type=ShapeType.ENUM,
@@ -3123,6 +3839,10 @@ CONVERSATION_ROLE = Schema.collection(
             "traits": [
                 Trait.new(id=ShapeID("smithy.api#enumValue"), value="assistant")
             ],
+        },
+        "SYSTEM": {
+            "target": UNIT,
+            "traits": [Trait.new(id=ShapeID("smithy.api#enumValue"), value="system")],
         },
     },
 )
@@ -4172,6 +4892,17 @@ INVOKE_MODEL_IDENTIFIER = Schema(
     ],
 )
 
+REQUEST_METADATA_JSON = Schema(
+    id=ShapeID("com.amazonaws.bedrockruntime#RequestMetadataJson"),
+    shape_type=ShapeType.STRING,
+    traits=[
+        Trait.new(
+            id=ShapeID("smithy.api#length"), value=MappingProxyType({"max": 8500})
+        ),
+        Trait.new(id=ShapeID("smithy.api#sensitive")),
+    ],
+)
+
 TRACE = Schema.collection(
     id=ShapeID("com.amazonaws.bedrockruntime#Trace"),
     shape_type=ShapeType.ENUM,
@@ -4266,6 +4997,15 @@ INVOKE_MODEL_INPUT = Schema.collection(
                 Trait.new(
                     id=ShapeID("smithy.api#httpHeader"),
                     value="X-Amzn-Bedrock-Service-Tier",
+                )
+            ],
+        },
+        "requestMetadata": {
+            "target": REQUEST_METADATA_JSON,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#httpHeader"),
+                    value="X-Amzn-Bedrock-Request-Metadata",
                 )
             ],
         },
@@ -4520,6 +5260,15 @@ INVOKE_MODEL_WITH_RESPONSE_STREAM_INPUT = Schema.collection(
                 Trait.new(
                     id=ShapeID("smithy.api#httpHeader"),
                     value="X-Amzn-Bedrock-Service-Tier",
+                )
+            ],
+        },
+        "requestMetadata": {
+            "target": REQUEST_METADATA_JSON,
+            "traits": [
+                Trait.new(
+                    id=ShapeID("smithy.api#httpHeader"),
+                    value="X-Amzn-Bedrock-Request-Metadata",
                 )
             ],
         },
@@ -5647,6 +6396,238 @@ AMAZON_BEDROCK_FRONTEND_SERVICE = Schema(
         Trait.new(
             id=ShapeID("smithy.api#auth"),
             value=("aws.auth#sigv4", "smithy.api#httpBearerAuth"),
+        ),
+        Trait.new(
+            id=ShapeID("smithy.rules#endpointBdd"),
+            value=MappingProxyType(
+                {
+                    "version": "1.1",
+                    "parameters": MappingProxyType(
+                        {
+                            "Region": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::Region",
+                                    "required": False,
+                                    "documentation": "The AWS region used to dispatch the request.",
+                                    "type": "string",
+                                }
+                            ),
+                            "UseDualStack": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseDualStack",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, use the dual-stack endpoint. If the configured endpoint does not support dual-stack, dispatching the request MAY return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "UseFIPS": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseFIPS",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, send this request to the FIPS-compliant regional endpoint. If the configured endpoint does not have a FIPS compliant endpoint, dispatching the request will return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "Endpoint": MappingProxyType(
+                                {
+                                    "builtIn": "SDK::Endpoint",
+                                    "required": False,
+                                    "documentation": "Override the endpoint used to send this request",
+                                    "type": "string",
+                                }
+                            ),
+                        }
+                    ),
+                    "conditions": (
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Endpoint"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "aws.partition",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                                "assign": "PartitionResult",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (MappingProxyType({"ref": "UseFIPS"}), True),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType({"ref": "UseDualStack"}),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsDualStack",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsFIPS",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                    ),
+                    "results": (
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": MappingProxyType({"ref": "Endpoint"}),
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://bedrock-runtime-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://bedrock-runtime-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS is enabled but this partition does not support FIPS",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://bedrock-runtime.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "DualStack is enabled but this partition does not support DualStack",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://bedrock-runtime.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Missing Region",
+                                "type": "error",
+                            }
+                        ),
+                    ),
+                    "root": 2,
+                    "nodeCount": 13,
+                    "nodes": "/////wAAAAH/////AAAAAAAAAAwAAAADAAAAAQAAAAQF9eELAAAAAgAAAAUF9eELAAAAAwAAAAgAAAAGAAAABAAAAAcF9eEKAAAABQX14QgF9eEJAAAABAAAAAoAAAAJAAAABgX14QYF9eEHAAAABQAAAAsF9eEFAAAABgX14QQF9eEFAAAAAwX14QEAAAANAAAABAX14QIF9eED",
+                }
+            ),
         ),
         Trait.new(
             id=ShapeID("aws.api#service"),

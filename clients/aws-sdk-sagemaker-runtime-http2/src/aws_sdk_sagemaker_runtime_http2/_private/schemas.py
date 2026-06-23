@@ -3130,6 +3130,423 @@ AMAZON_SAGE_MAKER_RUNTIME_HTTP2 = Schema(
             ),
         ),
         Trait.new(
+            id=ShapeID("smithy.rules#endpointBdd"),
+            value=MappingProxyType(
+                {
+                    "version": "1.1",
+                    "parameters": MappingProxyType(
+                        {
+                            "UseDualStack": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseDualStack",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, use the dual-stack endpoint. If the configured endpoint does not support dual-stack, dispatching the request MAY return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "UseFIPS": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseFIPS",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, send this request to the FIPS-compliant regional endpoint. If the configured endpoint does not have a FIPS compliant endpoint, dispatching the request will return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "Endpoint": MappingProxyType(
+                                {
+                                    "builtIn": "SDK::Endpoint",
+                                    "required": False,
+                                    "documentation": "Override the endpoint used to send this request",
+                                    "type": "string",
+                                }
+                            ),
+                            "Region": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::Region",
+                                    "required": False,
+                                    "documentation": "The AWS region used to dispatch the request.",
+                                    "type": "string",
+                                }
+                            ),
+                        }
+                    ),
+                    "conditions": (
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Endpoint"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "aws.partition",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                                "assign": "PartitionResult",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-cn",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-us-gov",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-iso",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-iso-b",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-eusc",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "stringEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "name",
+                                            ),
+                                        }
+                                    ),
+                                    "aws-iso-f",
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (MappingProxyType({"ref": "UseFIPS"}), True),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsFIPS",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType({"ref": "UseDualStack"}),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsDualStack",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                    ),
+                    "results": (
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": MappingProxyType({"ref": "Endpoint"}),
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker.{Region}.{PartitionResult#dnsSuffix}:8443",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker.{Region}.{PartitionResult#dualStackDnsSuffix}:8443",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-fips.sagemaker.{Region}.{PartitionResult#dnsSuffix}:8443",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-fips.sagemaker.{Region}.{PartitionResult#dualStackDnsSuffix}:8443",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS is enabled but this partition does not support FIPS",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "DualStack is enabled but this partition does not support DualStack",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime.sagemaker.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Missing Region",
+                                "type": "error",
+                            }
+                        ),
+                    ),
+                    "root": 2,
+                    "nodeCount": 23,
+                    "nodes": "/////wAAAAH/////AAAAAAAAABYAAAADAAAAAQAAAAQF9eEPAAAAAgAAAAUF9eEPAAAAAwAAABMAAAAGAAAABAAAABMAAAAHAAAABQAAABMAAAAIAAAABgAAABMAAAAJAAAABwAAABMAAAAKAAAACAAAABMAAAALAAAACQAAABMAAAAMAAAACgAAAA8AAAANAAAADAAAAA4F9eEOAAAADQX14QwF9eENAAAACwAAABEAAAAQAAAADAX14QkF9eELAAAADAAAABIF9eEKAAAADQX14QgF9eEJAAAACgAAABUAAAAUAAAADAX14QUF9eEEAAAADAX14QcF9eEGAAAACgX14QEAAAAXAAAADAX14QIF9eED",
+                }
+            ),
+        ),
+        Trait.new(
             id=ShapeID("aws.api#service"),
             value=MappingProxyType(
                 {

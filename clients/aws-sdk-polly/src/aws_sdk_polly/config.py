@@ -6,19 +6,15 @@ from typing import Any, Callable, TypeAlias, Union
 from smithy_aws_core.aio.protocols import RestJsonClientProtocol
 from smithy_aws_core.auth import SigV4AuthScheme
 from smithy_aws_core.endpoints.standard_regional import (
-    StandardRegionalEndpointsResolver as _RegionalResolver,
+    StandardRegionalEndpointsResolver,
 )
 from smithy_aws_core.identity import AWSCredentialsIdentity, AWSIdentityProperties
-from smithy_core.aio.interfaces import (
-    ClientProtocol,
-    ClientTransport,
-    EndpointResolver as _EndpointResolver,
-)
+from smithy_core.aio.interfaces import ClientProtocol, ClientTransport, EndpointResolver
 from smithy_core.aio.interfaces.auth import AuthScheme
 from smithy_core.aio.interfaces.identity import IdentityResolver
+from smithy_core.aio.interfaces.retries import RetryStrategy
 from smithy_core.interceptors import Interceptor
 from smithy_core.interfaces import URI
-from smithy_core.interfaces.retries import RetryStrategy
 from smithy_core.retries import RetryStrategyOptions
 from smithy_core.shapes import ShapeID
 from smithy_http.aio.crt import AWSCRTHTTPClient
@@ -97,7 +93,7 @@ class Config:
     aws_session_token: str | None
     """An access key ID that identifies temporary security credentials."""
 
-    endpoint_resolver: _EndpointResolver
+    endpoint_resolver: EndpointResolver
     """
     The endpoint resolver used to resolve the final endpoint per-operation
     based on the configuration.
@@ -154,7 +150,7 @@ class Config:
         | None = None,
         aws_secret_access_key: str | None = None,
         aws_session_token: str | None = None,
-        endpoint_resolver: _EndpointResolver | None = None,
+        endpoint_resolver: EndpointResolver | None = None,
         endpoint_uri: str | URI | None = None,
         http_request_config: HTTPRequestConfiguration | None = None,
         interceptors: list[_ServiceInterceptor] | None = None,
@@ -173,7 +169,7 @@ class Config:
         self.aws_credentials_identity_resolver = aws_credentials_identity_resolver
         self.aws_secret_access_key = aws_secret_access_key
         self.aws_session_token = aws_session_token
-        self.endpoint_resolver = endpoint_resolver or _RegionalResolver(
+        self.endpoint_resolver = endpoint_resolver or StandardRegionalEndpointsResolver(
             endpoint_prefix="polly"
         )
         self.endpoint_uri = endpoint_uri

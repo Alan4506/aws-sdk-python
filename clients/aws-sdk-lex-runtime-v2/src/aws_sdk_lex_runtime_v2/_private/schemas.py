@@ -2880,6 +2880,238 @@ AWS_DEEP_SENSE_RUN_TIME_SERVICE_API2_0 = Schema(
             ),
         ),
         Trait.new(
+            id=ShapeID("smithy.rules#endpointBdd"),
+            value=MappingProxyType(
+                {
+                    "version": "1.1",
+                    "parameters": MappingProxyType(
+                        {
+                            "Region": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::Region",
+                                    "required": False,
+                                    "documentation": "The AWS region used to dispatch the request.",
+                                    "type": "string",
+                                }
+                            ),
+                            "UseDualStack": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseDualStack",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, use the dual-stack endpoint. If the configured endpoint does not support dual-stack, dispatching the request MAY return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "UseFIPS": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseFIPS",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, send this request to the FIPS-compliant regional endpoint. If the configured endpoint does not have a FIPS compliant endpoint, dispatching the request will return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "Endpoint": MappingProxyType(
+                                {
+                                    "builtIn": "SDK::Endpoint",
+                                    "required": False,
+                                    "documentation": "Override the endpoint used to send this request",
+                                    "type": "string",
+                                }
+                            ),
+                        }
+                    ),
+                    "conditions": (
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Endpoint"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "aws.partition",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                                "assign": "PartitionResult",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (MappingProxyType({"ref": "UseFIPS"}), True),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType({"ref": "UseDualStack"}),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsDualStack",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (
+                                    MappingProxyType(
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": (
+                                                MappingProxyType(
+                                                    {"ref": "PartitionResult"}
+                                                ),
+                                                "supportsFIPS",
+                                            ),
+                                        }
+                                    ),
+                                    True,
+                                ),
+                            }
+                        ),
+                    ),
+                    "results": (
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Dualstack and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": MappingProxyType({"ref": "Endpoint"}),
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-v2-lex-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-v2-lex-fips.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "FIPS is enabled but this partition does not support FIPS",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-v2-lex.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "DualStack is enabled but this partition does not support DualStack",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://runtime-v2-lex.{Region}.{PartitionResult#dnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Missing Region",
+                                "type": "error",
+                            }
+                        ),
+                    ),
+                    "root": 2,
+                    "nodeCount": 13,
+                    "nodes": "/////wAAAAH/////AAAAAAAAAAwAAAADAAAAAQAAAAQF9eELAAAAAgAAAAUF9eELAAAAAwAAAAgAAAAGAAAABAAAAAcF9eEKAAAABQX14QgF9eEJAAAABAAAAAoAAAAJAAAABgX14QYF9eEHAAAABQAAAAsF9eEFAAAABgX14QQF9eEFAAAAAwX14QEAAAANAAAABAX14QIF9eED",
+                }
+            ),
+        ),
+        Trait.new(
             id=ShapeID("aws.api#service"),
             value=MappingProxyType(
                 {
@@ -2901,16 +3133,6 @@ AWS_DEEP_SENSE_RUN_TIME_SERVICE_API2_0 = Schema(
     ],
 )
 
-RUNTIME_HINT_DETAILS.members["subSlotHints"] = Schema.member(
-    id=RUNTIME_HINT_DETAILS.id.with_member("subSlotHints"),
-    target=SLOT_HINTS_SLOT_MAP,
-    index=1,
-)
-
-SLOT.members["values"] = Schema.member(
-    id=SLOT.id.with_member("values"), target=VALUES, index=2
-)
-
 SLOT.members["subSlots"] = Schema.member(
     id=SLOT.id.with_member("subSlots"), target=SLOTS, index=3
 )
@@ -2918,5 +3140,15 @@ SLOT.members["subSlots"] = Schema.member(
 ELICIT_SUB_SLOT.members["subSlotToElicit"] = Schema.member(
     id=ELICIT_SUB_SLOT.id.with_member("subSlotToElicit"),
     target=ELICIT_SUB_SLOT,
+    index=1,
+)
+
+SLOT.members["values"] = Schema.member(
+    id=SLOT.id.with_member("values"), target=VALUES, index=2
+)
+
+RUNTIME_HINT_DETAILS.members["subSlotHints"] = Schema.member(
+    id=RUNTIME_HINT_DETAILS.id.with_member("subSlotHints"),
+    target=SLOT_HINTS_SLOT_MAP,
     index=1,
 )

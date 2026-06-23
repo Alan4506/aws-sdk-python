@@ -5,9 +5,9 @@ import logging
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream, OutputEventStream
+from smithy_core.aio.retries import RetryStrategyResolver
 from smithy_core.exceptions import ExpectationNotMetError
 from smithy_core.interceptors import InterceptorChain
-from smithy_core.retries import RetryStrategyResolver
 from smithy_core.types import TypedProperties
 from smithy_http.plugins import user_agent_plugin
 
@@ -29,9 +29,12 @@ from .models import (
     GET_ASYNC_INVOKE,
     GetAsyncInvokeInput,
     GetAsyncInvokeOutput,
+    INVOKE_GUARDRAIL_CHECKS,
     INVOKE_MODEL,
     INVOKE_MODEL_WITH_BIDIRECTIONAL_STREAM,
     INVOKE_MODEL_WITH_RESPONSE_STREAM,
+    InvokeGuardrailChecksInput,
+    InvokeGuardrailChecksOutput,
     InvokeModelInput,
     InvokeModelOutput,
     InvokeModelWithBidirectionalStreamInput,
@@ -458,6 +461,55 @@ class BedrockRuntimeClient:
         call = ClientCall(
             input=input,
             operation=GET_ASYNC_INVOKE,
+            context=TypedProperties({"config": config}),
+            interceptor=InterceptorChain(config.interceptors),
+            auth_scheme_resolver=config.auth_scheme_resolver,
+            supported_auth_schemes=config.auth_schemes,
+            endpoint_resolver=config.endpoint_resolver,
+            retry_strategy=retry_strategy,
+        )
+
+        return await pipeline(call)
+
+    async def invoke_guardrail_checks(
+        self, input: InvokeGuardrailChecksInput, plugins: list[Plugin] | None = None
+    ) -> InvokeGuardrailChecksOutput:
+        """
+        Evaluates messages against inline guardrail checks. You specify the
+        check configurations directly in the request, and Amazon Bedrock returns
+        per-check results with severity or confidence scores.
+
+        Args:
+            input:
+                An instance of `InvokeGuardrailChecksInput`.
+            plugins:
+                A list of callables that modify the configuration dynamically.
+                Changes made by these plugins only apply for the duration of the
+                operation execution and will not affect any other operation
+                invocations.
+
+        Returns:
+            An instance of `InvokeGuardrailChecksOutput`.
+        """
+        operation_plugins: list[Plugin] = []
+        if plugins:
+            operation_plugins.extend(plugins)
+        config = deepcopy(self._config)
+        for plugin in operation_plugins:
+            plugin(config)
+        if config.protocol is None or config.transport is None:
+            raise ExpectationNotMetError(
+                "protocol and transport MUST be set on the config to make calls."
+            )
+
+        retry_strategy = await self._retry_strategy_resolver.resolve_retry_strategy(
+            retry_strategy=config.retry_strategy
+        )
+
+        pipeline = RequestPipeline(protocol=config.protocol, transport=config.transport)
+        call = ClientCall(
+            input=input,
+            operation=INVOKE_GUARDRAIL_CHECKS,
             context=TypedProperties({"config": config}),
             interceptor=InterceptorChain(config.interceptors),
             auth_scheme_resolver=config.auth_scheme_resolver,

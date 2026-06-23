@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.7.0
+
+### API Changes
+* Support system role in message.
+* Support Request Metadata for Invoke Model and Invoke Model with Response Stream.
+* InvokeGuardrailChecks API evaluates prompts and responses against safety checks (content filters, prompt attacks, sensitive info) without creating guardrail resources. It's a detect-only API, returning numeric scores so you can build adaptive logic as per your application.
+
+### Enhancements
+* Re-generated with smithy-python 0.3.1
+
+### Dependencies
+* Bump `smithy-core` from `~=0.5.0` to `~=0.6.0`.
+* Bump `smithy-aws-core` from `~=0.6.0` to `~=0.7.0`.
+
 ## v0.6.0
 
 ### Dependencies

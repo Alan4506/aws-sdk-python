@@ -2,8 +2,11 @@
 
 from smithy_core.aio.utils import async_list
 from smithy_http import tuples_to_fields
-from smithy_http.aio import HTTPResponse as _HTTPResponse
-from smithy_http.aio.interfaces import HTTPRequest, HTTPResponse
+from smithy_http.aio import HTTPResponse as _smithy_http_aio_HTTPResponse
+from smithy_http.aio.interfaces import (
+    HTTPRequest,
+    HTTPResponse as _smithy_http_aio_interfaces_HTTPResponse,
+)
 from smithy_http.interfaces import HTTPClientConfiguration, HTTPRequestConfiguration
 
 from aws_sdk_polly.models import ServiceError
@@ -29,7 +32,7 @@ class RequestTestHTTPClient:
         request: HTTPRequest,
         *,
         request_config: HTTPRequestConfiguration | None = None,
-    ) -> HTTPResponse:
+    ) -> _smithy_http_aio_interfaces_HTTPResponse:
         # Raise the exception with the request object to bypass actual request handling
         raise TestHttpServiceError(request)
 
@@ -57,8 +60,8 @@ class ResponseTestHTTPClient:
         request: HTTPRequest,
         *,
         request_config: HTTPRequestConfiguration | None = None,
-    ) -> _HTTPResponse:
+    ) -> _smithy_http_aio_HTTPResponse:
         # Pre-construct the response from the request and return it
-        return _HTTPResponse(
+        return _smithy_http_aio_HTTPResponse(
             status=self.status, fields=self.fields, body=async_list([self.body])
         )

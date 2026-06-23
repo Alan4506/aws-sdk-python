@@ -2,16 +2,18 @@
 
 from typing import Any
 
-from smithy_core.auth import AuthOption, AuthParams
-from smithy_core.interfaces.auth import AuthOption as AuthOptionProtocol
+from smithy_core.auth import AuthOption as _smithy_core_auth_AuthOption, AuthParams
+from smithy_core.interfaces.auth import (
+    AuthOption as _smithy_core_interfaces_auth_AuthOption,
+)
 from smithy_core.shapes import ShapeID
 
 
 class HTTPAuthSchemeResolver:
     def resolve_auth_scheme(
         self, auth_parameters: AuthParams[Any, Any]
-    ) -> list[AuthOptionProtocol]:
-        auth_options: list[AuthOptionProtocol] = []
+    ) -> list[_smithy_core_interfaces_auth_AuthOption]:
+        auth_options: list[_smithy_core_interfaces_auth_AuthOption] = []
 
         if (option := _generate_sigv4_option(auth_parameters)) is not None:
             auth_options.append(option)
@@ -21,8 +23,8 @@ class HTTPAuthSchemeResolver:
 
 def _generate_sigv4_option(
     auth_params: AuthParams[Any, Any],
-) -> AuthOptionProtocol | None:
-    return AuthOption(
+) -> _smithy_core_interfaces_auth_AuthOption | None:
+    return _smithy_core_auth_AuthOption(
         scheme_id=ShapeID("aws.auth#sigv4"),
         identity_properties={},  # type: ignore
         signer_properties={},  # type: ignore

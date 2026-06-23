@@ -13,6 +13,7 @@ from smithy_core.exceptions import ModeledError, SerializationError
 from smithy_core.schemas import APIOperation, Schema
 from smithy_core.serializers import ShapeSerializer
 from smithy_core.shapes import ShapeID
+from smithy_core.types import UnknownEnumMixin
 
 from ._private.schemas import (
     AUDIO_EVENT as _SCHEMA_AUDIO_EVENT,
@@ -344,14 +345,14 @@ DELETE_LEXICON = APIOperation(
 )
 
 
-class Engine(StrEnum):
+class Engine(UnknownEnumMixin, StrEnum):
     STANDARD = "standard"
     NEURAL = "neural"
     LONG_FORM = "long-form"
     GENERATIVE = "generative"
 
 
-class LanguageCode(StrEnum):
+class LanguageCode(UnknownEnumMixin, StrEnum):
     ARB = "arb"
     CMN_CN = "cmn-CN"
     CY_GB = "cy-GB"
@@ -400,13 +401,13 @@ class LanguageCode(StrEnum):
 class DescribeVoicesInput:
     """Dataclass for DescribeVoicesInput structure."""
 
-    engine: str | None = None
+    engine: Engine | None = None
     """
     Specifies the engine (`standard`, `neural`, `long-form` or `generative`)
     used by Amazon Polly when processing input text for speech synthesis.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     The language identification tag (ISO 639 code for the language name-ISO
     3166 country code) for filtering the list of voices returned. If you
@@ -466,13 +467,15 @@ class DescribeVoicesInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["engine"] = de.read_string(
-                        _SCHEMA_DESCRIBE_VOICES_INPUT.members["Engine"]
+                    kwargs["engine"] = Engine(
+                        de.read_string(_SCHEMA_DESCRIBE_VOICES_INPUT.members["Engine"])
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_DESCRIBE_VOICES_INPUT.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_DESCRIBE_VOICES_INPUT.members["LanguageCode"]
+                        )
                     )
 
                 case 2:
@@ -495,7 +498,7 @@ class DescribeVoicesInput:
 
 
 def _serialize_language_code_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[str]
+    serializer: ShapeSerializer, schema: Schema, value: list[LanguageCode]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -505,8 +508,8 @@ def _serialize_language_code_list(
 
 def _deserialize_language_code_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[str]:
-    result: list[str] = []
+) -> list[LanguageCode]:
+    result: list[LanguageCode] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -514,18 +517,18 @@ def _deserialize_language_code_list(
             d.read_null()
 
         else:
-            result.append(d.read_string(member_schema))
+            result.append(LanguageCode(d.read_string(member_schema)))
 
     deserializer.read_list(schema, _read_value)
     return result
 
 
-class Gender(StrEnum):
+class Gender(UnknownEnumMixin, StrEnum):
     FEMALE = "Female"
     MALE = "Male"
 
 
-class VoiceId(StrEnum):
+class VoiceId(UnknownEnumMixin, StrEnum):
     ADITI = "Aditi"
     AMY = "Amy"
     ASTRID = "Astrid"
@@ -635,7 +638,7 @@ class VoiceId(StrEnum):
 
 
 def _serialize_engine_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[str]
+    serializer: ShapeSerializer, schema: Schema, value: list[Engine]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -645,8 +648,8 @@ def _serialize_engine_list(
 
 def _deserialize_engine_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[str]:
-    result: list[str] = []
+) -> list[Engine]:
+    result: list[Engine] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -654,7 +657,7 @@ def _deserialize_engine_list(
             d.read_null()
 
         else:
-            result.append(d.read_string(member_schema))
+            result.append(Engine(d.read_string(member_schema)))
 
     deserializer.read_list(schema, _read_value)
     return result
@@ -664,16 +667,16 @@ def _deserialize_engine_list(
 class Voice:
     """Description of the voice."""
 
-    gender: str | None = None
+    gender: Gender | None = None
     """Gender of the voice."""
 
-    id: str | None = None
+    id: VoiceId | None = None
     """
     Amazon Polly assigned voice ID. This is the ID that you specify when
     calling the `SynthesizeSpeech` operation.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """Language code of the voice."""
 
     language_name: str | None = None
@@ -685,7 +688,7 @@ class Voice:
     human readable voice name that you might display in your application.
     """
 
-    additional_language_codes: list[str] | None = None
+    additional_language_codes: list[LanguageCode] | None = None
     """
     Additional codes for languages available for the specified voice in
     addition to its default language.
@@ -696,7 +699,7 @@ class Voice:
     the code `hi-IN`.
     """
 
-    supported_engines: list[str] | None = None
+    supported_engines: list[Engine] | None = None
     """
     Specifies which engines (`standard`, `neural`, `long-form` or
     `generative`) are supported by a given voice.
@@ -750,14 +753,16 @@ class Voice:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["gender"] = de.read_string(_SCHEMA_VOICE.members["Gender"])
+                    kwargs["gender"] = Gender(
+                        de.read_string(_SCHEMA_VOICE.members["Gender"])
+                    )
 
                 case 1:
-                    kwargs["id"] = de.read_string(_SCHEMA_VOICE.members["Id"])
+                    kwargs["id"] = VoiceId(de.read_string(_SCHEMA_VOICE.members["Id"]))
 
                 case 2:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_VOICE.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(_SCHEMA_VOICE.members["LanguageCode"])
                     )
 
                 case 3:
@@ -1124,7 +1129,7 @@ class LexiconAttributes:
     `x-sampa`.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Language code that the lexicon applies to. A lexicon with a language
     code such as \"en\" would be applied to all English languages (en-GB,
@@ -1188,8 +1193,10 @@ class LexiconAttributes:
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_LEXICON_ATTRIBUTES.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_LEXICON_ATTRIBUTES.members["LanguageCode"]
+                        )
                     )
 
                 case 2:
@@ -1361,7 +1368,7 @@ def _deserialize_lexicon_name_list(
     return result
 
 
-class OutputFormat(StrEnum):
+class OutputFormat(UnknownEnumMixin, StrEnum):
     JSON = "json"
     MP3 = "mp3"
     OGG_OPUS = "ogg_opus"
@@ -1371,7 +1378,7 @@ class OutputFormat(StrEnum):
     ALAW = "alaw"
 
 
-class SpeechMarkType(StrEnum):
+class SpeechMarkType(UnknownEnumMixin, StrEnum):
     SENTENCE = "sentence"
     SSML = "ssml"
     VISEME = "viseme"
@@ -1379,7 +1386,7 @@ class SpeechMarkType(StrEnum):
 
 
 def _serialize_speech_mark_type_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[str]
+    serializer: ShapeSerializer, schema: Schema, value: list[SpeechMarkType]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -1389,8 +1396,8 @@ def _serialize_speech_mark_type_list(
 
 def _deserialize_speech_mark_type_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[str]:
-    result: list[str] = []
+) -> list[SpeechMarkType]:
+    result: list[SpeechMarkType] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -1398,20 +1405,20 @@ def _deserialize_speech_mark_type_list(
             d.read_null()
 
         else:
-            result.append(d.read_string(member_schema))
+            result.append(SpeechMarkType(d.read_string(member_schema)))
 
     deserializer.read_list(schema, _read_value)
     return result
 
 
-class TaskStatus(StrEnum):
+class TaskStatus(UnknownEnumMixin, StrEnum):
     SCHEDULED = "scheduled"
     IN_PROGRESS = "inProgress"
     COMPLETED = "completed"
     FAILED = "failed"
 
 
-class TextType(StrEnum):
+class TextType(UnknownEnumMixin, StrEnum):
     SSML = "ssml"
     TEXT = "text"
 
@@ -1423,7 +1430,7 @@ class SynthesisTask:
     task.
     """
 
-    engine: str | None = None
+    engine: Engine | None = None
     """
     Specifies the engine (`standard`, `neural`, `long-form` or `generative`)
     for Amazon Polly to use when processing input text for speech synthesis.
@@ -1434,7 +1441,7 @@ class SynthesisTask:
     task_id: str | None = None
     """The Amazon Polly generated identifier for a speech synthesis task."""
 
-    task_status: str | None = None
+    task_status: TaskStatus | None = None
     """Current status of the individual speech synthesis task."""
 
     task_status_reason: str | None = None
@@ -1465,7 +1472,7 @@ class SynthesisTask:
     lexicon is the same as the language of the voice.
     """
 
-    output_format: str | None = None
+    output_format: OutputFormat | None = None
     """
     The format in which the returned output will be encoded. For audio
     stream, this will be mp3, ogg_vorbis, ogg_opus, mu-law, a-law, or pcm.
@@ -1490,19 +1497,19 @@ class SynthesisTask:
     Valid value for mu-law and a-law is \"8000\".
     """
 
-    speech_mark_types: list[str] | None = None
+    speech_mark_types: list[SpeechMarkType] | None = None
     """The type of speech marks returned for the input text."""
 
-    text_type: str | None = None
+    text_type: TextType | None = None
     """
     Specifies whether the input text is plain text or SSML. The default
     value is plain text.
     """
 
-    voice_id: str | None = None
+    voice_id: VoiceId | None = None
     """Voice ID to use for the synthesis."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Optional language code for a synthesis task. This is only necessary if
     using a bilingual voice, such as Aditi, which can be used for either
@@ -1609,8 +1616,8 @@ class SynthesisTask:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["engine"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["Engine"]
+                    kwargs["engine"] = Engine(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["Engine"])
                     )
 
                 case 1:
@@ -1619,8 +1626,8 @@ class SynthesisTask:
                     )
 
                 case 2:
-                    kwargs["task_status"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["TaskStatus"]
+                    kwargs["task_status"] = TaskStatus(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["TaskStatus"])
                     )
 
                 case 3:
@@ -1654,8 +1661,8 @@ class SynthesisTask:
                     )
 
                 case 9:
-                    kwargs["output_format"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["OutputFormat"]
+                    kwargs["output_format"] = OutputFormat(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["OutputFormat"])
                     )
 
                 case 10:
@@ -1669,18 +1676,18 @@ class SynthesisTask:
                     )
 
                 case 12:
-                    kwargs["text_type"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["TextType"]
+                    kwargs["text_type"] = TextType(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["TextType"])
                     )
 
                 case 13:
-                    kwargs["voice_id"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["VoiceId"]
+                    kwargs["voice_id"] = VoiceId(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["VoiceId"])
                     )
 
                 case 14:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_SYNTHESIS_TASK.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(_SCHEMA_SYNTHESIS_TASK.members["LanguageCode"])
                     )
 
                 case _:
@@ -2376,7 +2383,7 @@ class ListSpeechSynthesisTasksInput:
     of speech synthesis tasks.
     """
 
-    status: str | None = None
+    status: TaskStatus | None = None
     """Status of the speech synthesis tasks returned in a List operation"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2421,8 +2428,10 @@ class ListSpeechSynthesisTasksInput:
                     )
 
                 case 2:
-                    kwargs["status"] = de.read_string(
-                        _SCHEMA_LIST_SPEECH_SYNTHESIS_TASKS_INPUT.members["Status"]
+                    kwargs["status"] = TaskStatus(
+                        de.read_string(
+                            _SCHEMA_LIST_SPEECH_SYNTHESIS_TASKS_INPUT.members["Status"]
+                        )
                     )
 
                 case _:
@@ -2889,12 +2898,12 @@ PUT_LEXICON = APIOperation(
 )
 
 
-class QuotaCode(StrEnum):
+class QuotaCode(UnknownEnumMixin, StrEnum):
     INPUT_STREAM_INBOUND_EVENT_TIMEOUT = "input-stream-inbound-event-timeout"
     INPUT_STREAM_TIMEOUT = "input-stream-timeout"
 
 
-class ServiceCode(StrEnum):
+class ServiceCode(UnknownEnumMixin, StrEnum):
     POLLY = "polly"
 
 
@@ -2904,10 +2913,10 @@ class ServiceQuotaExceededException(ServiceError):
 
     fault: Literal["client", "server"] | None = "client"
 
-    quota_code: str
+    quota_code: QuotaCode
     """The quota code identifying the specific quota."""
 
-    service_code: str
+    service_code: ServiceCode
     """The service code identifying the originating service."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2942,13 +2951,21 @@ class ServiceQuotaExceededException(ServiceError):
                     )
 
                 case 1:
-                    kwargs["quota_code"] = de.read_string(
-                        _SCHEMA_SERVICE_QUOTA_EXCEEDED_EXCEPTION.members["quotaCode"]
+                    kwargs["quota_code"] = QuotaCode(
+                        de.read_string(
+                            _SCHEMA_SERVICE_QUOTA_EXCEEDED_EXCEPTION.members[
+                                "quotaCode"
+                            ]
+                        )
                     )
 
                 case 2:
-                    kwargs["service_code"] = de.read_string(
-                        _SCHEMA_SERVICE_QUOTA_EXCEEDED_EXCEPTION.members["serviceCode"]
+                    kwargs["service_code"] = ServiceCode(
+                        de.read_string(
+                            _SCHEMA_SERVICE_QUOTA_EXCEEDED_EXCEPTION.members[
+                                "serviceCode"
+                            ]
+                        )
                     )
 
                 case _:
@@ -2957,6 +2974,10 @@ class ServiceQuotaExceededException(ServiceError):
         deserializer.read_struct(
             _SCHEMA_SERVICE_QUOTA_EXCEEDED_EXCEPTION, consumer=_consumer
         )
+        if "quota_code" not in kwargs:
+            kwargs["quota_code"] = QuotaCode._corrected("")
+        if "service_code" not in kwargs:
+            kwargs["service_code"] = ServiceCode._corrected("")
         return kwargs
 
 
@@ -2970,7 +2991,7 @@ class TextEvent:
     follow the SSML format for the input text.
     """
 
-    text_type: str | None = None
+    text_type: TextType | None = None
     """
     Specifies whether the input text is plain text or SSML. Default: plain
     text.
@@ -3012,8 +3033,8 @@ class TextEvent:
                     kwargs["text"] = de.read_string(_SCHEMA_TEXT_EVENT.members["Text"])
 
                 case 1:
-                    kwargs["text_type"] = de.read_string(
-                        _SCHEMA_TEXT_EVENT.members["TextType"]
+                    kwargs["text_type"] = TextType(
+                        de.read_string(_SCHEMA_TEXT_EVENT.members["TextType"])
                     )
 
                 case 2:
@@ -3025,6 +3046,8 @@ class TextEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_TEXT_EVENT, consumer=_consumer)
+        if "text" not in kwargs:
+            kwargs["text"] = ""
         return kwargs
 
 
@@ -3160,7 +3183,7 @@ class _StartSpeechSynthesisStreamActionStreamDeserializer:
 class StartSpeechSynthesisStreamInput:
     """Dataclass for StartSpeechSynthesisStreamInput structure."""
 
-    engine: str | None = None
+    engine: Engine | None = None
     """
     Specifies the engine for Amazon Polly to use when processing input text
     for speech synthesis. Currently, only the `generative` engine is
@@ -3168,7 +3191,7 @@ class StartSpeechSynthesisStreamInput:
     support, Amazon Polly returns an error.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     An optional parameter that sets the language code for the speech
     synthesis request. Specify this parameter only when using a bilingual
@@ -3183,7 +3206,7 @@ class StartSpeechSynthesisStreamInput:
     language matches the voice language.
     """
 
-    output_format: str | None = None
+    output_format: OutputFormat | None = None
     """
     The audio format for the synthesized speech. Currently, Amazon Polly
     does not support JSON speech marks.
@@ -3192,7 +3215,7 @@ class StartSpeechSynthesisStreamInput:
     sample_rate: str | None = None
     """The audio frequency, specified in Hz."""
 
-    voice_id: str | None = None
+    voice_id: VoiceId | None = None
     """
     The voice to use in synthesis. To get a list of available voice IDs, use
     the
@@ -3252,15 +3275,21 @@ class StartSpeechSynthesisStreamInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["engine"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members["Engine"]
+                    kwargs["engine"] = Engine(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
+                                "Engine"
+                            ]
+                        )
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -3272,10 +3301,12 @@ class StartSpeechSynthesisStreamInput:
                     )
 
                 case 3:
-                    kwargs["output_format"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
-                            "OutputFormat"
-                        ]
+                    kwargs["output_format"] = OutputFormat(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
+                                "OutputFormat"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -3286,8 +3317,12 @@ class StartSpeechSynthesisStreamInput:
                     )
 
                 case 5:
-                    kwargs["voice_id"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members["VoiceId"]
+                    kwargs["voice_id"] = VoiceId(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_STREAM_INPUT.members[
+                                "VoiceId"
+                            ]
+                        )
                     )
 
                 case _:
@@ -3513,6 +3548,10 @@ class ValidationExceptionField:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_VALIDATION_EXCEPTION_FIELD, consumer=_consumer)
+        if "name" not in kwargs:
+            kwargs["name"] = ""
+        if "message" not in kwargs:
+            kwargs["message"] = ""
         return kwargs
 
 
@@ -3541,7 +3580,7 @@ def _deserialize_validation_exception_field_list(
     return result
 
 
-class ValidationExceptionReason(StrEnum):
+class ValidationExceptionReason(UnknownEnumMixin, StrEnum):
     UNSUPPORTED_OPERATION = "unsupportedOperation"
     FIELD_VALIDATION_FAILED = "fieldValidationFailed"
     OTHER = "other"
@@ -3554,7 +3593,7 @@ class ValidationException(ServiceError):
 
     fault: Literal["client", "server"] | None = "client"
 
-    reason: str
+    reason: ValidationExceptionReason
     """The reason the request failed validation."""
 
     fields: list[ValidationExceptionField] | None = None
@@ -3591,8 +3630,8 @@ class ValidationException(ServiceError):
                     )
 
                 case 1:
-                    kwargs["reason"] = de.read_string(
-                        _SCHEMA_VALIDATION_EXCEPTION.members["reason"]
+                    kwargs["reason"] = ValidationExceptionReason(
+                        de.read_string(_SCHEMA_VALIDATION_EXCEPTION.members["reason"])
                     )
 
                 case 2:
@@ -3604,6 +3643,8 @@ class ValidationException(ServiceError):
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_VALIDATION_EXCEPTION, consumer=_consumer)
+        if "reason" not in kwargs:
+            kwargs["reason"] = ValidationExceptionReason._corrected("")
         return kwargs
 
 
@@ -3970,7 +4011,7 @@ class SsmlMarksNotSupportedForTextTypeException(ServiceError):
 class StartSpeechSynthesisTaskInput:
     """Dataclass for StartSpeechSynthesisTaskInput structure."""
 
-    engine: str | None = None
+    engine: Engine | None = None
     """
     Specifies the engine (`standard`, `neural`, `long-form` or `generative`)
     for Amazon Polly to use when processing input text for speech synthesis.
@@ -3978,7 +4019,7 @@ class StartSpeechSynthesisTaskInput:
     in an error.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Optional language code for the Speech Synthesis request. This is only
     necessary if using a bilingual voice, such as Aditi, which can be used
@@ -3999,7 +4040,7 @@ class StartSpeechSynthesisTaskInput:
     lexicon is the same as the language of the voice.
     """
 
-    output_format: str | None = None
+    output_format: OutputFormat | None = None
     """
     The format in which the returned output will be encoded. For audio
     stream, this will be mp3, ogg_vorbis, ogg_opus, mu-law, a-law, or pcm.
@@ -4036,7 +4077,7 @@ class StartSpeechSynthesisTaskInput:
     for a speech synthesis task.
     """
 
-    speech_mark_types: list[str] | None = None
+    speech_mark_types: list[SpeechMarkType] | None = None
     """The type of speech marks returned for the input text."""
 
     text: str | None = None
@@ -4045,13 +4086,13 @@ class StartSpeechSynthesisTaskInput:
     follow the SSML format for the input text.
     """
 
-    text_type: str | None = None
+    text_type: TextType | None = None
     """
     Specifies whether the input text is plain text or SSML. The default
     value is plain text.
     """
 
-    voice_id: str | None = None
+    voice_id: VoiceId | None = None
     """Voice ID to use for the synthesis."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4141,15 +4182,19 @@ class StartSpeechSynthesisTaskInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["engine"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members["Engine"]
+                    kwargs["engine"] = Engine(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members["Engine"]
+                        )
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -4161,10 +4206,12 @@ class StartSpeechSynthesisTaskInput:
                     )
 
                 case 3:
-                    kwargs["output_format"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members[
-                            "OutputFormat"
-                        ]
+                    kwargs["output_format"] = OutputFormat(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members[
+                                "OutputFormat"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -4205,13 +4252,19 @@ class StartSpeechSynthesisTaskInput:
                     )
 
                 case 10:
-                    kwargs["text_type"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members["TextType"]
+                    kwargs["text_type"] = TextType(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members[
+                                "TextType"
+                            ]
+                        )
                     )
 
                 case 11:
-                    kwargs["voice_id"] = de.read_string(
-                        _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members["VoiceId"]
+                    kwargs["voice_id"] = VoiceId(
+                        de.read_string(
+                            _SCHEMA_START_SPEECH_SYNTHESIS_TASK_INPUT.members["VoiceId"]
+                        )
                     )
 
                 case _:
@@ -4375,7 +4428,7 @@ START_SPEECH_SYNTHESIS_TASK = APIOperation(
 class SynthesizeSpeechInput:
     """Dataclass for SynthesizeSpeechInput structure."""
 
-    engine: str | None = None
+    engine: Engine | None = None
     """
     Specifies the engine (`standard`, `neural`, `long-form`, or
     `generative`) for Amazon Polly to use when processing input text for
@@ -4387,7 +4440,7 @@ class SynthesizeSpeechInput:
     Voices](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html).
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Optional language code for the Synthesize Speech request. This is only
     necessary if using a bilingual voice, such as Aditi, which can be used
@@ -4410,7 +4463,7 @@ class SynthesizeSpeechInput:
     [PutLexicon](https://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html).
     """
 
-    output_format: str | None = None
+    output_format: OutputFormat | None = None
     """
     The format in which the returned output will be encoded. For audio
     stream, this will be mp3, ogg_vorbis, ogg_opus, mu-law, a-law or pcm.
@@ -4438,7 +4491,7 @@ class SynthesizeSpeechInput:
     Valid value for mu-law and a-law is \"8000\".
     """
 
-    speech_mark_types: list[str] | None = None
+    speech_mark_types: list[SpeechMarkType] | None = None
     """The type of speech marks returned for the input text."""
 
     text: str | None = None
@@ -4447,14 +4500,14 @@ class SynthesizeSpeechInput:
     follow the SSML format for the input text.
     """
 
-    text_type: str | None = None
+    text_type: TextType | None = None
     """
     Specifies whether the input text is plain text or SSML. The default
     value is plain text. For more information, see [Using
     SSML](https://docs.aws.amazon.com/polly/latest/dg/ssml.html).
     """
 
-    voice_id: str | None = None
+    voice_id: VoiceId | None = None
     """
     Voice ID to use for the synthesis. You can get a list of available voice
     IDs by calling the
@@ -4528,13 +4581,17 @@ class SynthesizeSpeechInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["engine"] = de.read_string(
-                        _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["Engine"]
+                    kwargs["engine"] = Engine(
+                        de.read_string(
+                            _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["Engine"]
+                        )
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["LanguageCode"]
+                        )
                     )
 
                 case 2:
@@ -4543,8 +4600,10 @@ class SynthesizeSpeechInput:
                     )
 
                 case 3:
-                    kwargs["output_format"] = de.read_string(
-                        _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["OutputFormat"]
+                    kwargs["output_format"] = OutputFormat(
+                        de.read_string(
+                            _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["OutputFormat"]
+                        )
                     )
 
                 case 4:
@@ -4563,13 +4622,17 @@ class SynthesizeSpeechInput:
                     )
 
                 case 7:
-                    kwargs["text_type"] = de.read_string(
-                        _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["TextType"]
+                    kwargs["text_type"] = TextType(
+                        de.read_string(
+                            _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["TextType"]
+                        )
                     )
 
                 case 8:
-                    kwargs["voice_id"] = de.read_string(
-                        _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["VoiceId"]
+                    kwargs["voice_id"] = VoiceId(
+                        de.read_string(
+                            _SCHEMA_SYNTHESIZE_SPEECH_INPUT.members["VoiceId"]
+                        )
                     )
 
                 case _:
