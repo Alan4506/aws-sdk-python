@@ -12,6 +12,7 @@ from smithy_core.exceptions import ModeledError, SerializationError
 from smithy_core.schemas import APIOperation, Schema
 from smithy_core.serializers import ShapeSerializer
 from smithy_core.shapes import ShapeID
+from smithy_core.types import UnknownEnumMixin
 
 from ._private.schemas import (
     ALTERNATIVE as _SCHEMA_ALTERNATIVE,
@@ -230,7 +231,7 @@ def _deserialize_entity_list(
     return result
 
 
-class ItemType(StrEnum):
+class ItemType(UnknownEnumMixin, StrEnum):
     PRONUNCIATION = "pronunciation"
     PUNCTUATION = "punctuation"
 
@@ -255,7 +256,7 @@ class Item:
     precision (e.g., 1.056)
     """
 
-    type: str | None = None
+    type: ItemType | None = None
     """
     The type of item identified. Options are: `PRONUNCIATION` (spoken words)
     and `PUNCTUATION`.
@@ -337,7 +338,9 @@ class Item:
                     kwargs["end_time"] = de.read_double(_SCHEMA_ITEM.members["EndTime"])
 
                 case 2:
-                    kwargs["type"] = de.read_string(_SCHEMA_ITEM.members["Type"])
+                    kwargs["type"] = ItemType(
+                        de.read_string(_SCHEMA_ITEM.members["Type"])
+                    )
 
                 case 3:
                     kwargs["content"] = de.read_string(_SCHEMA_ITEM.members["Content"])
@@ -549,7 +552,7 @@ class AudioEvent:
         return kwargs
 
 
-class ParticipantRole(StrEnum):
+class ParticipantRole(UnknownEnumMixin, StrEnum):
     AGENT = "AGENT"
     CUSTOMER = "CUSTOMER"
 
@@ -564,7 +567,7 @@ class ChannelDefinition:
     speaking).
     """
 
-    participant_role: str
+    participant_role: ParticipantRole
     """
     Specify the speaker you want to define. Omitting this parameter is
     equivalent to specifying both participants.
@@ -600,14 +603,18 @@ class ChannelDefinition:
                     )
 
                 case 1:
-                    kwargs["participant_role"] = de.read_string(
-                        _SCHEMA_CHANNEL_DEFINITION.members["ParticipantRole"]
+                    kwargs["participant_role"] = ParticipantRole(
+                        de.read_string(
+                            _SCHEMA_CHANNEL_DEFINITION.members["ParticipantRole"]
+                        )
                     )
 
                 case _:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_CHANNEL_DEFINITION, consumer=_consumer)
+        if "participant_role" not in kwargs:
+            kwargs["participant_role"] = ParticipantRole._corrected("")
         return kwargs
 
 
@@ -636,7 +643,7 @@ def _deserialize_channel_definitions(
     return result
 
 
-class ContentRedactionOutput(StrEnum):
+class ContentRedactionOutput(UnknownEnumMixin, StrEnum):
     REDACTED = "redacted"
     REDACTED_AND_UNREDACTED = "redacted_and_unredacted"
 
@@ -682,7 +689,7 @@ class PostCallAnalyticsSettings:
     ARNs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-arns).
     """
 
-    content_redaction_output: str | None = None
+    content_redaction_output: ContentRedactionOutput | None = None
     """
     Specify whether you want only a redacted transcript or both a redacted
     and an unredacted transcript. If you choose redacted and unredacted, two
@@ -775,10 +782,12 @@ class PostCallAnalyticsSettings:
                     )
 
                 case 2:
-                    kwargs["content_redaction_output"] = de.read_string(
-                        _SCHEMA_POST_CALL_ANALYTICS_SETTINGS.members[
-                            "ContentRedactionOutput"
-                        ]
+                    kwargs["content_redaction_output"] = ContentRedactionOutput(
+                        de.read_string(
+                            _SCHEMA_POST_CALL_ANALYTICS_SETTINGS.members[
+                                "ContentRedactionOutput"
+                            ]
+                        )
                     )
 
                 case 3:
@@ -794,6 +803,10 @@ class PostCallAnalyticsSettings:
         deserializer.read_struct(
             _SCHEMA_POST_CALL_ANALYTICS_SETTINGS, consumer=_consumer
         )
+        if "output_location" not in kwargs:
+            kwargs["output_location"] = ""
+        if "data_access_role_arn" not in kwargs:
+            kwargs["data_access_role_arn"] = ""
         return kwargs
 
 
@@ -1188,7 +1201,7 @@ class CallAnalyticsItem:
     end of the identified item.
     """
 
-    type: str | None = None
+    type: ItemType | None = None
     """
     The type of item identified. Options are: `PRONUNCIATION` (spoken words)
     and `PUNCTUATION`.
@@ -1282,8 +1295,8 @@ class CallAnalyticsItem:
                     )
 
                 case 2:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_CALL_ANALYTICS_ITEM.members["Type"]
+                    kwargs["type"] = ItemType(
+                        de.read_string(_SCHEMA_CALL_ANALYTICS_ITEM.members["Type"])
                     )
 
                 case 3:
@@ -1338,7 +1351,7 @@ def _deserialize_call_analytics_item_list(
     return result
 
 
-class CallAnalyticsLanguageCode(StrEnum):
+class CallAnalyticsLanguageCode(UnknownEnumMixin, StrEnum):
     EN_US = "en-US"
     EN_GB = "en-GB"
     ES_US = "es-US"
@@ -1357,7 +1370,7 @@ class CallAnalyticsLanguageWithScore:
     including the associated confidence score.
     """
 
-    language_code: str | None = None
+    language_code: CallAnalyticsLanguageCode | None = None
     """The language code of the identified language."""
 
     score: float = 0
@@ -1392,10 +1405,12 @@ class CallAnalyticsLanguageWithScore:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_CALL_ANALYTICS_LANGUAGE_WITH_SCORE.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = CallAnalyticsLanguageCode(
+                        de.read_string(
+                            _SCHEMA_CALL_ANALYTICS_LANGUAGE_WITH_SCORE.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 1:
@@ -1969,7 +1984,7 @@ def _deserialize_issues_detected(
     return result
 
 
-class Sentiment(StrEnum):
+class Sentiment(UnknownEnumMixin, StrEnum):
     POSITIVE = "POSITIVE"
     NEGATIVE = "NEGATIVE"
     MIXED = "MIXED"
@@ -1997,7 +2012,7 @@ class UtteranceEvent:
     (`FALSE`) or partial (`TRUE`).
     """
 
-    participant_role: str | None = None
+    participant_role: ParticipantRole | None = None
     """
     Provides the role of the speaker for each audio channel, either
     `CUSTOMER` or `AGENT`.
@@ -2030,13 +2045,13 @@ class UtteranceEvent:
     (PII) in your transcription output.
     """
 
-    sentiment: str | None = None
+    sentiment: Sentiment | None = None
     """Provides the sentiment that was detected in the specified segment."""
 
     issues_detected: list[IssueDetected] | None = None
     """Provides the issue that was detected in the specified segment."""
 
-    language_code: str | None = None
+    language_code: CallAnalyticsLanguageCode | None = None
     """
     The language code that represents the language spoken in your audio
     stream.
@@ -2135,8 +2150,10 @@ class UtteranceEvent:
                     )
 
                 case 2:
-                    kwargs["participant_role"] = de.read_string(
-                        _SCHEMA_UTTERANCE_EVENT.members["ParticipantRole"]
+                    kwargs["participant_role"] = ParticipantRole(
+                        de.read_string(
+                            _SCHEMA_UTTERANCE_EVENT.members["ParticipantRole"]
+                        )
                     )
 
                 case 3:
@@ -2165,8 +2182,8 @@ class UtteranceEvent:
                     )
 
                 case 8:
-                    kwargs["sentiment"] = de.read_string(
-                        _SCHEMA_UTTERANCE_EVENT.members["Sentiment"]
+                    kwargs["sentiment"] = Sentiment(
+                        de.read_string(_SCHEMA_UTTERANCE_EVENT.members["Sentiment"])
                     )
 
                 case 9:
@@ -2175,8 +2192,8 @@ class UtteranceEvent:
                     )
 
                 case 10:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_UTTERANCE_EVENT.members["LanguageCode"]
+                    kwargs["language_code"] = CallAnalyticsLanguageCode(
+                        de.read_string(_SCHEMA_UTTERANCE_EVENT.members["LanguageCode"])
                     )
 
                 case 11:
@@ -2488,7 +2505,7 @@ class _CallAnalyticsTranscriptResultStreamDeserializer:
         self._result = value
 
 
-class ClinicalNoteGenerationStatus(StrEnum):
+class ClinicalNoteGenerationStatus(UnknownEnumMixin, StrEnum):
     IN_PROGRESS = "IN_PROGRESS"
     FAILED = "FAILED"
     COMPLETED = "COMPLETED"
@@ -2508,7 +2525,7 @@ class ClinicalNoteGenerationResult:
     transcript_output_location: str | None = None
     """Holds the Amazon S3 URI for the output Transcript."""
 
-    status: str | None = None
+    status: ClinicalNoteGenerationStatus | None = None
     """
     The status of the clinical note generation.
 
@@ -2591,8 +2608,10 @@ class ClinicalNoteGenerationResult:
                     )
 
                 case 2:
-                    kwargs["status"] = de.read_string(
-                        _SCHEMA_CLINICAL_NOTE_GENERATION_RESULT.members["Status"]
+                    kwargs["status"] = ClinicalNoteGenerationStatus(
+                        de.read_string(
+                            _SCHEMA_CLINICAL_NOTE_GENERATION_RESULT.members["Status"]
+                        )
                     )
 
                 case 3:
@@ -2609,7 +2628,7 @@ class ClinicalNoteGenerationResult:
         return kwargs
 
 
-class MedicalScribeNoteTemplate(StrEnum):
+class MedicalScribeNoteTemplate(UnknownEnumMixin, StrEnum):
     HISTORY_AND_PHYSICAL = "HISTORY_AND_PHYSICAL"
     GIRPP = "GIRPP"
     DAP = "DAP"
@@ -2646,7 +2665,7 @@ class ClinicalNoteGenerationSettings:
     .
     """
 
-    note_template: str | None = None
+    note_template: MedicalScribeNoteTemplate | None = None
     """
     Specify one of the following templates to use for the clinical note
     summary. The default is `HISTORY_AND_PHYSICAL`.
@@ -2710,10 +2729,12 @@ class ClinicalNoteGenerationSettings:
                     )
 
                 case 1:
-                    kwargs["note_template"] = de.read_string(
-                        _SCHEMA_CLINICAL_NOTE_GENERATION_SETTINGS.members[
-                            "NoteTemplate"
-                        ]
+                    kwargs["note_template"] = MedicalScribeNoteTemplate(
+                        de.read_string(
+                            _SCHEMA_CLINICAL_NOTE_GENERATION_SETTINGS.members[
+                                "NoteTemplate"
+                            ]
+                        )
                     )
 
                 case _:
@@ -2722,14 +2743,20 @@ class ClinicalNoteGenerationSettings:
         deserializer.read_struct(
             _SCHEMA_CLINICAL_NOTE_GENERATION_SETTINGS, consumer=_consumer
         )
+        if "output_bucket_name" not in kwargs:
+            kwargs["output_bucket_name"] = ""
         return kwargs
 
+    @classmethod
+    def _smithy_default(cls) -> Self:
+        return cls(output_bucket_name="")
 
-class ContentIdentificationType(StrEnum):
+
+class ContentIdentificationType(UnknownEnumMixin, StrEnum):
     PII = "PII"
 
 
-class ContentRedactionType(StrEnum):
+class ContentRedactionType(UnknownEnumMixin, StrEnum):
     PII = "PII"
 
 
@@ -2777,7 +2804,7 @@ class GetMedicalScribeStreamInput:
         return kwargs
 
 
-class MedicalScribeParticipantRole(StrEnum):
+class MedicalScribeParticipantRole(UnknownEnumMixin, StrEnum):
     PATIENT = "PATIENT"
     CLINICIAN = "CLINICIAN"
 
@@ -2798,7 +2825,7 @@ class MedicalScribeChannelDefinition:
     the transcription and identify speaker roles for each speaker.
     """
 
-    participant_role: str
+    participant_role: MedicalScribeParticipantRole
     """
     Specify the participant that you want to flag. The allowed options are
     `CLINICIAN` and `PATIENT`.
@@ -2836,10 +2863,12 @@ class MedicalScribeChannelDefinition:
                     )
 
                 case 1:
-                    kwargs["participant_role"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_CHANNEL_DEFINITION.members[
-                            "ParticipantRole"
-                        ]
+                    kwargs["participant_role"] = MedicalScribeParticipantRole(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_CHANNEL_DEFINITION.members[
+                                "ParticipantRole"
+                            ]
+                        )
                     )
 
                 case _:
@@ -2848,6 +2877,8 @@ class MedicalScribeChannelDefinition:
         deserializer.read_struct(
             _SCHEMA_MEDICAL_SCRIBE_CHANNEL_DEFINITION, consumer=_consumer
         )
+        if "participant_role" not in kwargs:
+            kwargs["participant_role"] = MedicalScribeParticipantRole._corrected("")
         return kwargs
 
 
@@ -3010,14 +3041,16 @@ class MedicalScribeEncryptionSettings:
         deserializer.read_struct(
             _SCHEMA_MEDICAL_SCRIBE_ENCRYPTION_SETTINGS, consumer=_consumer
         )
+        if "kms_key_id" not in kwargs:
+            kwargs["kms_key_id"] = ""
         return kwargs
 
 
-class MedicalScribeLanguageCode(StrEnum):
+class MedicalScribeLanguageCode(UnknownEnumMixin, StrEnum):
     EN_US = "en-US"
 
 
-class MedicalScribeMediaEncoding(StrEnum):
+class MedicalScribeMediaEncoding(UnknownEnumMixin, StrEnum):
     PCM = "pcm"
     OGG_OPUS = "ogg-opus"
     FLAC = "flac"
@@ -3109,17 +3142,27 @@ class MedicalScribePostStreamAnalyticsSettings:
         deserializer.read_struct(
             _SCHEMA_MEDICAL_SCRIBE_POST_STREAM_ANALYTICS_SETTINGS, consumer=_consumer
         )
+        if "clinical_note_generation_settings" not in kwargs:
+            kwargs["clinical_note_generation_settings"] = (
+                ClinicalNoteGenerationSettings._smithy_default()
+            )
         return kwargs
 
+    @classmethod
+    def _smithy_default(cls) -> Self:
+        return cls(
+            clinical_note_generation_settings=ClinicalNoteGenerationSettings._smithy_default()
+        )
 
-class MedicalScribeStreamStatus(StrEnum):
+
+class MedicalScribeStreamStatus(UnknownEnumMixin, StrEnum):
     IN_PROGRESS = "IN_PROGRESS"
     PAUSED = "PAUSED"
     FAILED = "FAILED"
     COMPLETED = "COMPLETED"
 
 
-class MedicalScribeVocabularyFilterMethod(StrEnum):
+class MedicalScribeVocabularyFilterMethod(UnknownEnumMixin, StrEnum):
     REMOVE = "remove"
     MASK = "mask"
     TAG = "tag"
@@ -3141,13 +3184,13 @@ class MedicalScribeStreamDetails:
     stream_ended_at: datetime | None = None
     """The date and time when the HealthScribe streaming session was ended."""
 
-    language_code: str | None = None
+    language_code: MedicalScribeLanguageCode | None = None
     """The Language Code of the HealthScribe streaming session."""
 
     media_sample_rate_hertz: int | None = None
     """The sample rate (in hertz) of the HealthScribe streaming session."""
 
-    media_encoding: str | None = None
+    media_encoding: MedicalScribeMediaEncoding | None = None
     """The Media Encoding of the HealthScribe streaming session."""
 
     vocabulary_name: str | None = None
@@ -3159,7 +3202,7 @@ class MedicalScribeStreamDetails:
     session .
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: MedicalScribeVocabularyFilterMethod | None = None
     """
     The method of the vocabulary filter for the HealthScribe streaming
     session.
@@ -3177,7 +3220,7 @@ class MedicalScribeStreamDetails:
     encryption_settings: MedicalScribeEncryptionSettings | None = None
     """The Encryption Settings of the HealthScribe streaming session."""
 
-    stream_status: str | None = None
+    stream_status: MedicalScribeStreamStatus | None = None
     """
     The streaming status of the HealthScribe streaming session.
 
@@ -3352,8 +3395,12 @@ class MedicalScribeStreamDetails:
                     )
 
                 case 3:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members["LanguageCode"]
+                    kwargs["language_code"] = MedicalScribeLanguageCode(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -3364,8 +3411,12 @@ class MedicalScribeStreamDetails:
                     )
 
                 case 5:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members["MediaEncoding"]
+                    kwargs["media_encoding"] = MedicalScribeMediaEncoding(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 6:
@@ -3381,10 +3432,14 @@ class MedicalScribeStreamDetails:
                     )
 
                 case 8:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = (
+                        MedicalScribeVocabularyFilterMethod(
+                            de.read_string(
+                                _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members[
+                                    "VocabularyFilterMethod"
+                                ]
+                            )
+                        )
                     )
 
                 case 9:
@@ -3410,8 +3465,12 @@ class MedicalScribeStreamDetails:
                     )
 
                 case 12:
-                    kwargs["stream_status"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members["StreamStatus"]
+                    kwargs["stream_status"] = MedicalScribeStreamStatus(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_STREAM_DETAILS.members[
+                                "StreamStatus"
+                            ]
+                        )
                     )
 
                 case 13:
@@ -3554,7 +3613,7 @@ GET_MEDICAL_SCRIBE_STREAM = APIOperation(
 )
 
 
-class LanguageCode(StrEnum):
+class LanguageCode(UnknownEnumMixin, StrEnum):
     EN_US = "en-US"
     EN_GB = "en-GB"
     ES_US = "es-US"
@@ -3665,7 +3724,7 @@ class LanguageWithScore:
     language, you will have more than one `LanguageWithScore` result.
     """
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """The language code of the identified language."""
 
     score: float = 0
@@ -3699,8 +3758,10 @@ class LanguageWithScore:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_LANGUAGE_WITH_SCORE.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_LANGUAGE_WITH_SCORE.members["LanguageCode"]
+                        )
                     )
 
                 case 1:
@@ -3740,7 +3801,7 @@ def _deserialize_language_identification(
     return result
 
 
-class MediaEncoding(StrEnum):
+class MediaEncoding(UnknownEnumMixin, StrEnum):
     PCM = "pcm"
     OGG_OPUS = "ogg-opus"
     FLAC = "flac"
@@ -3883,7 +3944,7 @@ class MedicalItem:
     end_time: float = 0
     """The end time, in seconds, of the transcribed item."""
 
-    type: str | None = None
+    type: ItemType | None = None
     """
     The type of item identified. Options are: `PRONUNCIATION` (spoken words)
     and `PUNCTUATION`.
@@ -3955,8 +4016,8 @@ class MedicalItem:
                     )
 
                 case 2:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_MEDICAL_ITEM.members["Type"]
+                    kwargs["type"] = ItemType(
+                        de.read_string(_SCHEMA_MEDICAL_ITEM.members["Type"])
                     )
 
                 case 3:
@@ -4107,7 +4168,7 @@ def _deserialize_medical_alternative_list(
     return result
 
 
-class MedicalContentIdentificationType(StrEnum):
+class MedicalContentIdentificationType(UnknownEnumMixin, StrEnum):
     PHI = "PHI"
 
 
@@ -4307,10 +4368,12 @@ class MedicalScribeAudioEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_MEDICAL_SCRIBE_AUDIO_EVENT, consumer=_consumer)
+        if "audio_chunk" not in kwargs:
+            kwargs["audio_chunk"] = b""
         return kwargs
 
 
-class Pronouns(StrEnum):
+class Pronouns(UnknownEnumMixin, StrEnum):
     HE_HIM = "HE_HIM"
     SHE_HER = "SHE_HER"
     THEY_THEM = "THEY_THEM"
@@ -4320,7 +4383,7 @@ class Pronouns(StrEnum):
 class MedicalScribePatientContext:
     """Contains patient-specific information."""
 
-    pronouns: str | None = field(repr=False, default=None)
+    pronouns: Pronouns | None = field(repr=False, default=None)
     """
     The patient's preferred pronouns that the user wants to provide as a
     context for clinical note generation .
@@ -4347,8 +4410,10 @@ class MedicalScribePatientContext:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["pronouns"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_PATIENT_CONTEXT.members["Pronouns"]
+                    kwargs["pronouns"] = Pronouns(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_PATIENT_CONTEXT.members["Pronouns"]
+                        )
                     )
 
                 case _:
@@ -4454,7 +4519,7 @@ class MedicalScribeConfigurationEvent:
     `VocabularyFilterMethod`.
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: MedicalScribeVocabularyFilterMethod | None = None
     """
     Specify how you want your custom vocabulary filter applied to the
     streaming session.
@@ -4564,10 +4629,14 @@ class MedicalScribeConfigurationEvent:
                     )
 
                 case 2:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_CONFIGURATION_EVENT.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = (
+                        MedicalScribeVocabularyFilterMethod(
+                            de.read_string(
+                                _SCHEMA_MEDICAL_SCRIBE_CONFIGURATION_EVENT.members[
+                                    "VocabularyFilterMethod"
+                                ]
+                            )
+                        )
                     )
 
                 case 3:
@@ -4608,10 +4677,16 @@ class MedicalScribeConfigurationEvent:
         deserializer.read_struct(
             _SCHEMA_MEDICAL_SCRIBE_CONFIGURATION_EVENT, consumer=_consumer
         )
+        if "resource_access_role_arn" not in kwargs:
+            kwargs["resource_access_role_arn"] = ""
+        if "post_stream_analytics_settings" not in kwargs:
+            kwargs["post_stream_analytics_settings"] = (
+                MedicalScribePostStreamAnalyticsSettings._smithy_default()
+            )
         return kwargs
 
 
-class MedicalScribeSessionControlEventType(StrEnum):
+class MedicalScribeSessionControlEventType(UnknownEnumMixin, StrEnum):
     END_OF_SESSION = "END_OF_SESSION"
 
 
@@ -4619,7 +4694,7 @@ class MedicalScribeSessionControlEventType(StrEnum):
 class MedicalScribeSessionControlEvent:
     """Specify the lifecycle of your streaming session."""
 
-    type: str
+    type: MedicalScribeSessionControlEventType
     """
     The type of `MedicalScribeSessionControlEvent`.
 
@@ -4656,8 +4731,10 @@ class MedicalScribeSessionControlEvent:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_SESSION_CONTROL_EVENT.members["Type"]
+                    kwargs["type"] = MedicalScribeSessionControlEventType(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_SESSION_CONTROL_EVENT.members["Type"]
+                        )
                     )
 
                 case _:
@@ -4666,6 +4743,8 @@ class MedicalScribeSessionControlEvent:
         deserializer.read_struct(
             _SCHEMA_MEDICAL_SCRIBE_SESSION_CONTROL_EVENT, consumer=_consumer
         )
+        if "type" not in kwargs:
+            kwargs["type"] = MedicalScribeSessionControlEventType._corrected("")
         return kwargs
 
 
@@ -4832,7 +4911,7 @@ class _MedicalScribeInputStreamDeserializer:
         self._result = value
 
 
-class MedicalScribeTranscriptItemType(StrEnum):
+class MedicalScribeTranscriptItemType(UnknownEnumMixin, StrEnum):
     PRONUNCIATION = "pronunciation"
     PUNCTUATION = "punctuation"
 
@@ -4851,7 +4930,7 @@ class MedicalScribeTranscriptItem:
     end_audio_time: float = 0
     """The end time, in milliseconds, of the transcribed item."""
 
-    type: str | None = None
+    type: MedicalScribeTranscriptItemType | None = None
     """
     The type of item identified. Options are: `PRONUNCIATION` (spoken words)
     and `PUNCTUATION`.
@@ -4932,8 +5011,10 @@ class MedicalScribeTranscriptItem:
                     )
 
                 case 2:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_MEDICAL_SCRIBE_TRANSCRIPT_ITEM.members["Type"]
+                    kwargs["type"] = MedicalScribeTranscriptItemType(
+                        de.read_string(
+                            _SCHEMA_MEDICAL_SCRIBE_TRANSCRIPT_ITEM.members["Type"]
+                        )
                     )
 
                 case 3:
@@ -5761,7 +5842,7 @@ class _MedicalTranscriptResultStreamDeserializer:
         self._result = value
 
 
-class PartialResultsStability(StrEnum):
+class PartialResultsStability(UnknownEnumMixin, StrEnum):
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
@@ -5812,7 +5893,7 @@ class Result:
     channel_id: str | None = None
     """Indicates which audio channel is associated with the `Result`."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     The language code that represents the language spoken in your audio
     stream.
@@ -5899,8 +5980,8 @@ class Result:
                     )
 
                 case 6:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_RESULT.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(_SCHEMA_RESULT.members["LanguageCode"])
                     )
 
                 case 7:
@@ -5942,7 +6023,7 @@ def _deserialize_result_list(
     return result
 
 
-class Specialty(StrEnum):
+class Specialty(UnknownEnumMixin, StrEnum):
     PRIMARYCARE = "PRIMARYCARE"
     CARDIOLOGY = "CARDIOLOGY"
     NEUROLOGY = "NEUROLOGY"
@@ -5951,7 +6032,7 @@ class Specialty(StrEnum):
     UROLOGY = "UROLOGY"
 
 
-class VocabularyFilterMethod(StrEnum):
+class VocabularyFilterMethod(UnknownEnumMixin, StrEnum):
     REMOVE = "remove"
     MASK = "mask"
     TAG = "tag"
@@ -5961,7 +6042,7 @@ class VocabularyFilterMethod(StrEnum):
 class StartCallAnalyticsStreamTranscriptionInput:
     """Dataclass for StartCallAnalyticsStreamTranscriptionInput structure."""
 
-    language_code: str | None = None
+    language_code: CallAnalyticsLanguageCode | None = None
     """
     Specify the language code that represents the language spoken in your
     audio.
@@ -5980,7 +6061,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
     you specify must match that of your audio.
     """
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """
     Specify the encoding of your input audio. Supported formats are:
 
@@ -6030,7 +6111,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
     words](https://docs.aws.amazon.com/transcribe/latest/dg/vocabulary-filtering.html).
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: VocabularyFilterMethod | None = None
     """
     Specify how you want your vocabulary filter applied to your transcript.
 
@@ -6095,7 +6176,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
         example, you cannot include `en-US` and `en-AU` in the same request.
     """
 
-    preferred_language: str | None = None
+    preferred_language: CallAnalyticsLanguageCode | None = None
     """
     Specify a preferred language from the subset of languages codes you
     specified in `LanguageOptions`.
@@ -6149,7 +6230,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
     stabilization](https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html#streaming-partial-result-stabilization).
     """
 
-    partial_results_stability: str | None = None
+    partial_results_stability: PartialResultsStability | None = None
     """
     Specify the level of stability to use when you enable partial results
     stabilization (`EnablePartialResultsStabilization`).
@@ -6161,7 +6242,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
     stabilization](https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html#streaming-partial-result-stabilization).
     """
 
-    content_identification_type: str | None = None
+    content_identification_type: ContentIdentificationType | None = None
     """
     Labels all personally identifiable information (PII) identified in your
     transcript.
@@ -6180,7 +6261,7 @@ class StartCallAnalyticsStreamTranscriptionInput:
     information](https://docs.aws.amazon.com/transcribe/latest/dg/pii-redaction.html).
     """
 
-    content_redaction_type: str | None = None
+    content_redaction_type: ContentRedactionType | None = None
     """
     Redacts all personally identifiable information (PII) identified in your
     transcript.
@@ -6379,10 +6460,12 @@ class StartCallAnalyticsStreamTranscriptionInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = CallAnalyticsLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 1:
@@ -6393,10 +6476,12 @@ class StartCallAnalyticsStreamTranscriptionInput:
                     )
 
                 case 2:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 3:
@@ -6421,10 +6506,12 @@ class StartCallAnalyticsStreamTranscriptionInput:
                     )
 
                 case 7:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = VocabularyFilterMethod(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "VocabularyFilterMethod"
+                            ]
+                        )
                     )
 
                 case 8:
@@ -6449,10 +6536,12 @@ class StartCallAnalyticsStreamTranscriptionInput:
                     )
 
                 case 11:
-                    kwargs["preferred_language"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "PreferredLanguage"
-                        ]
+                    kwargs["preferred_language"] = CallAnalyticsLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "PreferredLanguage"
+                            ]
+                        )
                     )
 
                 case 12:
@@ -6477,24 +6566,30 @@ class StartCallAnalyticsStreamTranscriptionInput:
                     )
 
                 case 15:
-                    kwargs["partial_results_stability"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "PartialResultsStability"
-                        ]
+                    kwargs["partial_results_stability"] = PartialResultsStability(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "PartialResultsStability"
+                            ]
+                        )
                     )
 
                 case 16:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = ContentIdentificationType(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "ContentIdentificationType"
+                            ]
+                        )
                     )
 
                 case 17:
-                    kwargs["content_redaction_type"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
-                            "ContentRedactionType"
-                        ]
+                    kwargs["content_redaction_type"] = ContentRedactionType(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_INPUT.members[
+                                "ContentRedactionType"
+                            ]
+                        )
                     )
 
                 case 18:
@@ -6520,7 +6615,7 @@ class StartCallAnalyticsStreamTranscriptionOutput:
     request_id: str | None = None
     """Provides the identifier for your real-time Call Analytics request."""
 
-    language_code: str | None = None
+    language_code: CallAnalyticsLanguageCode | None = None
     """
     Provides the language code that you specified in your Call Analytics
     request.
@@ -6532,7 +6627,7 @@ class StartCallAnalyticsStreamTranscriptionOutput:
     request.
     """
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """
     Provides the media encoding you specified in your Call Analytics
     request.
@@ -6553,7 +6648,7 @@ class StartCallAnalyticsStreamTranscriptionOutput:
     your Call Analytics request.
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: VocabularyFilterMethod | None = None
     """
     Provides the vocabulary filtering method used in your Call Analytics
     transcription.
@@ -6577,7 +6672,7 @@ class StartCallAnalyticsStreamTranscriptionOutput:
     request.
     """
 
-    preferred_language: str | None = None
+    preferred_language: CallAnalyticsLanguageCode | None = None
     """
     Provides the preferred language that you specified in your Call
     Analytics request.
@@ -6601,16 +6696,16 @@ class StartCallAnalyticsStreamTranscriptionOutput:
     Analytics transcription.
     """
 
-    partial_results_stability: str | None = None
+    partial_results_stability: PartialResultsStability | None = None
     """Provides the stabilization level used for your transcription."""
 
-    content_identification_type: str | None = None
+    content_identification_type: ContentIdentificationType | None = None
     """
     Shows whether content identification was enabled for your Call Analytics
     transcription.
     """
 
-    content_redaction_type: str | None = None
+    content_redaction_type: ContentRedactionType | None = None
     """
     Shows whether content redaction was enabled for your Call Analytics
     transcription.
@@ -6791,10 +6886,12 @@ class StartCallAnalyticsStreamTranscriptionOutput:
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = CallAnalyticsLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -6805,10 +6902,12 @@ class StartCallAnalyticsStreamTranscriptionOutput:
                     )
 
                 case 3:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -6833,10 +6932,12 @@ class StartCallAnalyticsStreamTranscriptionOutput:
                     )
 
                 case 8:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = VocabularyFilterMethod(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "VocabularyFilterMethod"
+                            ]
+                        )
                     )
 
                 case 9:
@@ -6861,10 +6962,12 @@ class StartCallAnalyticsStreamTranscriptionOutput:
                     )
 
                 case 12:
-                    kwargs["preferred_language"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "PreferredLanguage"
-                        ]
+                    kwargs["preferred_language"] = CallAnalyticsLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "PreferredLanguage"
+                            ]
+                        )
                     )
 
                 case 13:
@@ -6889,24 +6992,30 @@ class StartCallAnalyticsStreamTranscriptionOutput:
                     )
 
                 case 16:
-                    kwargs["partial_results_stability"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "PartialResultsStability"
-                        ]
+                    kwargs["partial_results_stability"] = PartialResultsStability(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "PartialResultsStability"
+                            ]
+                        )
                     )
 
                 case 17:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = ContentIdentificationType(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "ContentIdentificationType"
+                            ]
+                        )
                     )
 
                 case 18:
-                    kwargs["content_redaction_type"] = de.read_string(
-                        _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "ContentRedactionType"
-                        ]
+                    kwargs["content_redaction_type"] = ContentRedactionType(
+                        de.read_string(
+                            _SCHEMA_START_CALL_ANALYTICS_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "ContentRedactionType"
+                            ]
+                        )
                     )
 
                 case 19:
@@ -6972,7 +7081,7 @@ class StartMedicalScribeStreamInput:
     HealthScribe generates an ID and returns it in the response.
     """
 
-    language_code: str | None = None
+    language_code: MedicalScribeLanguageCode | None = None
     """Specify the language code for your HealthScribe streaming session."""
 
     media_sample_rate_hertz: int | None = None
@@ -6982,7 +7091,7 @@ class StartMedicalScribeStreamInput:
     sample rate you specify must match that of your audio.
     """
 
-    media_encoding: str | None = None
+    media_encoding: MedicalScribeMediaEncoding | None = None
     """
     Specify the encoding used for the input audio.
 
@@ -7045,10 +7154,12 @@ class StartMedicalScribeStreamInput:
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_SCRIBE_STREAM_INPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = MedicalScribeLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_SCRIBE_STREAM_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -7059,10 +7170,12 @@ class StartMedicalScribeStreamInput:
                     )
 
                 case 3:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_SCRIBE_STREAM_INPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MedicalScribeMediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_SCRIBE_STREAM_INPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case _:
@@ -7089,7 +7202,7 @@ class StartMedicalScribeStreamOutput:
     request_id: str | None = None
     """The unique identifier for your streaming request."""
 
-    language_code: str | None = None
+    language_code: MedicalScribeLanguageCode | None = None
     """
     The Language Code that you specified in your request. Same as provided
     in the `StartMedicalScribeStreamRequest`.
@@ -7101,7 +7214,7 @@ class StartMedicalScribeStreamOutput:
     provided in the `StartMedicalScribeStreamRequest`
     """
 
-    media_encoding: str | None = None
+    media_encoding: MedicalScribeMediaEncoding | None = None
     """
     The Media Encoding you specified in your request. Same as provided in
     the `StartMedicalScribeStreamRequest`
@@ -7164,10 +7277,12 @@ class StartMedicalScribeStreamOutput:
                     )
 
                 case 2:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_SCRIBE_STREAM_OUTPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = MedicalScribeLanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_SCRIBE_STREAM_OUTPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 3:
@@ -7178,10 +7293,12 @@ class StartMedicalScribeStreamOutput:
                     )
 
                 case 4:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_SCRIBE_STREAM_OUTPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MedicalScribeMediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_SCRIBE_STREAM_OUTPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case _:
@@ -7229,7 +7346,7 @@ START_MEDICAL_SCRIBE_STREAM = APIOperation(
 )
 
 
-class Type(StrEnum):
+class Type(UnknownEnumMixin, StrEnum):
     CONVERSATION = "CONVERSATION"
     DICTATION = "DICTATION"
 
@@ -7238,7 +7355,7 @@ class Type(StrEnum):
 class StartMedicalStreamTranscriptionInput:
     """Dataclass for StartMedicalStreamTranscriptionInput structure."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Specify the language code that represents the language spoken in your
     audio.
@@ -7254,7 +7371,7 @@ class StartMedicalStreamTranscriptionInput:
     you specify must match that of your audio.
     """
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """
     Specify the encoding used for the input audio. Supported formats are:
 
@@ -7276,10 +7393,10 @@ class StartMedicalStreamTranscriptionInput:
     sensitive.
     """
 
-    specialty: str | None = None
+    specialty: Specialty | None = None
     """Specify the medical specialty contained in your audio."""
 
-    type: str | None = None
+    type: Type | None = None
     """
     Specify the type of input audio. For example, choose `DICTATION` for a
     provider dictating patient notes and `CONVERSATION` for a dialogue
@@ -7332,7 +7449,7 @@ class StartMedicalStreamTranscriptionInput:
     `EnableChannelIdentification`.
     """
 
-    content_identification_type: str | None = None
+    content_identification_type: MedicalContentIdentificationType | None = None
     """
     Labels all personal health information (PHI) identified in your
     transcript.
@@ -7442,10 +7559,12 @@ class StartMedicalStreamTranscriptionInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 1:
@@ -7456,10 +7575,12 @@ class StartMedicalStreamTranscriptionInput:
                     )
 
                 case 2:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 3:
@@ -7470,15 +7591,21 @@ class StartMedicalStreamTranscriptionInput:
                     )
 
                 case 4:
-                    kwargs["specialty"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
-                            "Specialty"
-                        ]
+                    kwargs["specialty"] = Specialty(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
+                                "Specialty"
+                            ]
+                        )
                     )
 
                 case 5:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members["Type"]
+                    kwargs["type"] = Type(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
+                                "Type"
+                            ]
+                        )
                     )
 
                 case 6:
@@ -7510,10 +7637,14 @@ class StartMedicalStreamTranscriptionInput:
                     )
 
                 case 11:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = (
+                        MedicalContentIdentificationType(
+                            de.read_string(
+                                _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_INPUT.members[
+                                    "ContentIdentificationType"
+                                ]
+                            )
+                        )
                     )
 
                 case _:
@@ -7532,7 +7663,7 @@ class StartMedicalStreamTranscriptionOutput:
     request_id: str | None = None
     """Provides the identifier for your streaming request."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Provides the language code that you specified in your request. This must
     be `en-US`.
@@ -7541,7 +7672,7 @@ class StartMedicalStreamTranscriptionOutput:
     media_sample_rate_hertz: int | None = None
     """Provides the sample rate that you specified in your request."""
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """Provides the media encoding you specified in your request."""
 
     vocabulary_name: str | None = None
@@ -7550,10 +7681,10 @@ class StartMedicalStreamTranscriptionOutput:
     request.
     """
 
-    specialty: str | None = None
+    specialty: Specialty | None = None
     """Provides the medical specialty that you specified in your request."""
 
-    type: str | None = None
+    type: Type | None = None
     """Provides the type of audio you specified in your request."""
 
     show_speaker_label: bool = False
@@ -7568,7 +7699,7 @@ class StartMedicalStreamTranscriptionOutput:
     number_of_channels: int | None = None
     """Provides the number of channels that you specified in your request."""
 
-    content_identification_type: str | None = None
+    content_identification_type: MedicalContentIdentificationType | None = None
     """Shows whether content identification was enabled for your transcription."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7677,10 +7808,12 @@ class StartMedicalStreamTranscriptionOutput:
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -7691,10 +7824,12 @@ class StartMedicalStreamTranscriptionOutput:
                     )
 
                 case 3:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -7705,17 +7840,21 @@ class StartMedicalStreamTranscriptionOutput:
                     )
 
                 case 5:
-                    kwargs["specialty"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "Specialty"
-                        ]
+                    kwargs["specialty"] = Specialty(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "Specialty"
+                            ]
+                        )
                     )
 
                 case 6:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "Type"
-                        ]
+                    kwargs["type"] = Type(
+                        de.read_string(
+                            _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "Type"
+                            ]
+                        )
                     )
 
                 case 7:
@@ -7747,10 +7886,14 @@ class StartMedicalStreamTranscriptionOutput:
                     )
 
                 case 12:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = (
+                        MedicalContentIdentificationType(
+                            de.read_string(
+                                _SCHEMA_START_MEDICAL_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                    "ContentIdentificationType"
+                                ]
+                            )
+                        )
                     )
 
                 case _:
@@ -7802,7 +7945,7 @@ START_MEDICAL_STREAM_TRANSCRIPTION = APIOperation(
 class StartStreamTranscriptionInput:
     """Dataclass for StartStreamTranscriptionInput structure."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """
     Specify the language code that represents the language spoken in your
     audio.
@@ -7824,7 +7967,7 @@ class StartStreamTranscriptionInput:
     you specify must match that of your audio.
     """
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """
     Specify the encoding of your input audio. Supported formats are:
 
@@ -7886,7 +8029,7 @@ class StartStreamTranscriptionInput:
     words](https://docs.aws.amazon.com/transcribe/latest/dg/vocabulary-filtering.html).
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: VocabularyFilterMethod | None = None
     """
     Specify how you want your vocabulary filter applied to your transcript.
 
@@ -7944,7 +8087,7 @@ class StartStreamTranscriptionInput:
     stabilization](https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html#streaming-partial-result-stabilization).
     """
 
-    partial_results_stability: str | None = None
+    partial_results_stability: PartialResultsStability | None = None
     """
     Specify the level of stability to use when you enable partial results
     stabilization (`EnablePartialResultsStabilization`).
@@ -7956,7 +8099,7 @@ class StartStreamTranscriptionInput:
     stabilization](https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html#streaming-partial-result-stabilization).
     """
 
-    content_identification_type: str | None = None
+    content_identification_type: ContentIdentificationType | None = None
     """
     Labels all personally identifiable information (PII) identified in your
     transcript.
@@ -7975,7 +8118,7 @@ class StartStreamTranscriptionInput:
     information](https://docs.aws.amazon.com/transcribe/latest/dg/pii-redaction.html).
     """
 
-    content_redaction_type: str | None = None
+    content_redaction_type: ContentRedactionType | None = None
     """
     Redacts all personally identifiable information (PII) identified in your
     transcript.
@@ -8076,7 +8219,7 @@ class StartStreamTranscriptionInput:
         example, you cannot include `en-US` and `en-AU` in the same request.
     """
 
-    preferred_language: str | None = None
+    preferred_language: LanguageCode | None = None
     """
     Specify a preferred language from the subset of languages codes you
     specified in `LanguageOptions`.
@@ -8327,8 +8470,12 @@ class StartStreamTranscriptionInput:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members["LanguageCode"]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 1:
@@ -8339,10 +8486,12 @@ class StartStreamTranscriptionInput:
                     )
 
                 case 2:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 3:
@@ -8365,10 +8514,12 @@ class StartStreamTranscriptionInput:
                     )
 
                 case 7:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = VocabularyFilterMethod(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "VocabularyFilterMethod"
+                            ]
+                        )
                     )
 
                 case 8:
@@ -8400,24 +8551,30 @@ class StartStreamTranscriptionInput:
                     )
 
                 case 12:
-                    kwargs["partial_results_stability"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "PartialResultsStability"
-                        ]
+                    kwargs["partial_results_stability"] = PartialResultsStability(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "PartialResultsStability"
+                            ]
+                        )
                     )
 
                 case 13:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = ContentIdentificationType(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "ContentIdentificationType"
+                            ]
+                        )
                     )
 
                 case 14:
-                    kwargs["content_redaction_type"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "ContentRedactionType"
-                        ]
+                    kwargs["content_redaction_type"] = ContentRedactionType(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "ContentRedactionType"
+                            ]
+                        )
                     )
 
                 case 15:
@@ -8449,10 +8606,12 @@ class StartStreamTranscriptionInput:
                     )
 
                 case 19:
-                    kwargs["preferred_language"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
-                            "PreferredLanguage"
-                        ]
+                    kwargs["preferred_language"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_INPUT.members[
+                                "PreferredLanguage"
+                            ]
+                        )
                     )
 
                 case 20:
@@ -8823,13 +8982,13 @@ class StartStreamTranscriptionOutput:
     request_id: str | None = None
     """Provides the identifier for your streaming request."""
 
-    language_code: str | None = None
+    language_code: LanguageCode | None = None
     """Provides the language code that you specified in your request."""
 
     media_sample_rate_hertz: int | None = None
     """Provides the sample rate that you specified in your request."""
 
-    media_encoding: str | None = None
+    media_encoding: MediaEncoding | None = None
     """Provides the media encoding you specified in your request."""
 
     vocabulary_name: str | None = None
@@ -8847,7 +9006,7 @@ class StartStreamTranscriptionOutput:
     your request.
     """
 
-    vocabulary_filter_method: str | None = None
+    vocabulary_filter_method: VocabularyFilterMethod | None = None
     """Provides the vocabulary filtering method used in your transcription."""
 
     show_speaker_label: bool = False
@@ -8865,13 +9024,13 @@ class StartStreamTranscriptionOutput:
     transcription.
     """
 
-    partial_results_stability: str | None = None
+    partial_results_stability: PartialResultsStability | None = None
     """Provides the stabilization level used for your transcription."""
 
-    content_identification_type: str | None = None
+    content_identification_type: ContentIdentificationType | None = None
     """Shows whether content identification was enabled for your transcription."""
 
-    content_redaction_type: str | None = None
+    content_redaction_type: ContentRedactionType | None = None
     """Shows whether content redaction was enabled for your transcription."""
 
     pii_entity_types: str | None = None
@@ -8892,7 +9051,7 @@ class StartStreamTranscriptionOutput:
     language_options: str | None = None
     """Provides the language codes that you specified in your request."""
 
-    preferred_language: str | None = None
+    preferred_language: LanguageCode | None = None
     """Provides the preferred language that you specified in your request."""
 
     identify_multiple_languages: bool = False
@@ -9095,10 +9254,12 @@ class StartStreamTranscriptionOutput:
                     )
 
                 case 1:
-                    kwargs["language_code"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "LanguageCode"
-                        ]
+                    kwargs["language_code"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "LanguageCode"
+                            ]
+                        )
                     )
 
                 case 2:
@@ -9109,10 +9270,12 @@ class StartStreamTranscriptionOutput:
                     )
 
                 case 3:
-                    kwargs["media_encoding"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "MediaEncoding"
-                        ]
+                    kwargs["media_encoding"] = MediaEncoding(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "MediaEncoding"
+                            ]
+                        )
                     )
 
                 case 4:
@@ -9135,10 +9298,12 @@ class StartStreamTranscriptionOutput:
                     )
 
                 case 8:
-                    kwargs["vocabulary_filter_method"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "VocabularyFilterMethod"
-                        ]
+                    kwargs["vocabulary_filter_method"] = VocabularyFilterMethod(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "VocabularyFilterMethod"
+                            ]
+                        )
                     )
 
                 case 9:
@@ -9170,24 +9335,30 @@ class StartStreamTranscriptionOutput:
                     )
 
                 case 13:
-                    kwargs["partial_results_stability"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "PartialResultsStability"
-                        ]
+                    kwargs["partial_results_stability"] = PartialResultsStability(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "PartialResultsStability"
+                            ]
+                        )
                     )
 
                 case 14:
-                    kwargs["content_identification_type"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "ContentIdentificationType"
-                        ]
+                    kwargs["content_identification_type"] = ContentIdentificationType(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "ContentIdentificationType"
+                            ]
+                        )
                     )
 
                 case 15:
-                    kwargs["content_redaction_type"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "ContentRedactionType"
-                        ]
+                    kwargs["content_redaction_type"] = ContentRedactionType(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "ContentRedactionType"
+                            ]
+                        )
                     )
 
                 case 16:
@@ -9219,10 +9390,12 @@ class StartStreamTranscriptionOutput:
                     )
 
                 case 20:
-                    kwargs["preferred_language"] = de.read_string(
-                        _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
-                            "PreferredLanguage"
-                        ]
+                    kwargs["preferred_language"] = LanguageCode(
+                        de.read_string(
+                            _SCHEMA_START_STREAM_TRANSCRIPTION_OUTPUT.members[
+                                "PreferredLanguage"
+                            ]
+                        )
                     )
 
                 case 21:

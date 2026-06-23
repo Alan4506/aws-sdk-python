@@ -5,9 +5,9 @@ import logging
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
+from smithy_core.aio.retries import RetryStrategyResolver
 from smithy_core.exceptions import ExpectationNotMetError
 from smithy_core.interceptors import InterceptorChain
-from smithy_core.retries import RetryStrategyResolver
 from smithy_core.types import TypedProperties
 from smithy_http.plugins import user_agent_plugin
 
@@ -72,7 +72,20 @@ logger = logging.getLogger(__name__)
 
 
 class ConnectHealthClient:
-    """Health Agent for healthcare providers and patient engagement"""
+    """
+    Amazon Connect Health is an AI-powered healthcare service built on
+    Amazon Connect. It provides pre-built agents that automate patient
+    engagement workflows and support clinical documentation at the point of
+    care.
+
+    You can use the Amazon Connect Health API to programmatically manage
+    domains, configure patient engagement agents, run patient insights jobs,
+    and stream ambient documentation sessions. This API reference describes
+    the available API operations and data types for Amazon Connect Health.
+
+    We recommend that you use the AWS SDKs to make programmatic API calls to
+    Amazon Connect Health.
+    """
 
     def __init__(
         self, config: Config | None = None, plugins: list[Plugin] | None = None

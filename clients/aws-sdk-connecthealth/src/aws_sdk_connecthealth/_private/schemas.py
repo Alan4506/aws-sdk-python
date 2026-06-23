@@ -1930,6 +1930,19 @@ MEDICAL_SCRIBE_AUDIO_EVENT = Schema.collection(
     },
 )
 
+MEDICAL_SCRIBE_BINARY_AUDIO_EVENT = Schema.collection(
+    id=ShapeID("com.amazonaws.connecthealth#MedicalScribeBinaryAudioEvent"),
+    members={
+        "audioChunk": {
+            "target": AUDIO_CHUNK,
+            "traits": [
+                Trait.new(id=ShapeID("smithy.api#eventPayload")),
+                Trait.new(id=ShapeID("smithy.api#required")),
+            ],
+        }
+    },
+)
+
 ENCOUNTER_CONTEXT = Schema.collection(
     id=ShapeID("com.amazonaws.connecthealth#EncounterContext"),
     members={"unstructuredContext": {"target": SENSITIVE_MARKDOWN_STRING}},
@@ -1985,6 +1998,7 @@ MEDICAL_SCRIBE_INPUT_STREAM = Schema.collection(
     traits=[Trait.new(id=ShapeID("smithy.api#streaming"))],
     members={
         "audioEvent": {"target": MEDICAL_SCRIBE_AUDIO_EVENT},
+        "binaryAudioEvent": {"target": MEDICAL_SCRIBE_BINARY_AUDIO_EVENT},
         "sessionControlEvent": {"target": MEDICAL_SCRIBE_SESSION_CONTROL_EVENT},
         "configurationEvent": {"target": MEDICAL_SCRIBE_CONFIGURATION_EVENT},
     },
@@ -2776,6 +2790,128 @@ CONNECT_HEALTH = Schema(
         ),
         Trait.new(id=ShapeID("aws.endpoints#dualStackOnlyEndpoints")),
         Trait.new(
+            id=ShapeID("smithy.rules#endpointBdd"),
+            value=MappingProxyType(
+                {
+                    "version": "1.1",
+                    "parameters": MappingProxyType(
+                        {
+                            "UseFIPS": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::UseFIPS",
+                                    "required": True,
+                                    "default": False,
+                                    "documentation": "When true, send this request to the FIPS-compliant regional endpoint. If the configured endpoint does not have a FIPS compliant endpoint, dispatching the request will return an error.",
+                                    "type": "boolean",
+                                }
+                            ),
+                            "Endpoint": MappingProxyType(
+                                {
+                                    "builtIn": "SDK::Endpoint",
+                                    "required": False,
+                                    "documentation": "Override the endpoint used to send this request",
+                                    "type": "string",
+                                }
+                            ),
+                            "Region": MappingProxyType(
+                                {
+                                    "builtIn": "AWS::Region",
+                                    "required": False,
+                                    "documentation": "The AWS region used to dispatch the request.",
+                                    "type": "string",
+                                }
+                            ),
+                        }
+                    ),
+                    "conditions": (
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Endpoint"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "isSet",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "aws.partition",
+                                "argv": (MappingProxyType({"ref": "Region"}),),
+                                "assign": "PartitionResult",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "fn": "booleanEquals",
+                                "argv": (MappingProxyType({"ref": "UseFIPS"}), True),
+                            }
+                        ),
+                    ),
+                    "results": (
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: FIPS and custom endpoint are not supported",
+                                "type": "error",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": MappingProxyType({"ref": "Endpoint"}),
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://health-agent-fips.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "endpoint": MappingProxyType(
+                                    {
+                                        "url": "https://health-agent.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                        "properties": MappingProxyType({}),
+                                        "headers": MappingProxyType({}),
+                                    }
+                                ),
+                                "type": "endpoint",
+                            }
+                        ),
+                        MappingProxyType(
+                            {
+                                "conditions": (),
+                                "error": "Invalid Configuration: Missing Region",
+                                "type": "error",
+                            }
+                        ),
+                    ),
+                    "root": 2,
+                    "nodeCount": 6,
+                    "nodes": "/////wAAAAH/////AAAAAAAAAAYAAAADAAAAAQAAAAQF9eEFAAAAAgAAAAUF9eEFAAAAAwX14QMF9eEEAAAAAwX14QEF9eEC",
+                }
+            ),
+        ),
+        Trait.new(
             id=ShapeID("aws.api#service"),
             value=MappingProxyType(
                 {
@@ -2787,12 +2923,6 @@ CONNECT_HEALTH = Schema(
             ),
         ),
         Trait.new(id=ShapeID("aws.endpoints#standardRegionalEndpoints")),
-        Trait.new(
-            id=ShapeID("aws.protocols#restJson1"),
-            value=MappingProxyType(
-                {"http": ("h2", "http/1.1"), "eventStreamHttp": ("h2",)}
-            ),
-        ),
         Trait.new(
             id=ShapeID("smithy.api#cors"),
             value=MappingProxyType(
@@ -2817,6 +2947,12 @@ CONNECT_HEALTH = Schema(
                     ),
                     "maxAge": 86400,
                 }
+            ),
+        ),
+        Trait.new(
+            id=ShapeID("aws.protocols#restJson1"),
+            value=MappingProxyType(
+                {"http": ("h2", "http/1.1"), "eventStreamHttp": ("h2",)}
             ),
         ),
     ],

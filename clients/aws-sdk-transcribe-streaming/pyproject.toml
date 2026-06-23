@@ -2,7 +2,7 @@
 
 [project]
 name = "aws_sdk_transcribe_streaming"
-version = "0.6.0"
+version = "0.7.0"
 description = "aws_sdk_transcribe_streaming client"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -23,8 +23,8 @@ classifiers = [
 ]
 
 dependencies = [
-    "smithy_aws_core[eventstream, json]~=0.6.0",
-    "smithy_core~=0.5.0",
+    "smithy_aws_core[eventstream, json]~=0.7.0",
+    "smithy_core~=0.6.0",
     "smithy_http[awscrt]~=0.4.0"
 ]
 

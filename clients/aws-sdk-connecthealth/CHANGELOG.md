@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.0
+
+### API Changes
+* Add support for MedicalScribeBinaryAudioEvent in the Medical Scribe streaming input. This new event type lets you send audio as a raw binary payload instead of a base64-encoded value
+
+### Enhancements
+* Re-generated with smithy-python 0.3.1
+
+### Dependencies
+* Bump `smithy-core` from `~=0.5.0` to `~=0.6.0`.
+* Bump `smithy-aws-core` from `~=0.6.0` to `~=0.7.0`.
+
 ## v0.6.0
 
 ### Features

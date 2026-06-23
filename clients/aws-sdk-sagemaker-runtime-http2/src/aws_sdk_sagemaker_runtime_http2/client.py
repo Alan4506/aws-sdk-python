@@ -5,9 +5,9 @@ import logging
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
+from smithy_core.aio.retries import RetryStrategyResolver
 from smithy_core.exceptions import ExpectationNotMetError
 from smithy_core.interceptors import InterceptorChain
-from smithy_core.retries import RetryStrategyResolver
 from smithy_core.types import TypedProperties
 from smithy_http.plugins import user_agent_plugin
 

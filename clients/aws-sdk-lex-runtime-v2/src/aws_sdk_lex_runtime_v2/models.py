@@ -12,6 +12,7 @@ from smithy_core.exceptions import ModeledError, SerializationError
 from smithy_core.schemas import APIOperation, Schema
 from smithy_core.serializers import ShapeSerializer
 from smithy_core.shapes import ShapeID
+from smithy_core.types import UnknownEnumMixin
 
 from ._private.schemas import (
     ACCESS_DENIED_EXCEPTION as _SCHEMA_ACCESS_DENIED_EXCEPTION,
@@ -210,7 +211,15 @@ class ActiveContextTimeToLive:
         deserializer.read_struct(
             _SCHEMA_ACTIVE_CONTEXT_TIME_TO_LIVE, consumer=_consumer
         )
+        if "time_to_live_in_seconds" not in kwargs:
+            kwargs["time_to_live_in_seconds"] = 0
+        if "turns_to_live" not in kwargs:
+            kwargs["turns_to_live"] = 0
         return kwargs
+
+    @classmethod
+    def _smithy_default(cls) -> Self:
+        return cls(time_to_live_in_seconds=0, turns_to_live=0)
 
 
 @dataclass(kw_only=True)
@@ -290,6 +299,12 @@ class ActiveContext:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_ACTIVE_CONTEXT, consumer=_consumer)
+        if "name" not in kwargs:
+            kwargs["name"] = ""
+        if "time_to_live" not in kwargs:
+            kwargs["time_to_live"] = ActiveContextTimeToLive._smithy_default()
+        if "context_attributes" not in kwargs:
+            kwargs["context_attributes"] = {}
         return kwargs
 
 
@@ -407,6 +422,8 @@ class AudioInputEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_AUDIO_INPUT_EVENT, consumer=_consumer)
+        if "content_type" not in kwargs:
+            kwargs["content_type"] = ""
         return kwargs
 
 
@@ -935,13 +952,13 @@ class GetSessionInput:
         return kwargs
 
 
-class ConfirmationState(StrEnum):
+class ConfirmationState(UnknownEnumMixin, StrEnum):
     CONFIRMED = "Confirmed"
     DENIED = "Denied"
     NONE = "None"
 
 
-class Shape(StrEnum):
+class Shape(UnknownEnumMixin, StrEnum):
     SCALAR = "Scalar"
     LIST_ = "List"
     COMPOSITE = "Composite"
@@ -1049,10 +1066,12 @@ class Value:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_VALUE, consumer=_consumer)
+        if "interpreted_value" not in kwargs:
+            kwargs["interpreted_value"] = ""
         return kwargs
 
 
-class IntentState(StrEnum):
+class IntentState(UnknownEnumMixin, StrEnum):
     FAILED = "Failed"
     FULFILLED = "Fulfilled"
     IN_PROGRESS = "InProgress"
@@ -1061,7 +1080,7 @@ class IntentState(StrEnum):
     FULFILLMENT_IN_PROGRESS = "FulfillmentInProgress"
 
 
-class InterpretationSource(StrEnum):
+class InterpretationSource(UnknownEnumMixin, StrEnum):
     BEDROCK = "Bedrock"
     LEX = "Lex"
 
@@ -1108,7 +1127,7 @@ class ConfidenceScore:
         return kwargs
 
 
-class SentimentType(StrEnum):
+class SentimentType(UnknownEnumMixin, StrEnum):
     MIXED = "MIXED"
     NEGATIVE = "NEGATIVE"
     NEUTRAL = "NEUTRAL"
@@ -1207,7 +1226,7 @@ class SentimentResponse:
     in the *Amazon Comprehend developer guide*.
     """
 
-    sentiment: str | None = None
+    sentiment: SentimentType | None = None
     """
     The overall sentiment expressed in the user's response. This is the
     sentiment most likely expressed by the user based on the analysis by
@@ -1243,8 +1262,8 @@ class SentimentResponse:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["sentiment"] = de.read_string(
-                        _SCHEMA_SENTIMENT_RESPONSE.members["sentiment"]
+                    kwargs["sentiment"] = SentimentType(
+                        de.read_string(_SCHEMA_SENTIMENT_RESPONSE.members["sentiment"])
                     )
 
                 case 1:
@@ -1257,7 +1276,7 @@ class SentimentResponse:
         return kwargs
 
 
-class MessageContentType(StrEnum):
+class MessageContentType(UnknownEnumMixin, StrEnum):
     CUSTOM_PAYLOAD = "CustomPayload"
     IMAGE_RESPONSE_CARD = "ImageResponseCard"
     PLAIN_TEXT = "PlainText"
@@ -1301,6 +1320,10 @@ class Button:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_BUTTON, consumer=_consumer)
+        if "text" not in kwargs:
+            kwargs["text"] = ""
+        if "value" not in kwargs:
+            kwargs["value"] = ""
         return kwargs
 
 
@@ -1421,6 +1444,8 @@ class ImageResponseCard:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_IMAGE_RESPONSE_CARD, consumer=_consumer)
+        if "title" not in kwargs:
+            kwargs["title"] = ""
         return kwargs
 
 
@@ -1428,7 +1453,7 @@ class ImageResponseCard:
 class Message:
     """Container for text that is returned to the customer.."""
 
-    content_type: str
+    content_type: MessageContentType
     """Indicates the type of response."""
 
     content: str | None = field(repr=False, default=None)
@@ -1474,8 +1499,8 @@ class Message:
                     )
 
                 case 1:
-                    kwargs["content_type"] = de.read_string(
-                        _SCHEMA_MESSAGE.members["contentType"]
+                    kwargs["content_type"] = MessageContentType(
+                        de.read_string(_SCHEMA_MESSAGE.members["contentType"])
                     )
 
                 case 2:
@@ -1485,6 +1510,8 @@ class Message:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_MESSAGE, consumer=_consumer)
+        if "content_type" not in kwargs:
+            kwargs["content_type"] = MessageContentType._corrected("")
         return kwargs
 
 
@@ -1513,13 +1540,13 @@ def _deserialize_messages(
     return result
 
 
-class StyleType(StrEnum):
+class StyleType(UnknownEnumMixin, StrEnum):
     DEFAULT = "Default"
     SPELL_BY_LETTER = "SpellByLetter"
     SPELL_BY_WORD = "SpellByWord"
 
 
-class DialogActionType(StrEnum):
+class DialogActionType(UnknownEnumMixin, StrEnum):
     CLOSE = "Close"
     CONFIRM_INTENT = "ConfirmIntent"
     DELEGATE = "Delegate"
@@ -1568,6 +1595,8 @@ class RuntimeHintValue:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_RUNTIME_HINT_VALUE, consumer=_consumer)
+        if "phrase" not in kwargs:
+            kwargs["phrase"] = ""
         return kwargs
 
 
@@ -1864,6 +1893,8 @@ class RecognizedBotMember:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_RECOGNIZED_BOT_MEMBER, consumer=_consumer)
+        if "bot_id" not in kwargs:
+            kwargs["bot_id"] = ""
         return kwargs
 
 
@@ -2352,7 +2383,7 @@ RECOGNIZE_UTTERANCE = APIOperation(
 )
 
 
-class ConversationMode(StrEnum):
+class ConversationMode(UnknownEnumMixin, StrEnum):
     AUDIO = "AUDIO"
     TEXT = "TEXT"
 
@@ -2491,6 +2522,8 @@ class DTMFInputEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_DTMF_INPUT_EVENT, consumer=_consumer)
+        if "input_character" not in kwargs:
+            kwargs["input_character"] = ""
         return kwargs
 
 
@@ -2626,6 +2659,8 @@ class TextInputEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_TEXT_INPUT_EVENT, consumer=_consumer)
+        if "text" not in kwargs:
+            kwargs["text"] = ""
         return kwargs
 
 
@@ -2674,13 +2709,13 @@ class HeartbeatEvent:
         return kwargs
 
 
-class InputMode(StrEnum):
+class InputMode(UnknownEnumMixin, StrEnum):
     TEXT = "Text"
     SPEECH = "Speech"
     DTMF = "DTMF"
 
 
-class PlaybackInterruptionReason(StrEnum):
+class PlaybackInterruptionReason(UnknownEnumMixin, StrEnum):
     DTMF_START_DETECTED = "DTMF_START_DETECTED"
     TEXT_DETECTED = "TEXT_DETECTED"
     VOICE_START_DETECTED = "VOICE_START_DETECTED"
@@ -2697,7 +2732,7 @@ class PlaybackInterruptionEvent:
     responding and that Amazon Lex V2 is processing their input.
     """
 
-    event_reason: str | None = None
+    event_reason: PlaybackInterruptionReason | None = None
     """Indicates the type of user input that Amazon Lex V2 detected."""
 
     caused_by_event_id: str | None = None
@@ -2745,8 +2780,10 @@ class PlaybackInterruptionEvent:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["event_reason"] = de.read_string(
-                        _SCHEMA_PLAYBACK_INTERRUPTION_EVENT.members["eventReason"]
+                    kwargs["event_reason"] = PlaybackInterruptionReason(
+                        de.read_string(
+                            _SCHEMA_PLAYBACK_INTERRUPTION_EVENT.members["eventReason"]
+                        )
                     )
 
                 case 1:
@@ -2936,6 +2973,8 @@ class ElicitSubSlot:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_ELICIT_SUB_SLOT, consumer=_consumer)
+        if "name" not in kwargs:
+            kwargs["name"] = ""
         return kwargs
 
 
@@ -2943,7 +2982,7 @@ class ElicitSubSlot:
 class DialogAction:
     """The next action that Amazon Lex V2 should take."""
 
-    type: str
+    type: DialogActionType
     """
     The next action that the bot should take in its interaction with the
     user. The following values are possible:
@@ -2968,7 +3007,7 @@ class DialogAction:
     slot_to_elicit: str | None = None
     """The name of the slot that should be elicited from the user."""
 
-    slot_elicitation_style: str | None = None
+    slot_elicitation_style: StyleType | None = None
     """
     Configures the slot to use spell-by-letter or spell-by-word style. When
     you use a style on a slot, users can spell out their input to make it
@@ -3022,8 +3061,8 @@ class DialogAction:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["type"] = de.read_string(
-                        _SCHEMA_DIALOG_ACTION.members["type"]
+                    kwargs["type"] = DialogActionType(
+                        de.read_string(_SCHEMA_DIALOG_ACTION.members["type"])
                     )
 
                 case 1:
@@ -3032,8 +3071,10 @@ class DialogAction:
                     )
 
                 case 2:
-                    kwargs["slot_elicitation_style"] = de.read_string(
-                        _SCHEMA_DIALOG_ACTION.members["slotElicitationStyle"]
+                    kwargs["slot_elicitation_style"] = StyleType(
+                        de.read_string(
+                            _SCHEMA_DIALOG_ACTION.members["slotElicitationStyle"]
+                        )
                     )
 
                 case 3:
@@ -3043,6 +3084,8 @@ class DialogAction:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_DIALOG_ACTION, consumer=_consumer)
+        if "type" not in kwargs:
+            kwargs["type"] = DialogActionType._corrected("")
         return kwargs
 
 
@@ -3239,7 +3282,7 @@ class Slot:
     value: Value | None = None
     """The current value of the slot."""
 
-    shape: str | None = None
+    shape: Shape | None = None
     """
     When the `shape` value is `List`, it indicates that the `values` field
     contains a list of slot values. When the value is `Scalar`, it indicates
@@ -3288,7 +3331,9 @@ class Slot:
                     kwargs["value"] = Value.deserialize(de)
 
                 case 1:
-                    kwargs["shape"] = de.read_string(_SCHEMA_SLOT.members["shape"])
+                    kwargs["shape"] = Shape(
+                        de.read_string(_SCHEMA_SLOT.members["shape"])
+                    )
 
                 case 2:
                     kwargs["values"] = _deserialize_values(
@@ -3369,7 +3414,7 @@ class Intent:
     the value of the slot. If a slot has not been filled, the value is null.
     """
 
-    state: str | None = None
+    state: IntentState | None = None
     """
     Indicates the fulfillment state for the intent. The meanings of each
     value are as follows:
@@ -3391,7 +3436,7 @@ class Intent:
       to streaming conversations).
     """
 
-    confirmation_state: str | None = None
+    confirmation_state: ConfirmationState | None = None
     """
     Indicates whether the intent has been `Confirmed`, `Denied`, or `None`
     if the confirmation stage has not yet been reached.
@@ -3432,17 +3477,21 @@ class Intent:
                     )
 
                 case 2:
-                    kwargs["state"] = de.read_string(_SCHEMA_INTENT.members["state"])
+                    kwargs["state"] = IntentState(
+                        de.read_string(_SCHEMA_INTENT.members["state"])
+                    )
 
                 case 3:
-                    kwargs["confirmation_state"] = de.read_string(
-                        _SCHEMA_INTENT.members["confirmationState"]
+                    kwargs["confirmation_state"] = ConfirmationState(
+                        de.read_string(_SCHEMA_INTENT.members["confirmationState"])
                     )
 
                 case _:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_INTENT, consumer=_consumer)
+        if "name" not in kwargs:
+            kwargs["name"] = ""
         return kwargs
 
 
@@ -3477,7 +3526,7 @@ class Interpretation:
     are ordered by the confidence score.
     """
 
-    interpretation_source: str | None = None
+    interpretation_source: InterpretationSource | None = None
     """Specifies the service that interpreted the input."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -3526,8 +3575,10 @@ class Interpretation:
                     kwargs["intent"] = Intent.deserialize(de)
 
                 case 3:
-                    kwargs["interpretation_source"] = de.read_string(
-                        _SCHEMA_INTERPRETATION.members["interpretationSource"]
+                    kwargs["interpretation_source"] = InterpretationSource(
+                        de.read_string(
+                            _SCHEMA_INTERPRETATION.members["interpretationSource"]
+                        )
                     )
 
                 case _:
@@ -3851,6 +3902,8 @@ class ConfigurationEvent:
                     logger.debug("Unexpected member schema: %s", schema)
 
         deserializer.read_struct(_SCHEMA_CONFIGURATION_EVENT, consumer=_consumer)
+        if "response_content_type" not in kwargs:
+            kwargs["response_content_type"] = ""
         return kwargs
 
 
@@ -4179,7 +4232,7 @@ class StartConversationRequestEventStreamConfigurationEvent:
     Lex V2
     """
 
-    value: ConfigurationEvent
+    value: "ConfigurationEvent"
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_START_CONVERSATION_REQUEST_EVENT_STREAM, self)
@@ -4453,7 +4506,7 @@ class StartConversationInput:
     session_id: str | None = None
     """The identifier of the user session that is having the conversation."""
 
-    conversation_mode: str | None = None
+    conversation_mode: ConversationMode | None = None
     """
     The conversation type that you are using the Amazon Lex V2. If the
     conversation mode is `AUDIO` you can send both audio and DTMF
@@ -4522,8 +4575,10 @@ class StartConversationInput:
                     )
 
                 case 4:
-                    kwargs["conversation_mode"] = de.read_string(
-                        _SCHEMA_START_CONVERSATION_INPUT.members["conversationMode"]
+                    kwargs["conversation_mode"] = ConversationMode(
+                        de.read_string(
+                            _SCHEMA_START_CONVERSATION_INPUT.members["conversationMode"]
+                        )
                     )
 
                 case _:
@@ -4636,7 +4691,7 @@ class IntentResultEvent:
     application and Amazon Lex V2.
     """
 
-    input_mode: str | None = None
+    input_mode: InputMode | None = None
     """
     Indicates whether the input to the operation was text, speech, or from a
     touch-tone keypad.
@@ -4727,8 +4782,8 @@ class IntentResultEvent:
         def _consumer(schema: Schema, de: ShapeDeserializer) -> None:
             match schema.expect_member_index():
                 case 0:
-                    kwargs["input_mode"] = de.read_string(
-                        _SCHEMA_INTENT_RESULT_EVENT.members["inputMode"]
+                    kwargs["input_mode"] = InputMode(
+                        de.read_string(_SCHEMA_INTENT_RESULT_EVENT.members["inputMode"])
                     )
 
                 case 1:
@@ -4987,7 +5042,7 @@ class StartConversationResponseEventStreamIntentResultEvent:
     current state of the conversation between the user and Amazon Lex V2.
     """
 
-    value: IntentResultEvent
+    value: "IntentResultEvent"
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_START_CONVERSATION_RESPONSE_EVENT_STREAM, self)
