@@ -53,8 +53,8 @@ async def _wait_for_application_active(client, application_id: str) -> None:
         client: A Q Business client.
         application_id: The Application ID to poll.
     """
-    deadline = asyncio.get_event_loop().time() + _POLL_TIMEOUT_SECONDS
-    while asyncio.get_event_loop().time() < deadline:
+    deadline = asyncio.get_running_loop().time() + _POLL_TIMEOUT_SECONDS
+    while asyncio.get_running_loop().time() < deadline:
         response = await client.get_application(
             input=GetApplicationInput(application_id=application_id)
         )
@@ -76,8 +76,8 @@ async def _wait_for_index_active(client, application_id: str, index_id: str) -> 
         application_id: The parent Application ID.
         index_id: The Index ID to poll.
     """
-    deadline = asyncio.get_event_loop().time() + _POLL_TIMEOUT_SECONDS
-    while asyncio.get_event_loop().time() < deadline:
+    deadline = asyncio.get_running_loop().time() + _POLL_TIMEOUT_SECONDS
+    while asyncio.get_running_loop().time() < deadline:
         response = await client.get_index(
             input=GetIndexInput(application_id=application_id, index_id=index_id)
         )
@@ -101,8 +101,8 @@ async def _wait_for_retriever_active(
         application_id: The parent Application ID.
         retriever_id: The Retriever ID to poll.
     """
-    deadline = asyncio.get_event_loop().time() + _POLL_TIMEOUT_SECONDS
-    while asyncio.get_event_loop().time() < deadline:
+    deadline = asyncio.get_running_loop().time() + _POLL_TIMEOUT_SECONDS
+    while asyncio.get_running_loop().time() < deadline:
         response = await client.get_retriever(
             input=GetRetrieverInput(
                 application_id=application_id, retriever_id=retriever_id
@@ -134,7 +134,7 @@ async def _create_qbusiness_app(
     """
     # ThrottlingException is not marked retryable in the service model, so the
     # SDK does not retry it automatically. Retry here for concurrent test runs.
-    deadline = asyncio.get_event_loop().time() + _THROTTLE_RETRY_TIMEOUT_SECONDS
+    deadline = asyncio.get_running_loop().time() + _THROTTLE_RETRY_TIMEOUT_SECONDS
     while True:
         try:
             response = await client.create_application(
@@ -147,7 +147,7 @@ async def _create_qbusiness_app(
             )
             break
         except ThrottlingException:
-            if asyncio.get_event_loop().time() >= deadline:
+            if asyncio.get_running_loop().time() >= deadline:
                 raise
             await asyncio.sleep(_THROTTLE_RETRY_DELAY_SECONDS)
     application_id = response.application_id

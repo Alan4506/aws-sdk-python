@@ -66,7 +66,6 @@ async def _receive_chat_output(
     async for event in output_stream:
         if isinstance(event, ChatOutputStreamTextEvent):
             got_text_events = True
-            assert event.value.system_message_type is not None
             assert event.value.system_message_type == "RESPONSE"
             assert event.value.conversation_id is not None
             assert event.value.user_message_id is not None
