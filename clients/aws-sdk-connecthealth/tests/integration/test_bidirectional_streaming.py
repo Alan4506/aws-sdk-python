@@ -158,7 +158,7 @@ async def test_start_medical_scribe_listening_session(connecthealth_resources) -
     domain_id, subscription_id, output_s3_uri = connecthealth_resources
 
     client = create_connecthealth_client(REGION)
-    streaming_plugin = streaming_endpoint_plugin(REGION)
+    endpoint_plugin = streaming_endpoint_plugin(REGION)
     session_id = str(uuid.uuid4())
 
     stream = await client.start_medical_scribe_listening_session(
@@ -170,7 +170,7 @@ async def test_start_medical_scribe_listening_session(connecthealth_resources) -
             media_sample_rate_hertz=SAMPLE_RATE,
             media_encoding=MedicalScribeMediaEncoding.PCM,
         ),
-        plugins=[streaming_plugin],
+        plugins=[endpoint_plugin],
     )
 
     results = await asyncio.gather(
@@ -186,7 +186,7 @@ async def test_start_medical_scribe_listening_session(connecthealth_resources) -
         input=GetMedicalScribeListeningSessionInput(
             session_id=session_id, domain_id=domain_id, subscription_id=subscription_id
         ),
-        plugins=[streaming_plugin],
+        plugins=[endpoint_plugin],
     )
     assert isinstance(response, GetMedicalScribeListeningSessionOutput)
     details = response.medical_scribe_listening_session_details

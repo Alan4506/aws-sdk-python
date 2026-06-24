@@ -47,8 +47,8 @@ async def _wait_for_subscription_inactive(
         domain_id: The parent Domain ID.
         subscription_id: The Subscription ID to poll.
     """
-    deadline = asyncio.get_event_loop().time() + _SUBSCRIPTION_POLL_TIMEOUT_SECONDS
-    while asyncio.get_event_loop().time() < deadline:
+    deadline = asyncio.get_running_loop().time() + _SUBSCRIPTION_POLL_TIMEOUT_SECONDS
+    while asyncio.get_running_loop().time() < deadline:
         response = await client.get_subscription(
             input=GetSubscriptionInput(
                 domain_id=domain_id, subscription_id=subscription_id
@@ -115,10 +115,11 @@ def _create_s3_bucket(s3_client: Any, bucket_name: str) -> None:
         s3_client: A boto3 S3 client.
         bucket_name: The name of the S3 bucket to create.
     """
-    s3_client.create_bucket(Bucket=bucket_name)
-    s3_client.put_bucket_tagging(
+    s3_client.create_bucket(
         Bucket=bucket_name,
-        Tagging={"TagSet": [{"Key": k, "Value": v} for k, v in _TAGS.items()]},
+        CreateBucketConfiguration={
+            "Tags": [{"Key": k, "Value": v} for k, v in _TAGS.items()],
+        },
     )
 
 
