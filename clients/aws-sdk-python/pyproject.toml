@@ -22,9 +22,9 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-bedrock_runtime = ["aws_sdk_bedrock_runtime==0.7.0"]
-sagemaker_runtime_http2 = ["aws_sdk_sagemaker_runtime_http2==0.7.0"]
-transcribe_streaming = ["aws_sdk_transcribe_streaming==0.7.0"]
+bedrock_runtime = ["aws_sdk_bedrock_runtime==0.8.0"]
+sagemaker_runtime_http2 = ["aws_sdk_sagemaker_runtime_http2==0.8.0"]
+transcribe_streaming = ["aws_sdk_transcribe_streaming==0.8.0"]
 all = [
     "aws_sdk_python[bedrock_runtime]",
     "aws_sdk_python[sagemaker_runtime_http2]",
