@@ -1,8 +1,8 @@
 site_name: AWS SDK for Python - Transcribe Streaming
 site_description: Documentation for AWS Transcribe Streaming Client
 
-repo_name: awslabs/aws-sdk-python
-repo_url: https://github.com/awslabs/aws-sdk-python
+repo_name: aws/aws-sdk-python
+repo_url: https://github.com/aws/aws-sdk-python
 
 exclude_docs: |
   README.md
@@ -86,7 +86,7 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/awslabs/aws-sdk-python
+      link: https://github.com/aws/aws-sdk-python
 
 extra_css:
   - stylesheets/extra.css

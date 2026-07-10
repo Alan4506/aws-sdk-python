@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 import logging
+from typing import Any, TYPE_CHECKING
+import warnings
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
@@ -41,7 +43,7 @@ from .user_agent import aws_user_agent_plugin
 logger = logging.getLogger(__name__)
 
 
-class LexRuntimeV2Client:
+class AsyncLexRuntimeV2Client:
     """
     This section contains documentation for the Amazon Lex V2 Runtime V2 API
     operations.
@@ -51,7 +53,7 @@ class LexRuntimeV2Client:
         self, config: Config | None = None, plugins: list[Plugin] | None = None
     ):
         """
-        Constructor for `LexRuntimeV2Client`.
+        Constructor for `AsyncLexRuntimeV2Client`.
 
         Args:
             config:
@@ -507,3 +509,20 @@ class LexRuntimeV2Client:
             StartConversationResponseEventStream,
             _StartConversationResponseEventStreamDeserializer().deserialize,
         )
+
+
+if TYPE_CHECKING:
+    # Deprecated alias for backwards compatibility, to be removed.
+    LexRuntimeV2Client = AsyncLexRuntimeV2Client
+
+
+def __getattr__(name: str) -> Any:
+    if name == "LexRuntimeV2Client":
+        warnings.warn(
+            "LexRuntimeV2Client is deprecated, use AsyncLexRuntimeV2Client instead. "
+            "This alias will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return AsyncLexRuntimeV2Client
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

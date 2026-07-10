@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0
+
+### Enhancements
+* Re-generated with smithy-python 0.4.0
+
+### Dependencies
+* Bump `smithy-aws-core` from `~=0.7.0` to `~=0.8.0`.
+
 ## v0.7.0
 
 ### API Changes

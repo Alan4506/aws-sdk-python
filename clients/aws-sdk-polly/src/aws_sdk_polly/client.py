@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 import logging
+from typing import Any, TYPE_CHECKING
+import warnings
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
@@ -53,7 +55,7 @@ from .user_agent import aws_user_agent_plugin
 logger = logging.getLogger(__name__)
 
 
-class PollyClient:
+class AsyncPollyClient:
     """
     Amazon Polly is a web service that makes it easy to synthesize speech
     from text.
@@ -68,7 +70,7 @@ class PollyClient:
         self, config: Config | None = None, plugins: list[Plugin] | None = None
     ):
         """
-        Constructor for `PollyClient`.
+        Constructor for `AsyncPollyClient`.
 
         Args:
             config:
@@ -631,3 +633,20 @@ class PollyClient:
         )
 
         return await pipeline(call)
+
+
+if TYPE_CHECKING:
+    # Deprecated alias for backwards compatibility, to be removed.
+    PollyClient = AsyncPollyClient
+
+
+def __getattr__(name: str) -> Any:
+    if name == "PollyClient":
+        warnings.warn(
+            "PollyClient is deprecated, use AsyncPollyClient instead. "
+            "This alias will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return AsyncPollyClient
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
