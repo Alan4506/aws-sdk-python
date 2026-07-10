@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 import logging
+from typing import Any, TYPE_CHECKING
+import warnings
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
@@ -45,7 +47,7 @@ from .user_agent import aws_user_agent_plugin
 logger = logging.getLogger(__name__)
 
 
-class TranscribeStreamingClient:
+class AsyncTranscribeStreamingClient:
     """
     Amazon Transcribe streaming offers four main types of real-time
     transcription: **Standard**, **Medical**, **Call Analytics**, and
@@ -72,7 +74,7 @@ class TranscribeStreamingClient:
         self, config: Config | None = None, plugins: list[Plugin] | None = None
     ):
         """
-        Constructor for `TranscribeStreamingClient`.
+        Constructor for `AsyncTranscribeStreamingClient`.
 
         Args:
             config:
@@ -449,3 +451,20 @@ class TranscribeStreamingClient:
             TranscriptResultStream,
             _TranscriptResultStreamDeserializer().deserialize,
         )
+
+
+if TYPE_CHECKING:
+    # Deprecated alias for backwards compatibility, to be removed.
+    TranscribeStreamingClient = AsyncTranscribeStreamingClient
+
+
+def __getattr__(name: str) -> Any:
+    if name == "TranscribeStreamingClient":
+        warnings.warn(
+            "TranscribeStreamingClient is deprecated, use AsyncTranscribeStreamingClient instead. "
+            "This alias will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return AsyncTranscribeStreamingClient
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

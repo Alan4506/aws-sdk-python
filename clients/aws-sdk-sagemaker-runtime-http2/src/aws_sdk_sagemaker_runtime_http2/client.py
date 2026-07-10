@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 import logging
+from typing import Any, TYPE_CHECKING
+import warnings
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
@@ -26,14 +28,14 @@ from .user_agent import aws_user_agent_plugin
 logger = logging.getLogger(__name__)
 
 
-class SageMakerRuntimeHTTP2Client:
+class AsyncSageMakerRuntimeHTTP2Client:
     """The Amazon SageMaker AI runtime HTTP/2 API."""
 
     def __init__(
         self, config: Config | None = None, plugins: list[Plugin] | None = None
     ):
         """
-        Constructor for `SageMakerRuntimeHTTP2Client`.
+        Constructor for `AsyncSageMakerRuntimeHTTP2Client`.
 
         Args:
             config:
@@ -145,3 +147,20 @@ class SageMakerRuntimeHTTP2Client:
             ResponseStreamEvent,
             _ResponseStreamEventDeserializer().deserialize,
         )
+
+
+if TYPE_CHECKING:
+    # Deprecated alias for backwards compatibility, to be removed.
+    SageMakerRuntimeHTTP2Client = AsyncSageMakerRuntimeHTTP2Client
+
+
+def __getattr__(name: str) -> Any:
+    if name == "SageMakerRuntimeHTTP2Client":
+        warnings.warn(
+            "SageMakerRuntimeHTTP2Client is deprecated, use AsyncSageMakerRuntimeHTTP2Client instead. "
+            "This alias will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return AsyncSageMakerRuntimeHTTP2Client
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

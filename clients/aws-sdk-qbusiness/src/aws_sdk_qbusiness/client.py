@@ -2,6 +2,8 @@
 
 from copy import deepcopy
 import logging
+from typing import Any, TYPE_CHECKING
+import warnings
 
 from smithy_core.aio.client import ClientCall, RequestPipeline
 from smithy_core.aio.eventstream import DuplexEventStream
@@ -272,7 +274,7 @@ from .user_agent import aws_user_agent_plugin
 logger = logging.getLogger(__name__)
 
 
-class QBusinessClient:
+class AsyncQBusinessClient:
     """
     This is the *Amazon Q Business* API Reference. Amazon Q Business is a
     fully managed, generative-AI powered enterprise chat assistant that you
@@ -312,7 +314,7 @@ class QBusinessClient:
         self, config: Config | None = None, plugins: list[Plugin] | None = None
     ):
         """
-        Constructor for `QBusinessClient`.
+        Constructor for `AsyncQBusinessClient`.
 
         Args:
             config:
@@ -4460,3 +4462,20 @@ class QBusinessClient:
         )
 
         return await pipeline(call)
+
+
+if TYPE_CHECKING:
+    # Deprecated alias for backwards compatibility, to be removed.
+    QBusinessClient = AsyncQBusinessClient
+
+
+def __getattr__(name: str) -> Any:
+    if name == "QBusinessClient":
+        warnings.warn(
+            "QBusinessClient is deprecated, use AsyncQBusinessClient instead. "
+            "This alias will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return AsyncQBusinessClient
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

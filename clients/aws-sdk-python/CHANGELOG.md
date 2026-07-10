@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.8.0
+
+### Dependencies
+* Bump `aws-sdk-bedrock-runtime` from `==0.7.0` to `==0.8.0`.
+* Bump `aws-sdk-sagemaker-runtime-http2` from `==0.7.0` to `==0.8.0`.
+* Bump `aws-sdk-transcribe-streaming` from `==0.7.0` to `==0.8.0`.
+
 ## v0.7.0
 
 ### Dependencies
