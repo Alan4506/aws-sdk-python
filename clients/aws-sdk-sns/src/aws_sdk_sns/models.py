@@ -1382,7 +1382,7 @@ class CreateSMSSandboxPhoneNumberInput:
     send SMS messages to.
     """
 
-    language_code: LanguageCodeString | None = None
+    language_code: str | None = None
     """The language to use for sending the OTP. The default value is `en-US`."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4113,7 +4113,7 @@ class NumberCapability(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_number_capability_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[NumberCapability]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -4123,8 +4123,8 @@ def _serialize_number_capability_list(
 
 def _deserialize_number_capability_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[NumberCapability]:
-    result: list[NumberCapability] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -4169,10 +4169,10 @@ class PhoneNumberInformation:
     format.
     """
 
-    route_type: RouteType | None = None
+    route_type: str | None = None
     """The list of supported routes."""
 
-    number_capabilities: list[NumberCapability] | None = None
+    number_capabilities: list[str] | None = None
     """The capabilities of each phone number."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4901,7 +4901,7 @@ class SMSSandboxPhoneNumber:
     phone_number: str | None = field(repr=False, default=None)
     """The destination phone number."""
 
-    status: SMSSandboxPhoneNumberVerificationStatus | None = None
+    status: str | None = None
     """The destination phone number's verification status."""
 
     def serialize(self, serializer: ShapeSerializer):

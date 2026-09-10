@@ -1099,7 +1099,7 @@ class UnprocessedIdentityId:
     identity_id: str | None = None
     """A unique identifier in the format REGION:GUID."""
 
-    error_code: ErrorCode | None = None
+    error_code: str | None = None
     """The error code indicating the type of error that occurred."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2495,7 +2495,7 @@ class MappingRule:
     \"isAdmin\" or \"paid\".
     """
 
-    match_type: MappingRuleMatchType
+    match_type: str
     """
     The match condition that specifies how closely the claim value in the
     IdP token must match `Value`.
@@ -2643,7 +2643,7 @@ class RoleMappingType(UnknownEnumMixin, StrEnum):
 class RoleMapping:
     """A role mapping."""
 
-    type: RoleMappingType
+    type: str
     """
     The role mapping type. Token will use `cognito:roles` and
     `cognito:preferred_role` claims from the Cognito identity provider token
@@ -2651,7 +2651,7 @@ class RoleMapping:
     token to map to a role.
     """
 
-    ambiguous_role_resolution: AmbiguousRoleResolutionType | None = None
+    ambiguous_role_resolution: str | None = None
     """
     If you specify Token or Rules as the `Type`, `AmbiguousRoleResolution`
     is required.

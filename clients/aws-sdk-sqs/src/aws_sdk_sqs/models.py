@@ -2758,7 +2758,7 @@ DELETE_QUEUE = APIOperation(
 
 
 def _serialize_attribute_name_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[QueueAttributeName]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -2768,8 +2768,8 @@ def _serialize_attribute_name_list(
 
 def _deserialize_attribute_name_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[QueueAttributeName]:
-    result: list[QueueAttributeName] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -2795,7 +2795,7 @@ class GetQueueAttributesInput:
     Queue URLs and names are case-sensitive.
     """
 
-    attribute_names: list[QueueAttributeName] | None = None
+    attribute_names: list[str] | None = None
     """
     A list of attributes for which to retrieve information.
 
@@ -4502,7 +4502,7 @@ class MessageSystemAttributeName(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_message_system_attribute_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[MessageSystemAttributeName]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -4512,8 +4512,8 @@ def _serialize_message_system_attribute_list(
 
 def _deserialize_message_system_attribute_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[MessageSystemAttributeName]:
-    result: list[MessageSystemAttributeName] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -4538,7 +4538,7 @@ class ReceiveMessageInput:
     Queue URLs and names are case-sensitive.
     """
 
-    attribute_names: list[QueueAttributeName] | None = None
+    attribute_names: list[str] | None = None
     """
     Warning:
         This parameter has been discontinued but will be supported for backward
@@ -4587,7 +4587,7 @@ class ReceiveMessageInput:
     - `SequenceNumber` -- Returns the value provided by Amazon SQS.
     """
 
-    message_system_attribute_names: list[MessageSystemAttributeName] | None = None
+    message_system_attribute_names: list[str] | None = None
     """
     A list of attributes that need to be returned along with each message.
     These attributes include:

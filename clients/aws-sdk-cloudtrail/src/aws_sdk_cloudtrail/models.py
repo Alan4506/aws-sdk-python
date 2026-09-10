@@ -1825,7 +1825,7 @@ class Template(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_templates(
-    serializer: ShapeSerializer, schema: Schema, value: list[Template]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -1835,8 +1835,8 @@ def _serialize_templates(
 
 def _deserialize_templates(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[Template]:
-    result: list[Template] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -1854,13 +1854,13 @@ def _deserialize_templates(
 class AggregationConfiguration:
     """An object that contains configuration settings for aggregating events."""
 
-    templates: list[Template]
+    templates: list[str]
     """
     A list of aggregation templates that can be used to configure event
     aggregation.
     """
 
-    event_category: EventCategoryAggregation
+    event_category: str
     """Specifies the event category for which aggregation should be performed."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2030,7 +2030,7 @@ class CancelQueryOutput:
     query_id: str
     """The ID of the canceled query."""
 
-    query_status: QueryStatus
+    query_status: str
     """
     Shows the status of a query after a `CancelQuery` request. Typically,
     the values shown are either `RUNNING` or `CANCELLED`.
@@ -2527,7 +2527,7 @@ class DestinationType(UnknownEnumMixin, StrEnum):
 class Destination:
     """Contains information about the destination receiving events."""
 
-    type: DestinationType
+    type: str
     """
     The type of destination for events arriving from a channel. For channels
     used for a CloudTrail Lake integration, the value is `EVENT_DATA_STORE`.
@@ -2955,7 +2955,7 @@ class RefreshScheduleFrequency:
     or 24 hours, or every day.
     """
 
-    unit: RefreshScheduleFrequencyUnit | None = None
+    unit: str | None = None
     """
     The unit to use for the refresh.
 
@@ -3032,7 +3032,7 @@ class RefreshSchedule:
     frequency: RefreshScheduleFrequency | None = None
     """The frequency at which you want the dashboard refreshed."""
 
-    status: RefreshScheduleStatus | None = None
+    status: str | None = None
     """
     Specifies whether the refresh schedule is enabled. Set the value to
     `ENABLED` to enable the refresh schedule, or to `DISABLED` to turn off
@@ -3498,7 +3498,7 @@ class CreateDashboardOutput:
     name: str | None = None
     """The name of the dashboard."""
 
-    type: DashboardType | None = None
+    type: str | None = None
     """The dashboard type."""
 
     widgets: list[Widget] | None = None
@@ -3962,7 +3962,7 @@ class CreateEventDataStoreInput:
     events. The default is true.
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     The billing mode for the event data store determines the cost for
     ingesting events and the default and maximum retention period for the
@@ -4156,7 +4156,7 @@ class CreateEventDataStoreOutput:
     name: str | None = None
     """The name of the event data store."""
 
-    status: EventDataStoreStatus | None = None
+    status: str | None = None
     """The status of event data store creation."""
 
     advanced_event_selectors: list[AdvancedEventSelector] | None = None
@@ -4208,7 +4208,7 @@ class CreateEventDataStoreOutput:
     `arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """The billing mode for the event data store."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7594,7 +7594,7 @@ class DescribeQueryOutput:
     query_string: str | None = None
     """The SQL code of a query."""
 
-    query_status: QueryStatus | None = None
+    query_status: str | None = None
     """
     The status of a query. Values for `QueryStatus` include `QUEUED`,
     `RUNNING`, `FINISHED`, `FAILED`, `TIMED_OUT`, or `CANCELLED`
@@ -7616,7 +7616,7 @@ class DescribeQueryOutput:
     applicable.
     """
 
-    delivery_status: DeliveryStatus | None = None
+    delivery_status: str | None = None
     """The delivery status."""
 
     prompt: str | None = None
@@ -8397,7 +8397,7 @@ class DisableFederationOutput:
     federation.
     """
 
-    federation_status: FederationStatus | None = None
+    federation_status: str | None = None
     """The federation status."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8591,7 +8591,7 @@ class EnableFederationOutput:
     federation.
     """
 
-    federation_status: FederationStatus | None = None
+    federation_status: str | None = None
     """The federation status."""
 
     federation_role_arn: str | None = None
@@ -9389,10 +9389,10 @@ class GetDashboardOutput:
     dashboard_arn: str | None = None
     """The ARN for the dashboard."""
 
-    type: DashboardType | None = None
+    type: str | None = None
     """The type of dashboard."""
 
-    status: DashboardStatus | None = None
+    status: str | None = None
     """The status of the dashboard."""
 
     widgets: list[Widget] | None = None
@@ -9668,7 +9668,7 @@ class ContextKeySelector:
     enriched events.
     """
 
-    type: Type
+    type: str
     """
     Specifies the type of the event record field in ContextKeySelector.
     Valid values include RequestContext, TagContext.
@@ -9766,7 +9766,7 @@ class GetEventConfigurationOutput:
     store for which the event configuration settings are returned.
     """
 
-    max_event_size: MaxEventSize | None = None
+    max_event_size: str | None = None
     """
     The maximum allowed size for events stored in the specified event data
     store.
@@ -10113,7 +10113,7 @@ class GetEventDataStoreOutput:
     name: str | None = None
     """The name of the event data store."""
 
-    status: EventDataStoreStatus | None = None
+    status: str | None = None
     """The status of an event data store."""
 
     advanced_event_selectors: list[AdvancedEventSelector] | None = None
@@ -10156,10 +10156,10 @@ class GetEventDataStoreOutput:
     `arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """The billing mode for the event data store."""
 
-    federation_status: FederationStatus | None = None
+    federation_status: str | None = None
     """
     Indicates the [Lake query
     federation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html)
@@ -10759,7 +10759,7 @@ class EventSelector:
     trail.
     """
 
-    read_write_type: ReadWriteType | None = None
+    read_write_type: str | None = None
     """
     Specify if you want your trail to log read-only events, write-only
     events, or all. For example, the EC2 `GetConsoleOutput` is a read-only
@@ -11337,7 +11337,7 @@ class GetImportOutput:
     time period.
     """
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import."""
 
     created_timestamp: datetime | None = None
@@ -11625,7 +11625,7 @@ class SourceEventCategory(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_source_event_categories(
-    serializer: ShapeSerializer, schema: Schema, value: list[SourceEventCategory]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -11635,8 +11635,8 @@ def _serialize_source_event_categories(
 
 def _deserialize_source_event_categories(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[SourceEventCategory]:
-    result: list[SourceEventCategory] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -11662,7 +11662,7 @@ class InsightSelector:
     a trail or event data store.
     """
 
-    insight_type: InsightType | None = None
+    insight_type: str | None = None
     """
     The type of Insights events to log on a trail or event data store.
     `ApiCallRateInsight` and `ApiErrorRateInsight` are valid Insight types.
@@ -11676,7 +11676,7 @@ class InsightSelector:
     unsuccessful.
     """
 
-    event_categories: list[SourceEventCategory] | None = None
+    event_categories: list[str] | None = None
     """
     Select the event category on which Insights should be enabled.
 
@@ -12206,7 +12206,7 @@ class QueryStatistics:
 class GetQueryResultsOutput:
     """Dataclass for GetQueryResultsOutput structure."""
 
-    query_status: QueryStatus | None = None
+    query_status: str | None = None
     """
     The status of the query. Values include `QUEUED`, `RUNNING`, `FINISHED`,
     `FAILED`, `TIMED_OUT`, or `CANCELLED`.
@@ -13324,7 +13324,7 @@ class ListDashboardsInput:
     name_prefix: str | None = None
     """Specify a name prefix to filter on."""
 
-    type: DashboardType | None = None
+    type: str | None = None
     """Specify a dashboard type to filter on: `CUSTOM` or `MANAGED`."""
 
     next_token: str | None = None
@@ -13401,7 +13401,7 @@ class DashboardDetail:
     dashboard_arn: str | None = None
     """The ARN for the dashboard."""
 
-    type: DashboardType | None = None
+    type: str | None = None
     """The type of dashboard."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -13616,7 +13616,7 @@ class EventDataStore:
     termination_protection_enabled: bool | None = None
     """Indicates whether the event data store is protected from termination."""
 
-    status: EventDataStoreStatus | None = None
+    status: str | None = None
     """The status of an event data store."""
 
     advanced_event_selectors: list[AdvancedEventSelector] | None = None
@@ -13982,7 +13982,7 @@ class ImportFailureListItem:
     location: str | None = None
     """The location of the failure in the S3 bucket."""
 
-    status: ImportFailureStatus | None = None
+    status: str | None = None
     """The status of the import."""
 
     error_type: str | None = None
@@ -14192,7 +14192,7 @@ class ListImportsInput:
     destination: str | None = None
     """The ARN of the destination event data store."""
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import."""
 
     next_token: str | None = None
@@ -14271,7 +14271,7 @@ class ImportsListItem:
     import_id: str | None = None
     """The ID of the import."""
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import."""
 
     destinations: list[str] | None = None
@@ -14518,7 +14518,7 @@ class ListInsightsDataInput:
     retrieve Insights events.
     """
 
-    data_type: ListInsightsDataType | None = None
+    data_type: str | None = None
     """
     Specifies the category of events returned. To fetch Insights events,
     specify `InsightsEvents` as the value of `DataType`
@@ -15035,7 +15035,7 @@ class ListInsightsMetricDataInput:
     unusual levels of activity were recorded.
     """
 
-    insight_type: InsightType | None = None
+    insight_type: str | None = None
     """
     The type of CloudTrail Insights event, which is either
     `ApiCallRateInsight` or `ApiErrorRateInsight`. The `ApiCallRateInsight`
@@ -15079,7 +15079,7 @@ class ListInsightsMetricDataInput:
     error. The default is 3600 seconds.
     """
 
-    data_type: InsightsMetricDataType | None = None
+    data_type: str | None = None
     """
     Type of data points to return. Valid values are `NonZeroData` and
     `FillWithZeros`. The default is `NonZeroData`.
@@ -15323,7 +15323,7 @@ class ListInsightsMetricDataOutput:
     unusual levels of activity were recorded.
     """
 
-    insight_type: InsightType | None = None
+    insight_type: str | None = None
     """
     The type of CloudTrail Insights event, which is either
     `ApiCallRateInsight` or `ApiErrorRateInsight`. The `ApiCallRateInsight`
@@ -15967,7 +15967,7 @@ class ListQueriesInput:
     results to only those queries run within a specified time period.
     """
 
-    query_status: QueryStatus | None = None
+    query_status: str | None = None
     """
     The status of queries that you want to return in results. Valid values
     for `QueryStatus` include `QUEUED`, `RUNNING`, `FINISHED`, `FAILED`,
@@ -16068,7 +16068,7 @@ class Query:
     query_id: str | None = None
     """The ID of a query."""
 
-    query_status: QueryStatus | None = None
+    query_status: str | None = None
     """
     The status of the query. This can be `QUEUED`, `RUNNING`, `FINISHED`,
     `FAILED`, `TIMED_OUT`, or `CANCELLED`.
@@ -16876,7 +16876,7 @@ class LookupAttributeKey(UnknownEnumMixin, StrEnum):
 class LookupAttribute:
     """Specifies an attribute and value that filter the events returned."""
 
-    attribute_key: LookupAttributeKey
+    attribute_key: str
     """Specifies an attribute on which to filter the events returned."""
 
     attribute_value: str
@@ -16979,7 +16979,7 @@ class LookupEventsInput:
     time, an error is returned.
     """
 
-    event_category: EventCategory | None = None
+    event_category: str | None = None
     """
     Specifies the event category. If you do not specify an event category,
     events of the category are not returned in the response. For example, if
@@ -17258,7 +17258,7 @@ class PutEventConfigurationInput:
     store for which event configuration settings are updated.
     """
 
-    max_event_size: MaxEventSize | None = None
+    max_event_size: str | None = None
     """
     The maximum allowed size for events to be stored in the specified event
     data store. If you are using context key selectors, MaxEventSize must be
@@ -17389,7 +17389,7 @@ class PutEventConfigurationOutput:
     store for which the event configuration settings were updated.
     """
 
-    max_event_size: MaxEventSize | None = None
+    max_event_size: str | None = None
     """
     The maximum allowed size for events stored in the specified event data
     store.
@@ -18901,7 +18901,7 @@ class RestoreEventDataStoreOutput:
     name: str | None = None
     """The name of the event data store."""
 
-    status: EventDataStoreStatus | None = None
+    status: str | None = None
     """The status of the event data store."""
 
     advanced_event_selectors: list[AdvancedEventSelector] | None = None
@@ -18948,7 +18948,7 @@ class RestoreEventDataStoreOutput:
     `arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """The billing mode for the event data store."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -19975,7 +19975,7 @@ class StartImportOutput:
     time period.
     """
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """
     Shows the status of the import after a `StartImport` request. An import
     finishes with a status of `COMPLETED` if there were no failures, or
@@ -20743,7 +20743,7 @@ class StopImportOutput:
     destinations: list[str] | None = None
     """The ARN of the destination event data store."""
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import."""
 
     created_timestamp: datetime | None = None
@@ -21360,7 +21360,7 @@ class UpdateDashboardOutput:
     name: str | None = None
     """The name for the dashboard."""
 
-    type: DashboardType | None = None
+    type: str | None = None
     """The type of dashboard."""
 
     widgets: list[Widget] | None = None
@@ -21629,7 +21629,7 @@ class UpdateEventDataStoreInput:
     - `12345678-1234-1234-1234-123456789012`
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     Note:
         You can't change the billing mode from `EXTENDABLE_RETENTION_PRICING`
@@ -21808,7 +21808,7 @@ class UpdateEventDataStoreOutput:
     name: str | None = None
     """The name of the event data store."""
 
-    status: EventDataStoreStatus | None = None
+    status: str | None = None
     """The status of an event data store."""
 
     advanced_event_selectors: list[AdvancedEventSelector] | None = None
@@ -21854,10 +21854,10 @@ class UpdateEventDataStoreOutput:
     `arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """The billing mode for the event data store."""
 
-    federation_status: FederationStatus | None = None
+    federation_status: str | None = None
     """
     Indicates the [Lake query
     federation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-federation.html)
