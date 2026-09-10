@@ -597,7 +597,7 @@ class ActionGroupExecutorCustomControl:
     `InvokeAgent` response, specify `RETURN_CONTROL`.
     """
 
-    value: CustomControlMethod
+    value: str
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_ACTION_GROUP_EXECUTOR, self)
@@ -925,7 +925,7 @@ class ParameterDetail:
       response](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_GetAgentActionGroup.html#API_agent_GetAgentActionGroup_ResponseSyntax)
     """
 
-    type: Type
+    type: str
     """The data type of the parameter."""
 
     description: str | None = None
@@ -1058,7 +1058,7 @@ class Function:
     function.
     """
 
-    require_confirmation: RequireConfirmation | None = None
+    require_confirmation: str | None = None
     """
     Contains information if user confirmation is required to invoke the
     function.
@@ -1308,7 +1308,7 @@ class CreateAgentActionGroupInput:
     description: str | None = None
     """A description of the action group."""
 
-    parent_action_group_signature: ActionGroupSignature | None = None
+    parent_action_group_signature: str | None = None
     """
     Specify a built-in or computer use action for this action group. If you
     specify a value, you must leave the `description`, `apiSchema`, and
@@ -1371,7 +1371,7 @@ class CreateAgentActionGroupInput:
     schemas](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-api-schema.html).
     """
 
-    action_group_state: ActionGroupState | None = None
+    action_group_state: str | None = None
     """
     Specifies whether the action group is available for the agent to invoke
     or not when sending an
@@ -1569,7 +1569,7 @@ class AgentActionGroup:
     updated_at: datetime
     """The time at which the action group was last updated."""
 
-    action_group_state: ActionGroupState
+    action_group_state: str
     """
     Specifies whether the action group is available for the agent to invoke
     or not when sending an
@@ -1589,7 +1589,7 @@ class AgentActionGroup:
     description: str | None = None
     """The description of the action group."""
 
-    parent_action_signature: ActionGroupSignature | None = None
+    parent_action_signature: str | None = None
     """
     If this field is set as `AMAZON.UserInput`, the agent can request the
     user for additional information when trying to complete a task. The
@@ -2608,7 +2608,7 @@ class ActionGroupSummary:
     action_group_name: str
     """The name of the action group."""
 
-    action_group_state: ActionGroupState
+    action_group_state: str
     """
     Specifies whether the action group is available for the agent to invoke
     or not when sending an
@@ -2849,7 +2849,7 @@ class UpdateAgentActionGroupInput:
     description: str | None = None
     """Specifies a new name for the action group."""
 
-    parent_action_group_signature: ActionGroupSignature | None = None
+    parent_action_group_signature: str | None = None
     """
     Update the built-in or computer use action for this action group. If you
     specify a value, you must leave the `description`, `apiSchema`, and
@@ -2909,7 +2909,7 @@ class UpdateAgentActionGroupInput:
     business logic that is carried out upon invoking the action.
     """
 
-    action_group_state: ActionGroupState | None = None
+    action_group_state: str | None = None
     """
     Specifies whether the action group is available for the agent to invoke
     or not when sending an
@@ -3434,7 +3434,7 @@ class MemoryType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_enabled_memory_types(
-    serializer: ShapeSerializer, schema: Schema, value: list[MemoryType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -3444,8 +3444,8 @@ def _serialize_enabled_memory_types(
 
 def _deserialize_enabled_memory_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[MemoryType]:
-    result: list[MemoryType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -3509,7 +3509,7 @@ class SessionSummaryConfiguration:
 class MemoryConfiguration:
     """Details of the memory configuration."""
 
-    enabled_memory_types: list[MemoryType]
+    enabled_memory_types: list[str]
     """The type of memory that is stored."""
 
     storage_days: int = 30
@@ -3753,13 +3753,13 @@ class PromptConfiguration:
     prompts](https://docs.aws.amazon.com/bedrock/latest/userguide/advanced-prompts.html).
     """
 
-    prompt_type: PromptType | None = None
+    prompt_type: str | None = None
     """
     The step in the agent sequence that this prompt configuration applies
     to.
     """
 
-    prompt_creation_mode: CreationMode | None = None
+    prompt_creation_mode: str | None = None
     """
     Specifies whether to override the default prompt template for this
     `promptType`. Set this value to `OVERRIDDEN` to use the prompt that you
@@ -3767,7 +3767,7 @@ class PromptConfiguration:
     agent uses a default prompt template.
     """
 
-    prompt_state: PromptState | None = None
+    prompt_state: str | None = None
     """
     Specifies whether to allow the agent to carry out the step specified in
     the `promptType`. If you set this value to `DISABLED`, the agent skips
@@ -3801,7 +3801,7 @@ class PromptConfiguration:
     models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters.html).
     """
 
-    parser_mode: CreationMode | None = None
+    parser_mode: str | None = None
     """
     Specifies whether to override the default parser Lambda function when
     parsing the raw foundation model output in the part of the agent
@@ -4084,7 +4084,7 @@ class Agent:
     agent_version: str
     """The version of the agent."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """
     The status of the agent and whether it is ready for use. The following
     statuses are possible:
@@ -4147,7 +4147,7 @@ class Agent:
     description: str | None = None
     """The description of the agent."""
 
-    orchestration_type: OrchestrationType | None = None
+    orchestration_type: str | None = None
     """Specifies the orchestration strategy for the agent."""
 
     custom_orchestration: CustomOrchestration | None = None
@@ -4183,7 +4183,7 @@ class Agent:
     memory_configuration: MemoryConfiguration | None = None
     """Contains memory configuration for the agent."""
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """The agent's collaboration settings."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4683,7 +4683,7 @@ class AgentAlias:
     updated_at: datetime
     """The time at which the alias was last updated."""
 
-    agent_alias_status: AgentAliasStatus
+    agent_alias_status: str
     """
     The status of the alias of the agent and whether it is ready for use.
     The following statuses are possible:
@@ -4723,7 +4723,7 @@ class AgentAlias:
     agent alias.
     """
 
-    alias_invocation_state: AliasInvocationState | None = None
+    alias_invocation_state: str | None = None
     """
     The invocation state for the agent alias. If the agent alias is running,
     the value is `ACCEPT_INVOCATIONS`. If the agent alias is paused, the
@@ -4916,7 +4916,7 @@ class AgentAliasSummary:
     agent_alias_name: str
     """The name of the alias."""
 
-    agent_alias_status: AgentAliasStatus
+    agent_alias_status: str
     """The status of the alias."""
 
     created_at: datetime
@@ -4934,7 +4934,7 @@ class AgentAliasSummary:
     associated.
     """
 
-    alias_invocation_state: AliasInvocationState | None = None
+    alias_invocation_state: str | None = None
     """
     The invocation state for the agent alias. If the agent alias is running,
     the value is `ACCEPT_INVOCATIONS`. If the agent alias is paused, the
@@ -5154,7 +5154,7 @@ class AgentCollaborator:
     last_updated_at: datetime
     """When the collaborator was updated."""
 
-    relay_conversation_history: RelayConversationHistory | None = None
+    relay_conversation_history: str | None = None
     """The collaborator's relay conversation history."""
 
     client_token: str | None = None
@@ -5318,7 +5318,7 @@ class AssociateAgentCollaboratorInput:
     collaboration_instruction: str | None = field(repr=False, default=None)
     """Instruction for the collaborator."""
 
-    relay_conversation_history: RelayConversationHistory | None = None
+    relay_conversation_history: str | None = None
     """A relay conversation history for the collaborator."""
 
     client_token: str | None = None
@@ -5911,7 +5911,7 @@ class AgentCollaboratorSummary:
     collaboration_instruction: str = field(repr=False)
     """The collaborator's collaboration instruction."""
 
-    relay_conversation_history: RelayConversationHistory
+    relay_conversation_history: str
     """The collaborator's relay conversation history."""
 
     collaborator_name: str
@@ -6197,7 +6197,7 @@ class UpdateAgentCollaboratorInput:
     collaboration_instruction: str | None = field(repr=False, default=None)
     """Instruction for the collaborator."""
 
-    relay_conversation_history: RelayConversationHistory | None = None
+    relay_conversation_history: str | None = None
     """A relay conversation history for the collaborator."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6484,7 +6484,7 @@ class AgentKnowledgeBase:
     base was last updated.
     """
 
-    knowledge_base_state: KnowledgeBaseState
+    knowledge_base_state: str
     """
     Specifies whether to use the knowledge base or not when sending an
     [InvokeAgent](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_InvokeAgent.html)
@@ -6606,7 +6606,7 @@ class AgentKnowledgeBaseSummary:
     knowledge_base_id: str
     """The unique identifier of the knowledge base associated with an agent."""
 
-    knowledge_base_state: KnowledgeBaseState
+    knowledge_base_state: str
     """
     Specifies whether the agent uses the knowledge base or not when sending
     an
@@ -6810,7 +6810,7 @@ class CreateAgentInput:
     description: str | None = None
     """A description of the agent."""
 
-    orchestration_type: OrchestrationType | None = None
+    orchestration_type: str | None = None
     """
     Specifies the type of orchestration strategy for the agent. This is set
     to `DEFAULT` orchestration type, by default.
@@ -6862,7 +6862,7 @@ class CreateAgentInput:
     memory_configuration: MemoryConfiguration | None = None
     """Contains the details of the memory configured for the agent."""
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """The agent's collaboration role."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7184,7 +7184,7 @@ class DeleteAgentOutput:
     agent_id: str
     """The unique identifier of the agent that was deleted."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the agent."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7448,7 +7448,7 @@ class AgentSummary:
     agent_name: str
     """The name of the agent."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the agent."""
 
     updated_at: datetime
@@ -7719,7 +7719,7 @@ class PrepareAgentOutput:
     created.
     """
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the `DRAFT` version and whether it is ready for use."""
 
     agent_version: str
@@ -7893,7 +7893,7 @@ class UpdateAgentInput:
     description: str | None = None
     """Specifies a new description of the agent."""
 
-    orchestration_type: OrchestrationType | None = None
+    orchestration_type: str | None = None
     """
     Specifies the type of orchestration strategy for the agent. This is set
     to `DEFAULT` orchestration type, by default.
@@ -7942,7 +7942,7 @@ class UpdateAgentInput:
     memory_configuration: MemoryConfiguration | None = None
     """Specifies the new memory configuration for the agent."""
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """The agent's collaboration role."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8211,7 +8211,7 @@ class AgentVersion:
     version: str
     """The version number."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the agent that the version belongs to."""
 
     idle_session_ttl_in_seconds: int
@@ -8275,7 +8275,7 @@ class AgentVersion:
     agent.
     """
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """The agent's collaboration settings."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8517,7 +8517,7 @@ class AgentVersionSummary:
     agent_name: str
     """The name of the agent to which the version belongs."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the agent to which the version belongs."""
 
     agent_version: str
@@ -8914,7 +8914,7 @@ class DeleteAgentAliasOutput:
     agent_alias_id: str
     """The unique identifier of the alias that was deleted."""
 
-    agent_alias_status: AgentAliasStatus
+    agent_alias_status: str
     """The status of the alias."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9332,7 +9332,7 @@ class UpdateAgentAliasInput:
     routing_configuration: list[AgentAliasRoutingConfigurationListItem] | None = None
     """Contains details about the routing configuration of the alias."""
 
-    alias_invocation_state: AliasInvocationState | None = None
+    alias_invocation_state: str | None = None
     """
     The invocation state for the agent alias. To pause the agent alias, set
     the value to `REJECT_INVOCATIONS`. To start the agent alias running
@@ -9715,7 +9715,7 @@ class CrawlFilterConfiguration:
     content.
     """
 
-    type: CrawlFilterConfigurationType
+    type: str
     """
     The type of filtering that you want to apply to certain objects or
     content of the data source. For example, the `PATTERN` type is regular
@@ -9836,10 +9836,10 @@ class ConfluenceSourceConfiguration:
     host_url: str
     """The Confluence host URL or instance URL."""
 
-    host_type: ConfluenceHostType
+    host_type: str
     """The supported host type, whether online/cloud or server/on-premises."""
 
-    auth_type: ConfluenceAuthType
+    auth_type: str
     """
     The supported authentication type to authenticate and connect to your
     Confluence instance.
@@ -10008,7 +10008,7 @@ class EnabledOrDisabledState(UnknownEnumMixin, StrEnum):
 class DeletionProtectionConfiguration:
     """Configuration for deletion protection."""
 
-    deletion_protection_status: EnabledOrDisabledState
+    deletion_protection_status: str
     """Enable or disable deletion protection for the connector."""
 
     deletion_protection_threshold: int = 15
@@ -10077,7 +10077,7 @@ class DeletionProtectionConfiguration:
 class AudioExtractionConfiguration:
     """Configuration for audio extraction."""
 
-    audio_extraction_status: EnabledOrDisabledState
+    audio_extraction_status: str
     """Whether audio extraction is enabled or disabled."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -10123,7 +10123,7 @@ class AudioExtractionConfiguration:
 class ImageExtractionConfiguration:
     """Configuration for image extraction."""
 
-    image_extraction_status: EnabledOrDisabledState
+    image_extraction_status: str
     """Whether image extraction is enabled or disabled."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -10169,7 +10169,7 @@ class ImageExtractionConfiguration:
 class VideoExtractionConfiguration:
     """Configuration for video extraction."""
 
-    video_extraction_status: EnabledOrDisabledState
+    video_extraction_status: str
     """Whether video extraction is enabled or disabled."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -10539,7 +10539,7 @@ class SalesforceSourceConfiguration:
     host_url: str
     """The Salesforce host URL or instance URL."""
 
-    auth_type: SalesforceAuthType
+    auth_type: str
     """
     The supported authentication type to authenticate and connect to your
     Salesforce instance.
@@ -10783,10 +10783,10 @@ class SharePointSourceConfiguration:
     site_urls: list[str]
     """A list of one or more SharePoint site URLs."""
 
-    host_type: SharePointHostType
+    host_type: str
     """The supported host type, whether online/cloud or server/on-premises."""
 
-    auth_type: SharePointAuthType
+    auth_type: str
     """
     The supported authentication type to authenticate and connect to your
     SharePoint site/sites.
@@ -11075,7 +11075,7 @@ class WebCrawlerConfiguration:
     content of the URL isn't crawled.
     """
 
-    scope: WebScopeType | None = None
+    scope: str | None = None
     """
     The scope of what is crawled for your URLs.
 
@@ -11402,7 +11402,7 @@ class WebDataSourceConfiguration:
 class DataSourceConfiguration:
     """The connection configuration for the data source."""
 
-    type: DataSourceType
+    type: str
     """The type of data source."""
 
     managed_knowledge_base_connector_configuration: (
@@ -11939,7 +11939,7 @@ class ChunkingConfiguration:
     knowledge base that it belongs to is queried.
     """
 
-    chunking_strategy: ChunkingStrategy
+    chunking_strategy: str
     """
     Knowledge base can split your source data into chunks. A *chunk* refers
     to an excerpt from a data source that is returned when the knowledge
@@ -12065,7 +12065,7 @@ class EnrichmentStrategyMethod(UnknownEnumMixin, StrEnum):
 class EnrichmentStrategyConfiguration:
     """The strategy used for performing context enrichment."""
 
-    method: EnrichmentStrategyMethod
+    method: str
     """The method used for the context enrichment strategy."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -12196,7 +12196,7 @@ class ContextEnrichmentConfiguration:
     to the RAG application.
     """
 
-    type: ContextEnrichmentType
+    type: str
     """
     The method used for context enrichment. It must be Amazon Bedrock
     foundation models.
@@ -12454,7 +12454,7 @@ class Transformation:
     transformation_function: TransformationFunction
     """A Lambda function that processes documents."""
 
-    step_to_apply: StepType
+    step_to_apply: str
     """When the service applies the transformation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -12607,7 +12607,7 @@ class BedrockDataAutomationConfiguration:
     parser for ingesting your data sources.
     """
 
-    parsing_modality: ParsingModality | None = None
+    parsing_modality: str | None = None
     """
     Specifies whether to enable parsing of multimodal data, including both
     text and/or images.
@@ -12706,7 +12706,7 @@ class BedrockFoundationModelConfiguration:
     parsing_prompt: ParsingPrompt | None = None
     """Instructions for interpreting the contents of a document."""
 
-    parsing_modality: ParsingModality | None = None
+    parsing_modality: str | None = None
     """
     Specifies whether to enable parsing of multimodal data, including both
     text and/or images.
@@ -12797,7 +12797,7 @@ class ParsingConfiguration:
         used instead.
     """
 
-    parsing_strategy: ParsingStrategy
+    parsing_strategy: str
     """
     The parsing strategy for the data source. Only `SMART_PARSING` can be
     selected for managed knowledge bases. For more information, see
@@ -13008,7 +13008,7 @@ class CreateDataSourceInput:
     data_source_configuration: DataSourceConfiguration | None = None
     """The connection configuration for the data source."""
 
-    data_deletion_policy: DataDeletionPolicy | None = None
+    data_deletion_policy: str | None = None
     """
     The data deletion policy for the data source.
 
@@ -13179,7 +13179,7 @@ class DataSource:
     name: str
     """The name of the data source."""
 
-    status: DataSourceStatus
+    status: str
     """
     The status of the data source. The following statuses are possible:
 
@@ -13209,7 +13209,7 @@ class DataSource:
     vector_ingestion_configuration: VectorIngestionConfiguration | None = None
     """Contains details about how to ingest the documents in the data source."""
 
-    data_deletion_policy: DataDeletionPolicy | None = None
+    data_deletion_policy: str | None = None
     """The data deletion policy for the data source."""
 
     failure_reasons: list[str] | None = None
@@ -13520,7 +13520,7 @@ class DeleteDataSourceOutput:
     data_source_id: str
     """The unique identifier of the data source that was deleted."""
 
-    status: DataSourceStatus
+    status: str
     """The status of the data source."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -13836,7 +13836,7 @@ class DataSourceSummary:
     name: str
     """The name of the data source."""
 
-    status: DataSourceStatus
+    status: str
     """The status of the data source."""
 
     updated_at: datetime
@@ -14074,7 +14074,7 @@ class UpdateDataSourceInput:
     update.
     """
 
-    data_deletion_policy: DataDeletionPolicy | None = None
+    data_deletion_policy: str | None = None
     """The data deletion policy for the data source that you want to update."""
 
     server_side_encryption_configuration: ServerSideEncryptionConfiguration | None = (
@@ -14672,7 +14672,7 @@ class FlowConnectionType(UnknownEnumMixin, StrEnum):
 class FlowConnection:
     """Contains information about a connection between two nodes in the flow."""
 
-    type: FlowConnectionType
+    type: str
     """
     Whether the source node that the connection begins from is a condition
     node (`Conditional`) or not (`Data`).
@@ -14971,7 +14971,7 @@ class InlineCodeFlowNodeConfiguration:
     The code must be valid in the programming `language` that you specify.
     """
 
-    language: SupportedLanguages = SupportedLanguages("Python_3")
+    language: str = SupportedLanguages("Python_3")
     """
     The programming language used by your inline code node.
 
@@ -15293,7 +15293,7 @@ class PerformanceConfiguration:
     retrieval and generation process.
     """
 
-    latency: PerformanceConfigLatency = PerformanceConfigLatency("standard")
+    latency: str = PerformanceConfigLatency("standard")
     """The latency optimization setting."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -15713,7 +15713,7 @@ class MetadataConfigurationForReranking:
     process.
     """
 
-    selection_mode: RerankingMetadataSelectionMode
+    selection_mode: str
     """The mode for selecting metadata fields for reranking."""
 
     selective_mode_configuration: RerankingMetadataSelectiveModeConfiguration | None = (
@@ -15956,7 +15956,7 @@ class VectorSearchRerankingConfiguration:
     improve relevance.
     """
 
-    type: VectorSearchRerankingConfigurationType
+    type: str
     """
     Specifies the type of reranking model to use. Currently, the only
     supported value is `BEDROCK_RERANKING_MODEL`.
@@ -16510,7 +16510,7 @@ class CachePointBlock:
     this checkpoint is cached to be accessed on subsequent requests.
     """
 
-    type: CachePointType
+    type: str
     """Indicates that the CachePointBlock is of the default type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -16682,7 +16682,7 @@ class Message:
     management](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-create.html).
     """
 
-    role: ConversationRole
+    role: str
     """The role that the message belongs to."""
 
     content: list[ContentBlock]
@@ -17766,7 +17766,7 @@ class PromptFlowNodeInlineConfiguration:
     values at runtime.
     """
 
-    template_type: PromptTemplateType = PromptTemplateType("TEXT")
+    template_type: str = PromptTemplateType("TEXT")
     """The type of prompt template."""
 
     model_id: str = ""
@@ -18516,7 +18516,7 @@ class FlowNodeInput:
     name: str
     """Specifies a name for the input that you can reference."""
 
-    type: FlowNodeIODataType
+    type: str
     """
     Specifies the data type of the input. If the input doesn't match this
     type at runtime, a validation error will be thrown.
@@ -18529,7 +18529,7 @@ class FlowNodeInput:
     Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/flows-expressions.html).
     """
 
-    category: FlowNodeInputCategory | None = None
+    category: str | None = None
     """
     Specifies how input data flows between iterations in a DoWhile loop.
 
@@ -18634,7 +18634,7 @@ class FlowNodeOutput:
     name: str
     """A name for the output that you can reference."""
 
-    type: FlowNodeIODataType
+    type: str
     """
     The data type of the output. If the output doesn't match this type at
     runtime, a validation error will be thrown.
@@ -18873,7 +18873,7 @@ class FlowAliasConcurrencyConfiguration:
     nodes concurrently can improve your flow's performance.
     """
 
-    type: ConcurrencyType
+    type: str
     """
     The type of concurrency to use for parallel node execution. Specify one
     of the following options:
@@ -20637,7 +20637,7 @@ class GetFlowVersionInput:
     flow_version: str | None = None
     """The version of the flow for which to get information."""
 
-    included_data: IncludedData | None = None
+    included_data: str | None = None
     """
     Controls the scope of data returned. Set to `METADATA_ONLY` to return
     only resource metadata. Set to `ALL_DATA` or omit this field to return
@@ -20790,7 +20790,7 @@ class FlowVersionSummary:
     arn: str
     """The Amazon Resource Name (ARN) of the flow that the version belongs to."""
 
-    status: FlowStatus
+    status: str
     """The status of the flow."""
 
     created_at: datetime
@@ -20997,7 +20997,7 @@ class GetFlowInput:
     flow_identifier: str | None = None
     """The unique identifier of the flow."""
 
-    included_data: IncludedData | None = None
+    included_data: str | None = None
     """
     Controls the scope of data returned. Set to `METADATA_ONLY` to return
     only resource metadata. Set to `ALL_DATA` or omit this field to return
@@ -21371,7 +21371,7 @@ class LoopIncompatibleNodeTypeFlowValidationDetails:
     node: str
     """The `Loop` container node that contains an incompatible node."""
 
-    incompatible_node_type: IncompatibleLoopNodeType
+    incompatible_node_type: str
     """
     The node type of the incompatible node in the DoWhile loop. Some node
     types, like a condition node, aren't allowed in a DoWhile loop.
@@ -21632,7 +21632,7 @@ class MismatchedNodeInputTypeFlowValidationDetails:
     input: str
     """The name of the input with the mismatched data type."""
 
-    expected_type: FlowNodeIODataType
+    expected_type: str
     """The expected data type for the node input."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -21718,7 +21718,7 @@ class MismatchedNodeOutputTypeFlowValidationDetails:
     output: str
     """The name of the output with the mismatched data type."""
 
-    expected_type: FlowNodeIODataType
+    expected_type: str
     """The expected data type for the node output."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24024,13 +24024,13 @@ class FlowValidation:
     message: str
     """A message describing the validation error."""
 
-    severity: FlowValidationSeverity
+    severity: str
     """The severity of the issue described in the message."""
 
     details: FlowValidationDetails | None = None
     """Specific details about the validation issue encountered in the flow."""
 
-    type: FlowValidationType | None = None
+    type: str | None = None
     """The type of validation issue encountered in the flow."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24190,7 +24190,7 @@ class FlowSummary:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """
     The status of the flow. The following statuses are possible:
 
@@ -24473,7 +24473,7 @@ class PrepareFlowOutput:
     id: str
     """The unique identifier of the flow."""
 
-    status: FlowStatus
+    status: str
     """
     The status of the flow. When you submit this request, the status will be
     `NotPrepared`. If preparation succeeds, the status becomes `Prepared`.
@@ -24977,7 +24977,7 @@ class IngestionJob:
     ingestion_job_id: str
     """The unique identifier of the data ingestion job."""
 
-    status: IngestionJobStatus
+    status: str
     """The status of the data ingestion job."""
 
     started_at: datetime
@@ -25237,10 +25237,10 @@ def _deserialize_ingestion_job_filter_values(
 class IngestionJobFilter:
     """The definition of a filter to filter the data."""
 
-    attribute: IngestionJobFilterAttribute
+    attribute: str
     """The name of field or attribute to apply the filter."""
 
-    operator: IngestionJobFilterOperator
+    operator: str
     """The operation to apply to the field or attribute."""
 
     values: list[str]
@@ -25339,10 +25339,10 @@ class SortOrder(UnknownEnumMixin, StrEnum):
 class IngestionJobSortBy:
     """The parameters of sorting the data."""
 
-    attribute: IngestionJobSortByAttribute
+    attribute: str
     """The name of field or attribute to apply sorting of data."""
 
-    order: SortOrder
+    order: str
     """The order for sorting the data."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -25523,7 +25523,7 @@ class IngestionJobSummary:
     ingestion_job_id: str
     """The unique identifier of the data ingestion job."""
 
-    status: IngestionJobStatus
+    status: str
     """The status of the data ingestion job."""
 
     started_at: datetime
@@ -26136,7 +26136,7 @@ class ContentDataSourceType(UnknownEnumMixin, StrEnum):
 class DocumentIdentifier:
     """Contains information that identifies the document."""
 
-    data_source_type: ContentDataSourceType
+    data_source_type: str
     """
     The type of data source connected to the knowledge base that contains
     the document.
@@ -26367,7 +26367,7 @@ class KnowledgeBaseDocumentDetail:
     the document was ingested into or deleted from.
     """
 
-    status: DocumentStatus
+    status: str
     """
     The ingestion status of the document. The following statuses are
     possible:
@@ -26935,7 +26935,7 @@ class InlineContent:
     source. Choose a `type` and include the field that corresponds to it.
     """
 
-    type: InlineContentType
+    type: str
     """The type of inline content to define."""
 
     byte_content: ByteContentDoc | None = None
@@ -27062,7 +27062,7 @@ class CustomContent:
     custom_document_identifier: CustomDocumentIdentifier
     """A unique identifier for the document."""
 
-    source_type: CustomSourceType
+    source_type: str
     """The source of the data to ingest."""
 
     s3_location: CustomS3Location | None = None
@@ -27184,7 +27184,7 @@ class DocumentContent:
     `dataSourceType` and include the field that corresponds to it.
     """
 
-    data_source_type: ContentDataSourceType
+    data_source_type: str
     """
     The type of data source that is connected to the knowledge base to which
     to ingest this document.
@@ -27260,10 +27260,10 @@ class DocumentAccessControlEntry:
     name: str
     """The user identifier."""
 
-    type: AccessControlPrincipalType
+    type: str
     """The type of principal."""
 
-    access: AccessControlAccess
+    access: str
     """Whether to allow or deny access."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -27389,7 +27389,7 @@ class MetadataAttributeValue:
     include the field that corresponds to it.
     """
 
-    type: MetadataValueType
+    type: str
     """The type of the metadata attribute."""
 
     number_value: float | None = field(repr=False, default=None)
@@ -27568,7 +27568,7 @@ class DocumentMetadata:
     corresponds to it.
     """
 
-    type: MetadataSourceType
+    type: str
     """The type of the source source from which to add metadata."""
 
     inline_attributes: list[MetadataAttribute] | None = None
@@ -28163,7 +28163,7 @@ class AssociateAgentKnowledgeBaseInput:
     description: str | None = None
     """A description of what the agent should use the knowledge base for."""
 
-    knowledge_base_state: KnowledgeBaseState | None = None
+    knowledge_base_state: str | None = None
     """
     Specifies whether to use the knowledge base or not when sending an
     [InvokeAgent](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_InvokeAgent.html)
@@ -28656,7 +28656,7 @@ class BedrockEmbeddingModelConfiguration:
     embeddings model.
     """
 
-    embedding_data_type: EmbeddingDataType | None = None
+    embedding_data_type: str | None = None
     """
     The data type for the vectors when using a model to convert text into
     vector embeddings. The model must support the specified data type for
@@ -28819,7 +28819,7 @@ class EmbeddingModelType(UnknownEnumMixin, StrEnum):
 class ManagedKnowledgeBaseConfiguration:
     """Configurations for a managed knowledge base."""
 
-    embedding_model_type: EmbeddingModelType | None = None
+    embedding_model_type: str | None = None
     """
     Choose `CUSTOM` to provide your own Bedrock embedding model ARN. Choose
     `MANAGED` to use a service-managed embedding model. For more
@@ -28937,7 +28937,7 @@ class RedshiftProvisionedAuthConfiguration:
     authentication, you don't need to include another field.
     """
 
-    type: RedshiftProvisionedAuthType
+    type: str
     """The type of authentication to use."""
 
     database_user: str | None = None
@@ -29092,7 +29092,7 @@ class RedshiftServerlessAuthConfiguration:
     don't need to include another field.
     """
 
-    type: RedshiftServerlessAuthType
+    type: str
     """The type of authentication to use."""
 
     username_password_secret_arn: str | None = None
@@ -29236,7 +29236,7 @@ class RedshiftQueryEngineConfiguration:
     in the Amazon Bedrock User Guide.
     """
 
-    type: RedshiftQueryEngineType
+    type: str
     """The type of query engine."""
 
     serverless_configuration: RedshiftServerlessConfiguration | None = None
@@ -29408,7 +29408,7 @@ class QueryGenerationColumn:
     contents of the column.
     """
 
-    inclusion: IncludeExclude | None = None
+    inclusion: str | None = None
     """
     Specifies whether to include or exclude the column during query
     generation. If you specify `EXCLUDE`, the column will be ignored. If you
@@ -29506,7 +29506,7 @@ class QueryGenerationTable:
     contents of the table.
     """
 
-    inclusion: IncludeExclude | None = None
+    inclusion: str | None = None
     """
     Specifies whether to include or exclude the table during query
     generation. If you specify `EXCLUDE`, the table will be ignored. If you
@@ -29876,7 +29876,7 @@ class RedshiftQueryEngineStorageConfiguration:
     in the Amazon Bedrock User Guide.
     """
 
-    type: RedshiftQueryEngineStorageType
+    type: str
     """The data storage service to use."""
 
     aws_data_catalog_configuration: (
@@ -30080,7 +30080,7 @@ class SqlKnowledgeBaseConfiguration:
     in the Amazon Bedrock User Guide.
     """
 
-    type: QueryEngineType
+    type: str
     """The type of SQL database to connect to the knowledge base."""
 
     redshift_configuration: RedshiftConfiguration | None = None
@@ -30158,7 +30158,7 @@ class SupplementalDataStorageLocation:
     data source.
     """
 
-    type: SupplementalDataStorageLocationType
+    type: str
     """Specifies the storage service used for this location."""
 
     s3_location: S3Location | None = None
@@ -30394,7 +30394,7 @@ class KnowledgeBaseConfiguration:
     knowledge base.
     """
 
-    type: KnowledgeBaseType
+    type: str
     """
     The type of data that the data source is converted into for the
     knowledge base. Choose `MANAGED` to create a managed knowledge base.
@@ -31913,7 +31913,7 @@ class KnowledgeBaseStorageType(UnknownEnumMixin, StrEnum):
 class StorageConfiguration:
     """Contains the storage configuration of the knowledge base."""
 
-    type: KnowledgeBaseStorageType
+    type: str
     """The vector store service in which the knowledge base is stored."""
 
     opensearch_serverless_configuration: OpenSearchServerlessConfiguration | None = None
@@ -32271,7 +32271,7 @@ class KnowledgeBase:
     base.
     """
 
-    status: KnowledgeBaseStatus
+    status: str
     """
     The status of the knowledge base. The following statuses are possible:
 
@@ -32573,7 +32573,7 @@ class DeleteKnowledgeBaseOutput:
     knowledge_base_id: str
     """The unique identifier of the knowledge base that was deleted."""
 
-    status: KnowledgeBaseStatus
+    status: str
     """
     The status of the knowledge base and whether it has been successfully
     deleted.
@@ -33351,7 +33351,7 @@ class KnowledgeBaseSummary:
     name: str
     """The name of the knowledge base."""
 
-    status: KnowledgeBaseStatus
+    status: str
     """The status of the knowledge base."""
 
     updated_at: datetime
@@ -33583,7 +33583,7 @@ class UpdateAgentKnowledgeBaseInput:
     agent.
     """
 
-    knowledge_base_state: KnowledgeBaseState | None = None
+    knowledge_base_state: str | None = None
     """
     Specifies whether the agent uses the knowledge base or not when sending
     an
@@ -34174,7 +34174,7 @@ class PromptVariant:
     name: str
     """The name of the prompt variant."""
 
-    template_type: PromptTemplateType
+    template_type: str
     """The type of prompt template to use."""
 
     template_configuration: PromptTemplateConfiguration
@@ -35153,7 +35153,7 @@ class GetPromptInput:
     prompt.
     """
 
-    included_data: IncludedData | None = None
+    included_data: str | None = None
     """
     Controls the scope of data returned. Set to `METADATA_ONLY` to return
     only resource metadata. Set to `ALL_DATA` or omit this field to return
@@ -36735,7 +36735,7 @@ class DeleteAgentVersionOutput:
     agent_version: str
     """The version that was deleted."""
 
-    agent_status: AgentStatus
+    agent_status: str
     """The status of the agent version."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -37198,7 +37198,7 @@ class FlowNode:
     name: str
     """A name for the node."""
 
-    type: FlowNodeType
+    type: str
     """
     The type of node. This value must match the name of the key that you
     provide in the configuration you provide in the `FlowNodeConfiguration`
@@ -38011,7 +38011,7 @@ class CreateFlowOutput:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """
     The status of the flow. When you submit this request, the status will be
     `NotPrepared`. If creation fails, the status becomes `Failed`.
@@ -38188,7 +38188,7 @@ class CreateFlowVersionOutput:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """The status of the flow."""
 
     created_at: datetime
@@ -38357,7 +38357,7 @@ class GetFlowOutput:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """
     The status of the flow. The following statuses are possible:
 
@@ -38564,7 +38564,7 @@ class GetFlowVersionOutput:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """The status of the flow."""
 
     created_at: datetime
@@ -38843,7 +38843,7 @@ class UpdateFlowOutput:
     arn: str
     """The Amazon Resource Name (ARN) of the flow."""
 
-    status: FlowStatus
+    status: str
     """
     The status of the flow. When you submit this request, the status will be
     `NotPrepared`. If updating fails, the status becomes `Failed`.

@@ -1585,7 +1585,7 @@ class FreeTrialFeatureResult(UnknownEnumMixin, StrEnum):
 class FreeTrialFeatureConfigurationResult:
     """Contains information about the free trial period for a feature."""
 
-    name: FreeTrialFeatureResult | None = None
+    name: str | None = None
     """The name of the feature for which the free trial is configured."""
 
     free_trial_days_remaining: int | None = None
@@ -3994,7 +3994,7 @@ class Session:
     uid: str | None = None
     """The unique identifier of the session."""
 
-    mfa_status: MfaStatus | None = None
+    mfa_status: str | None = None
     """
     Indicates whether or not multi-factor authencation (MFA) was used during
     authentication.
@@ -4414,7 +4414,7 @@ class AdminAccount:
     admin_account_id: str | None = None
     """The Amazon Web Services account ID for the account."""
 
-    admin_status: AdminStatus | None = None
+    admin_status: str | None = None
     """Indicates whether the account is enabled as the delegated administrator."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4726,10 +4726,10 @@ class ProfileType(UnknownEnumMixin, StrEnum):
 class AnomalyObject:
     """Contains information about the unusual anomalies."""
 
-    profile_type: ProfileType | None = None
+    profile_type: str | None = None
     """The type of behavior of the profile."""
 
-    profile_subtype: ProfileSubtype | None = None
+    profile_subtype: str | None = None
     """The frequency of the anomaly."""
 
     observations: Observations | None = None
@@ -5375,13 +5375,13 @@ class ContentPolicyFilter:
     guardrail evaluation.
     """
 
-    type: ContentPolicyFilterType | None = None
+    type: str | None = None
     """The type of content that was filtered by the guardrail."""
 
-    confidence: ConfidenceLevel | None = None
+    confidence: str | None = None
     """The confidence level that the content matched the filter."""
 
-    action: ContentPolicyFilterAction | None = None
+    action: str | None = None
     """The action taken by the guardrail filter."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -5519,10 +5519,10 @@ class BedrockGuardrailDetails:
     guardrails: list[BedrockGuardrail] | None = None
     """The list of Bedrock guardrails associated with the finding."""
 
-    guardrail_action: GuardrailAction | None = None
+    guardrail_action: str | None = None
     """Indicates whether the guardrail intervened or not."""
 
-    guardrail_source: GuardrailSource | None = None
+    guardrail_source: str | None = None
     """
     Indicates whether the guardrail was applied on the input or output of
     the model invocation.
@@ -5772,7 +5772,7 @@ class CloudDetails:
     investigation.
     """
 
-    provider: CloudProvider | None = None
+    provider: str | None = None
     """The cloud provider. Currently, only `AWS` is supported."""
 
     region: str | None = None
@@ -5894,7 +5894,7 @@ class CloudTrailConfigurationResult:
     the detector.
     """
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """
     Describes whether CloudTrail is enabled as a data source for the
     detector.
@@ -6982,7 +6982,7 @@ class CoverageEc2InstanceDetails:
     agent_details: AgentDetails | None = None
     """Information about the installed security agent."""
 
-    management_type: ManagementType | None = None
+    management_type: str | None = None
     """
     Indicates how the GuardDuty security agent is managed for this resource.
 
@@ -7114,7 +7114,7 @@ class FargateDetails:
     Web Services Fargate.
     """
 
-    management_type: ManagementType | None = None
+    management_type: str | None = None
     """
     Indicates how the GuardDuty security agent is managed for this resource.
 
@@ -7266,7 +7266,7 @@ class CoverageEksClusterDetails:
     addon_details: AddonDetails | None = None
     """Information about the installed EKS add-on."""
 
-    management_type: ManagementType | None = None
+    management_type: str | None = None
     """
     Indicates how the Amazon EKS add-on GuardDuty agent is managed for this
     EKS cluster.
@@ -7443,7 +7443,7 @@ class CoverageFilterCriterion:
     of the operation.
     """
 
-    criterion_key: CoverageFilterCriterionKey | None = None
+    criterion_key: str | None = None
     """
     An enum value representing possible filter fields.
 
@@ -7585,7 +7585,7 @@ class CoverageResourceDetails:
     ec2_instance_details: CoverageEc2InstanceDetails | None = None
     """Information about the Amazon EC2 instance assessed for runtime coverage."""
 
-    resource_type: ResourceType | None = None
+    resource_type: str | None = None
     """The type of Amazon Web Services resource."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7674,7 +7674,7 @@ class CoverageResource:
     retrieved.
     """
 
-    coverage_status: CoverageStatus | None = None
+    coverage_status: str | None = None
     """Represents the status of the EKS cluster coverage."""
 
     issue: str | None = None
@@ -7828,7 +7828,7 @@ class OrderBy(UnknownEnumMixin, StrEnum):
 class CoverageSortCriteria:
     """Information about the sorting criteria used in the coverage statistics."""
 
-    attribute_name: CoverageSortKey | None = None
+    attribute_name: str | None = None
     """
     Represents the field name used to sort the coverage details.
 
@@ -7837,7 +7837,7 @@ class CoverageSortCriteria:
         `CLUSTER_NAME` has been deprecated.
     """
 
-    order_by: OrderBy | None = None
+    order_by: str | None = None
     """The order in which the sorted findings are to be displayed."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7961,7 +7961,7 @@ class CoverageStatisticsType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_coverage_statistics_type_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[CoverageStatisticsType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7971,8 +7971,8 @@ def _serialize_coverage_statistics_type_list(
 
 def _deserialize_coverage_statistics_type_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[CoverageStatisticsType]:
-    result: list[CoverageStatisticsType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -8273,10 +8273,10 @@ class DetectorAdditionalConfiguration:
     GuardDuty account.
     """
 
-    name: FeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """Name of the additional configuration."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """Status of the additional configuration."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8378,10 +8378,10 @@ class DetectorFeatureConfiguration:
     Monitoring](https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring.html).
     """
 
-    name: DetectorFeature | None = None
+    name: str | None = None
     """The name of the feature."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """The status of the feature."""
 
     additional_configuration: list[DetectorAdditionalConfiguration] | None = None
@@ -8522,7 +8522,7 @@ class CreateDetectorInput:
     client_token: str | None = None
     """The idempotency token for the create request."""
 
-    finding_publishing_frequency: FindingPublishingFrequency | None = None
+    finding_publishing_frequency: str | None = None
     """A value that specifies how frequently updated findings are exported."""
 
     data_sources: DataSourceConfigurations | None = None
@@ -8631,7 +8631,7 @@ class CreateDetectorInput:
 class EbsVolumesResult:
     """Describes the configuration of scanning EBS volumes as a data source."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """Describes whether scanning EBS volumes is enabled as a data source."""
 
     reason: str | None = None
@@ -9015,7 +9015,7 @@ class CreateFilterInput:
     whitespace.
     """
 
-    action: FilterAction | None = None
+    action: str | None = None
     """
     Specifies the action that is to be applied to the findings that match
     the filter.
@@ -10698,7 +10698,7 @@ class CreateIPSetInput:
     underscores (_).
     """
 
-    format: IpSetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the IPSet."""
 
     location: str | None = None
@@ -10900,7 +10900,7 @@ class MalwareProtectionPlanTaggingAction:
     result.
     """
 
-    status: MalwareProtectionPlanTaggingActionStatus | None = None
+    status: str | None = None
     """Indicates whether or not the tags will added."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -11583,7 +11583,7 @@ class CreatePublishingDestinationInput:
     API.
     """
 
-    destination_type: DestinationType | None = None
+    destination_type: str | None = None
     """
     The type of resource for the publishing destination. Currently only
     Amazon S3 buckets are supported.
@@ -11927,7 +11927,7 @@ class CreateThreatEntitySetInput:
     numbers, dash (-), and underscore (_).
     """
 
-    format: ThreatEntitySetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the threat entity set."""
 
     location: str | None = None
@@ -12173,7 +12173,7 @@ class CreateThreatIntelSetInput:
     ThreatIntelSet.
     """
 
-    format: ThreatIntelSetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the ThreatIntelSet."""
 
     location: str | None = None
@@ -12410,7 +12410,7 @@ class CreateTrustedEntitySetInput:
     numbers, dash (-), and underscore (_).
     """
 
-    format: TrustedEntitySetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the trusted entity set."""
 
     location: str | None = None
@@ -12648,7 +12648,7 @@ class DataSource(UnknownEnumMixin, StrEnum):
 class DNSLogsConfigurationResult:
     """Contains information on the status of DNS logs as a data source."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """Denotes whether DNS logs is enabled as a data source."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -12690,7 +12690,7 @@ class DNSLogsConfigurationResult:
 class FlowLogsConfigurationResult:
     """Contains information on the status of VPC flow logs as a data source."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """Denotes whether VPC flow logs is enabled as a data source."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -12732,7 +12732,7 @@ class FlowLogsConfigurationResult:
 class KubernetesAuditLogsConfigurationResult:
     """Describes whether Kubernetes audit logs are enabled as a data source."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """
     A value that describes whether Kubernetes audit logs are enabled as a
     data source.
@@ -12823,7 +12823,7 @@ class KubernetesConfigurationResult:
 class S3LogsConfigurationResult:
     """Describes whether S3 data event logs will be enabled as a data source."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """
     A value that describes whether S3 data event logs are automatically
     enabled for new members of the organization.
@@ -12983,7 +12983,7 @@ class DataSourceConfigurationsResult:
 
 
 def _serialize_data_source_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[DataSource]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -12993,8 +12993,8 @@ def _serialize_data_source_list(
 
 def _deserialize_data_source_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[DataSource]:
-    result: list[DataSource] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -14534,7 +14534,7 @@ class FilterCriterion:
     for their own account.
     """
 
-    criterion_key: CriterionKey | None = None
+    criterion_key: str | None = None
     """
     An enum value representing possible scan properties to match with given
     scan entries.
@@ -14664,7 +14664,7 @@ class SortCriteria:
     findings.
     """
 
-    order_by: OrderBy | None = None
+    order_by: str | None = None
     """The order by which the sorted findings are to be displayed."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -15012,7 +15012,7 @@ class ScanResult(UnknownEnumMixin, StrEnum):
 class ScanResultDetails:
     """Represents the result of the scan."""
 
-    scan_result: ScanResult | None = None
+    scan_result: str | None = None
     """An enum value representing possible scan results."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -15075,7 +15075,7 @@ class TriggerDetails:
     description: str | None = None
     """The description of the scan trigger."""
 
-    trigger_type: TriggerType | None = None
+    trigger_type: str | None = None
     """Specifies the trigger type that started the malware scan."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -15162,7 +15162,7 @@ class Scan:
     scan_id: str | None = None
     """The unique scan ID associated with a scan entry."""
 
-    scan_status: ScanStatus | None = None
+    scan_status: str | None = None
     """An enum value representing possible scan statuses."""
 
     failure_reason: str | None = None
@@ -15198,7 +15198,7 @@ class Scan:
     scanned.
     """
 
-    scan_type: ScanType | None = None
+    scan_type: str | None = None
     """Specifies the scan type that invoked the malware scan."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -15964,14 +15964,14 @@ class OrganizationAdditionalConfigurationResult:
     organization.
     """
 
-    name: OrgFeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """
     The name of the additional configuration that is configured for the
     member accounts within the organization. These values are applicable to
     only Runtime Monitoring protection plan.
     """
 
-    auto_enable: OrgFeatureStatus | None = None
+    auto_enable: str | None = None
     """
     Describes the status of the additional configuration that is configured
     for the member accounts within the organization. One of the following
@@ -16093,13 +16093,13 @@ class OrgFeature(UnknownEnumMixin, StrEnum):
 class OrganizationFeatureConfigurationResult:
     """A list of features which will be configured for the organization."""
 
-    name: OrgFeature | None = None
+    name: str | None = None
     """
     The name of the feature that is configured for the member accounts
     within the organization.
     """
 
-    auto_enable: OrgFeatureStatus | None = None
+    auto_enable: str | None = None
     """
     Describes the status of the feature that is configured for the member
     accounts within the organization.
@@ -16259,7 +16259,7 @@ class DescribeOrganizationConfigurationOutput:
     retrieve more items.
     """
 
-    auto_enable_organization_members: AutoEnableMembers | None = None
+    auto_enable_organization_members: str | None = None
     """
     Indicates the auto-enablement configuration of GuardDuty or any of the
     corresponding protection plans for the member accounts in the
@@ -16507,13 +16507,13 @@ class DescribePublishingDestinationOutput:
     destination_id: str | None = None
     """The ID of the publishing destination."""
 
-    destination_type: DestinationType | None = None
+    destination_type: str | None = None
     """
     The type of publishing destination. Currently, only Amazon S3 buckets
     are supported.
     """
 
-    status: PublishingStatus | None = None
+    status: str | None = None
     """The status of the publishing destination."""
 
     publishing_failure_start_timestamp: int | None = None
@@ -16672,13 +16672,13 @@ class Destination:
     destination_id: str | None = None
     """The unique ID of the publishing destination."""
 
-    destination_type: DestinationType | None = None
+    destination_type: str | None = None
     """
     The type of resource used for the publishing destination. Currently,
     only Amazon S3 buckets are supported.
     """
 
-    status: PublishingStatus | None = None
+    status: str | None = None
     """The status of the publishing destination."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -16764,7 +16764,7 @@ class NetworkDirection(UnknownEnumMixin, StrEnum):
 class NetworkConnection:
     """Contains information about the network connection."""
 
-    direction: NetworkDirection | None = None
+    direction: str | None = None
     """The direction in which the network traffic is flowing."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17781,7 +17781,7 @@ class EcsCluster:
     GuardDuty finding, including cluster identification and status.
     """
 
-    status: EcsClusterStatus | None = None
+    status: str | None = None
     """The current status of the Amazon ECS cluster."""
 
     ec2_instance_uids: list[str] | None = None
@@ -17855,7 +17855,7 @@ class EcsTask:
     definitions of the Amazon ECS task.
     """
 
-    launch_type: EcsLaunchType | None = None
+    launch_type: str | None = None
     """The infrastructure type on which the Amazon ECS task runs."""
 
     container_uids: list[str] | None = None
@@ -17947,7 +17947,7 @@ class EksCluster:
     format.
     """
 
-    status: ClusterStatus | None = None
+    status: str | None = None
     """The current status of the Amazon EKS cluster."""
 
     vpc_id: str | None = None
@@ -18104,7 +18104,7 @@ class KubernetesWorkload:
     logical isolation within the cluster.
     """
 
-    kubernetes_resources_types: KubernetesResourcesTypes | None = None
+    kubernetes_resources_types: str | None = None
     """The types of Kubernetes resources involved in the workload."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -18191,26 +18191,26 @@ class PublicAccessConfiguration:
     in the *Amazon S3 User Guide*.
     """
 
-    public_acl_access: PublicAccessStatus | None = None
+    public_acl_access: str | None = None
     """
     Indicates whether or not there is a setting that allows public access to
     the Amazon S3 buckets through access control lists (ACLs).
     """
 
-    public_policy_access: PublicAccessStatus | None = None
+    public_policy_access: str | None = None
     """
     Indicates whether or not there is a setting that allows public access to
     the Amazon S3 bucket policy.
     """
 
-    public_acl_ignore_behavior: PublicAclIgnoreBehavior | None = None
+    public_acl_ignore_behavior: str | None = None
     """
     Indicates whether or not there is a setting that ignores all public
     access control lists (ACLs) on the Amazon S3 bucket and the objects that
     it contains.
     """
 
-    public_bucket_restrict_behavior: PublicBucketRestrictBehavior | None = None
+    public_bucket_restrict_behavior: str | None = None
     """
     Indicates whether or not there is a setting that restricts access to the
     bucket with specified policies.
@@ -18359,13 +18359,13 @@ class S3Bucket:
     all the attached policies.
     """
 
-    public_read_access: PublicAccessStatus | None = None
+    public_read_access: str | None = None
     """
     Indicates whether or not the public read access is allowed for an Amazon
     S3 bucket.
     """
 
-    public_write_access: PublicAccessStatus | None = None
+    public_write_access: str | None = None
     """
     Indicates whether or not the public write access is allowed for an
     Amazon S3 bucket.
@@ -18926,7 +18926,7 @@ class ResourceV2:
     account_id: str | None = None
     """The Amazon Web Services account ID to which the resource belongs."""
 
-    resource_type: FindingResourceType | None = None
+    resource_type: str | None = None
     """The type of the Amazon Web Services resource."""
 
     region: str | None = None
@@ -19128,7 +19128,7 @@ class Indicator:
     observed in an attack sequence.
     """
 
-    key: IndicatorType | None = None
+    key: str | None = None
     """
     Specific indicator keys observed in the attack sequence. For description
     of the valid values for key, see [Attack sequence finding
@@ -19286,7 +19286,7 @@ class Signal:
     uid: str | None = None
     """The unique identifier of the signal."""
 
-    type: SignalType | None = None
+    type: str | None = None
     """
     The type of the signal used to identify an attack sequence.
 
@@ -19739,10 +19739,10 @@ class DetectionSource(UnknownEnumMixin, StrEnum):
 class DetectorAdditionalConfigurationResult:
     """Information about the additional configuration."""
 
-    name: FeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """Name of the additional configuration."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """Status of the additional configuration."""
 
     updated_at: datetime | None = None
@@ -19872,10 +19872,10 @@ class DetectorFeatureConfigurationResult:
     Monitoring](https://docs.aws.amazon.com/guardduty/latest/ug/runtime-monitoring.html).
     """
 
-    name: DetectorFeatureResult | None = None
+    name: str | None = None
     """Indicates the name of the feature that can be enabled for the detector."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """Indicates the status of the feature that is enabled for the detector."""
 
     updated_at: datetime | None = None
@@ -21185,7 +21185,7 @@ class EbsVolumeScanDetails:
     scan_detections: ScanDetections | None = None
     """Contains a complete view providing malware scan result details."""
 
-    scan_type: ScanType | None = None
+    scan_type: str | None = None
     """Specifies the scan type that invoked the malware scan."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24570,7 +24570,7 @@ class IncrementalScanDetails:
 class MalwareProtectionFindingsScanConfiguration:
     """Contains finding configuration details about the malware scan."""
 
-    trigger_type: TriggerType | None = None
+    trigger_type: str | None = None
     """The event that triggered the malware scan."""
 
     incremental_scan_details: IncrementalScanDetails | None = None
@@ -24950,10 +24950,10 @@ class MalwareScanDetails:
     scan_id: str | None = None
     """The unique identifier for the malware scan."""
 
-    scan_type: MalwareProtectionScanType | None = None
+    scan_type: str | None = None
     """The type of malware scan performed."""
 
-    scan_category: ScanCategory | None = None
+    scan_category: str | None = None
     """The category of the malware scan."""
 
     scan_configuration: MalwareProtectionFindingsScanConfiguration | None = None
@@ -26968,7 +26968,7 @@ class FindingStatisticType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_finding_statistic_types(
-    serializer: ShapeSerializer, schema: Schema, value: list[FindingStatisticType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -26978,8 +26978,8 @@ def _serialize_finding_statistic_types(
 
 def _deserialize_finding_statistic_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[FindingStatisticType]:
-    result: list[FindingStatisticType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -27112,7 +27112,7 @@ class GetCoverageStatisticsInput:
     filter_criteria: CoverageFilterCriteria | None = None
     """Represents the criteria used to filter the coverage statistics."""
 
-    statistics_type: list[CoverageStatisticsType] | None = None
+    statistics_type: list[str] | None = None
     """Represents the statistics type used to aggregate the coverage details."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -27288,13 +27288,13 @@ class GetDetectorOutput:
     created_at: str | None = None
     """The timestamp of when the detector was created."""
 
-    finding_publishing_frequency: FindingPublishingFrequency | None = None
+    finding_publishing_frequency: str | None = None
     """The publishing frequency of the finding."""
 
     service_role: str | None = None
     """The GuardDuty service role."""
 
-    status: DetectorStatus | None = None
+    status: str | None = None
     """The detector status."""
 
     updated_at: str | None = None
@@ -27509,7 +27509,7 @@ class GetFilterOutput:
     description: str | None = None
     """The description of the filter."""
 
-    action: FilterAction | None = None
+    action: str | None = None
     """
     Specifies the action that is to be applied to the findings that match
     the filter.
@@ -27837,19 +27837,19 @@ class GetFindingsStatisticsInput:
     API.
     """
 
-    finding_statistic_types: list[FindingStatisticType] | None = None
+    finding_statistic_types: list[str] | None = None
     """The types of finding statistics to retrieve."""
 
     finding_criteria: FindingCriteria | None = None
     """Represents the criteria that is used for querying findings."""
 
-    group_by: GroupByType | None = None
+    group_by: str | None = None
     """
     Displays the findings statistics grouped by one of the listed valid
     values.
     """
 
-    order_by: OrderBy | None = None
+    order_by: str | None = None
     """
     Displays the sorted findings in the requested order. The default value
     of `orderBy` is `DESC`.
@@ -28218,7 +28218,7 @@ class Investigation:
     investigation_id: str | None = None
     """The unique identifier of the investigation."""
 
-    status: InvestigationStatus | None = None
+    status: str | None = None
     """
     The current status of the investigation. Possible values are `RUNNING`,
     `COMPLETED`, and `FAILED`.
@@ -28239,7 +28239,7 @@ class Investigation:
     performed, including the provider, region, and account.
     """
 
-    risk_level: RiskLevel | None = None
+    risk_level: str | None = None
     """
     The assessed risk level of the investigated threat. Possible values are
     `Info`, `Low`, `Medium`, `High`, and `Critical`.
@@ -28248,7 +28248,7 @@ class Investigation:
     risk: str | None = None
     """A human-readable description of the assessed risk."""
 
-    confidence: Confidence | None = None
+    confidence: str | None = None
     """
     The confidence level of the investigation's assessment. Possible values
     are `Unknown`, `Low`, `Medium`, and `High`.
@@ -28644,13 +28644,13 @@ class GetIPSetOutput:
     name: str | None = None
     """The user-friendly name for the IPSet."""
 
-    format: IpSetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the IPSet."""
 
     location: str | None = None
     """The URI of the file that contains the IPSet."""
 
-    status: IpSetStatus | None = None
+    status: str | None = None
     """The status of IPSet file that was uploaded."""
 
     tags: dict[str, str] | None = None
@@ -28937,7 +28937,7 @@ class GetMalwareProtectionPlanOutput:
     created_at: datetime | None = None
     """The timestamp when the Malware Protection plan resource was created."""
 
-    status: MalwareProtectionPlanStatus | None = None
+    status: str | None = None
     """Malware Protection plan status."""
 
     status_reasons: list[MalwareProtectionPlanStatusReason] | None = None
@@ -29386,13 +29386,13 @@ class ScannedResource:
     scanned_resource_arn: str | None = None
     """Amazon Resource Name (ARN) of the scanned resource."""
 
-    scanned_resource_type: MalwareProtectionResourceType | None = None
+    scanned_resource_type: str | None = None
     """The resource type of the scanned resource."""
 
-    scanned_resource_status: MalwareProtectionScanStatus | None = None
+    scanned_resource_status: str | None = None
     """The status of the scanned resource."""
 
-    scan_status_reason: ScanStatusReason | None = None
+    scan_status_reason: str | None = None
     """
     The reason for the scan status of this particular resource, if
     applicable.
@@ -29521,7 +29521,7 @@ class ScanResultThreat:
     name: str | None = None
     """The name of the detected threat."""
 
-    source: DetectionSource | None = None
+    source: str | None = None
     """The source that detected this threat."""
 
     count: int | None = None
@@ -29635,7 +29635,7 @@ def _deserialize_scan_result_threats(
 class GetMalwareScanResultDetails:
     """Contains information about the results of the malware scan."""
 
-    scan_result_status: ScanResultStatus | None = None
+    scan_result_status: str | None = None
     """Status indicating whether threats were found for a completed scan."""
 
     skipped_file_count: int | None = None
@@ -29826,7 +29826,7 @@ class GetMalwareScanOutput:
     invoked.
     """
 
-    resource_type: MalwareProtectionResourceType | None = None
+    resource_type: str | None = None
     """The type of resource that was scanned for malware."""
 
     scanned_resources_count: int | None = None
@@ -29850,16 +29850,16 @@ class GetMalwareScanOutput:
     scan_configuration: ScanConfiguration | None = None
     """Information about the scan configuration used for the malware scan."""
 
-    scan_category: ScanCategory | None = None
+    scan_category: str | None = None
     """The category of the malware scan, indicating the type of scan performed."""
 
-    scan_status: MalwareProtectionScanStatus | None = None
+    scan_status: str | None = None
     """A value representing the current status of the malware scan."""
 
-    scan_status_reason: ScanStatusReason | None = None
+    scan_status_reason: str | None = None
     """Represents the reason for the current scan status, if applicable."""
 
-    scan_type: MalwareProtectionScanType | None = None
+    scan_type: str | None = None
     """A value representing the initiator of the scan."""
 
     scan_started_at: datetime | None = None
@@ -30390,7 +30390,7 @@ class GetMalwareScanSettingsOutput:
     scan_resource_criteria: ScanResourceCriteria | None = None
     """Represents the criteria to be used in the filter for scanning resources."""
 
-    ebs_snapshot_preservation: EbsSnapshotPreservation | None = None
+    ebs_snapshot_preservation: str | None = None
     """An enum value representing possible snapshot preservation settings."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -30719,13 +30719,13 @@ class GetMemberDetectorsInput:
 class MemberAdditionalConfigurationResult:
     """Information about the additional configuration for the member account."""
 
-    name: OrgFeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """
     Indicates the name of the additional configuration that is set for the
     member account.
     """
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """
     Indicates the status of the additional configuration that is set for the
     member account.
@@ -30834,10 +30834,10 @@ def _deserialize_member_additional_configuration_results(
 class MemberFeaturesConfigurationResult:
     """Contains information about the features for the member account."""
 
-    name: OrgFeature | None = None
+    name: str | None = None
     """Indicates the name of the feature that is enabled for the detector."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """Indicates the status of the feature that is enabled for the detector."""
 
     updated_at: datetime | None = None
@@ -31487,7 +31487,7 @@ class OrganizationFeatureStatisticsAdditionalConfiguration:
     configuration of the feature.
     """
 
-    name: OrgFeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """Name of the additional configuration within a feature."""
 
     enabled_accounts_count: int | None = None
@@ -31587,7 +31587,7 @@ class OrganizationFeatureStatistics:
     feature.
     """
 
-    name: OrgFeature | None = None
+    name: str | None = None
     """Name of the feature."""
 
     enabled_accounts_count: int | None = None
@@ -32171,7 +32171,7 @@ class GetThreatEntitySetOutput:
     `threatEntitySetId`.
     """
 
-    format: ThreatEntitySetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the threat entity set."""
 
     location: str | None = None
@@ -32183,7 +32183,7 @@ class GetThreatEntitySetOutput:
     specified in the **location** parameter.
     """
 
-    status: ThreatEntitySetStatus | None = None
+    status: str | None = None
     """The status of the associated threat entity set."""
 
     tags: dict[str, str] | None = None
@@ -32427,13 +32427,13 @@ class GetThreatIntelSetOutput:
     ThreatIntelSet.
     """
 
-    format: ThreatIntelSetFormat | None = None
+    format: str | None = None
     """The format of the threatIntelSet."""
 
     location: str | None = None
     """The URI of the file that contains the ThreatIntelSet."""
 
-    status: ThreatIntelSetStatus | None = None
+    status: str | None = None
     """The status of threatIntelSet file uploaded."""
 
     tags: dict[str, str] | None = None
@@ -32641,7 +32641,7 @@ class GetTrustedEntitySetOutput:
     `trustedEntitySetId`.
     """
 
-    format: TrustedEntitySetFormat | None = None
+    format: str | None = None
     """The format of the file that contains the trusted entity set."""
 
     location: str | None = None
@@ -32653,7 +32653,7 @@ class GetTrustedEntitySetOutput:
     specified in the **location** parameter.
     """
 
-    status: TrustedEntitySetStatus | None = None
+    status: str | None = None
     """The status of the associated trusted entity set."""
 
     tags: dict[str, str] | None = None
@@ -32833,7 +32833,7 @@ class UsageFeature(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_usage_feature_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[UsageFeature]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -32843,8 +32843,8 @@ def _serialize_usage_feature_list(
 
 def _deserialize_usage_feature_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[UsageFeature]:
-    result: list[UsageFeature] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -32891,7 +32891,7 @@ class UsageCriteria:
     account_ids: list[str] | None = None
     """The account IDs to aggregate usage statistics from."""
 
-    data_sources: list[DataSource] | None = None
+    data_sources: list[str] | None = None
     """The data sources to aggregate usage statistics from."""
 
     resources: list[str] | None = None
@@ -32900,7 +32900,7 @@ class UsageCriteria:
     resource names.
     """
 
-    features: list[UsageFeature] | None = None
+    features: list[str] | None = None
     """The features to aggregate usage statistics from."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -32992,7 +32992,7 @@ class GetUsageStatisticsInput:
     API.
     """
 
-    usage_statistic_type: UsageStatisticType | None = None
+    usage_statistic_type: str | None = None
     """The type of usage statistics to retrieve."""
 
     usage_criteria: UsageCriteria | None = None
@@ -33226,7 +33226,7 @@ def _deserialize_usage_account_result_list(
 class UsageDataSourceResult:
     """Contains information on the result of usage based on data source type."""
 
-    data_source: DataSource | None = None
+    data_source: str | None = None
     """The data source type that generated usage."""
 
     total: Total | None = None
@@ -33305,7 +33305,7 @@ class UsageFeatureResult:
     feature.
     """
 
-    feature: UsageFeature | None = None
+    feature: str | None = None
     """The feature that generated the usage cost."""
 
     total: Total | None = None
@@ -33542,7 +33542,7 @@ class UsageTopAccountsResult:
     feature.
     """
 
-    feature: UsageFeature | None = None
+    feature: str | None = None
     """
     Features by which you can generate the usage statistics.
 
@@ -34776,10 +34776,10 @@ class InvestigationSortField(UnknownEnumMixin, StrEnum):
 class InvestigationSortCriteria:
     """Contains information about the criteria used for sorting investigations."""
 
-    attribute_name: InvestigationSortField | None = None
+    attribute_name: str | None = None
     """The attribute by which to sort investigations."""
 
-    order_by: OrderBy | None = None
+    order_by: str | None = None
     """The order in which the sorted results are to be displayed."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -34931,16 +34931,16 @@ class InvestigationSummary:
     investigation_id: str | None = None
     """The unique identifier of the investigation."""
 
-    status: InvestigationStatus | None = None
+    status: str | None = None
     """The current status of the investigation."""
 
     trigger_prompt: str | None = None
     """The natural-language prompt that initiated this investigation."""
 
-    risk_level: RiskLevel | None = None
+    risk_level: str | None = None
     """The assessed risk level of the investigated threat."""
 
-    confidence: Confidence | None = None
+    confidence: str | None = None
     """The confidence level of the investigation's assessment."""
 
     title: str | None = None
@@ -35849,7 +35849,7 @@ class ListMalwareScansFilterCriterion:
     for their own account.
     """
 
-    list_malware_scans_criterion_key: ListMalwareScansCriterionKey | None = None
+    list_malware_scans_criterion_key: str | None = None
     """
     An enum value representing possible scan properties to match with given
     scan entries.
@@ -36084,7 +36084,7 @@ class MalwareScan:
     resource_arn: str | None = None
     """Amazon Resource Name (ARN) of the resource for the given malware scan."""
 
-    resource_type: MalwareProtectionResourceType | None = None
+    resource_type: str | None = None
     """The type of resource that was scanned for malware."""
 
     scan_id: str | None = None
@@ -36094,13 +36094,13 @@ class MalwareScan:
     scan ID, you can monitor the status of your malware scan.
     """
 
-    scan_status: MalwareProtectionScanStatus | None = None
+    scan_status: str | None = None
     """An enum value representing the current status of the malware scan."""
 
-    scan_result_status: ScanResultStatus | None = None
+    scan_result_status: str | None = None
     """An enum value representing the result of the malware scan."""
 
-    scan_type: MalwareProtectionScanType | None = None
+    scan_type: str | None = None
     """An enum value representing the type of scan that was initiated."""
 
     scan_started_at: datetime | None = None
@@ -38619,7 +38619,7 @@ class UpdateDetectorInput:
     enable: bool | None = None
     """Specifies whether the detector is enabled or not enabled."""
 
-    finding_publishing_frequency: FindingPublishingFrequency | None = None
+    finding_publishing_frequency: str | None = None
     """
     An enum value that specifies how frequently findings are exported, such
     as to CloudWatch Events.
@@ -38790,7 +38790,7 @@ class UpdateFilterInput:
     whitespace.
     """
 
-    action: FilterAction | None = None
+    action: str | None = None
     """
     Specifies the action that is to be applied to the findings that match
     the filter.
@@ -40283,7 +40283,7 @@ class UpdateFindingsFeedbackInput:
     finding_ids: list[str] | None = None
     """The IDs of the findings that you want to mark as useful or not useful."""
 
-    feedback: Feedback | None = None
+    feedback: str | None = None
     """The feedback for the finding."""
 
     comments: str | None = field(repr=False, default=None)
@@ -40843,7 +40843,7 @@ class UpdateMalwareScanSettingsInput:
     to scan.
     """
 
-    ebs_snapshot_preservation: EbsSnapshotPreservation | None = None
+    ebs_snapshot_preservation: str | None = None
     """An enum value representing possible snapshot preservation settings."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -40965,10 +40965,10 @@ UPDATE_MALWARE_SCAN_SETTINGS = APIOperation(
 class MemberAdditionalConfiguration:
     """Information about the additional configuration for the member account."""
 
-    name: OrgFeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """Name of the additional configuration."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """Status of the additional configuration."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -41049,10 +41049,10 @@ def _deserialize_member_additional_configurations(
 class MemberFeaturesConfiguration:
     """Contains information about the features for the member account."""
 
-    name: OrgFeature | None = None
+    name: str | None = None
     """The name of the feature."""
 
-    status: FeatureStatus | None = None
+    status: str | None = None
     """The status of the feature."""
 
     additional_configuration: list[MemberAdditionalConfiguration] | None = None
@@ -41684,14 +41684,14 @@ class OrganizationAdditionalConfiguration:
     protection plan.
     """
 
-    name: OrgFeatureAdditionalConfiguration | None = None
+    name: str | None = None
     """
     The name of the additional configuration that will be configured for the
     organization. These values are applicable to only Runtime Monitoring
     protection plan.
     """
 
-    auto_enable: OrgFeatureStatus | None = None
+    auto_enable: str | None = None
     """
     The status of the additional configuration that will be configured for
     the organization. Use one of the following values to configure the
@@ -41797,10 +41797,10 @@ def _deserialize_organization_additional_configurations(
 class OrganizationFeatureConfiguration:
     """A list of features which will be configured for the organization."""
 
-    name: OrgFeature | None = None
+    name: str | None = None
     """The name of the feature that will be configured for the organization."""
 
-    auto_enable: OrgFeatureStatus | None = None
+    auto_enable: str | None = None
     """
     Describes the status of the feature that is configured for the member
     accounts within the organization. One of the following values is the
@@ -41954,7 +41954,7 @@ class UpdateOrganizationConfigurationInput:
     features: list[OrganizationFeatureConfiguration] | None = None
     """A list of features that will be configured for the organization."""
 
-    auto_enable_organization_members: AutoEnableMembers | None = None
+    auto_enable_organization_members: str | None = None
     """
     Indicates the auto-enablement configuration of GuardDuty for the member
     accounts in the organization. You must provide a value for either

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.1
+
+### Enhancements
+* Re-generated with smithy-python 0.5.2
+
 ## v0.11.0
 
 ### Enhancements

@@ -202,7 +202,7 @@ class AutomationJobStatus(UnknownEnumMixin, StrEnum):
 class GetDataAutomationStatusOutput:
     """Response of GetDataAutomationStatus API."""
 
-    status: AutomationJobStatus | None = None
+    status: str | None = None
     """Job Status."""
 
     error_type: str | None = None
@@ -540,7 +540,7 @@ class Blueprint:
     version: str | None = None
     """Version of blueprint."""
 
-    stage: BlueprintStage | None = None
+    stage: str | None = None
     """Stage of blueprint."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -629,7 +629,7 @@ class DataAutomationConfiguration:
     data_automation_project_arn: str
     """Data automation project arn."""
 
-    stage: DataAutomationStage | None = None
+    stage: str | None = None
     """Data automation stage."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -1656,7 +1656,7 @@ class CustomOutputStatus(UnknownEnumMixin, StrEnum):
 class OutputSegment:
     """Results for an output segment"""
 
-    custom_output_status: CustomOutputStatus | None = None
+    custom_output_status: str | None = None
     """Status of blueprint match"""
 
     custom_output: str | None = None
@@ -1757,7 +1757,7 @@ class SemanticModality(UnknownEnumMixin, StrEnum):
 class InvokeDataAutomationOutput:
     """Invoke Data Automation Response"""
 
-    semantic_modality: SemanticModality
+    semantic_modality: str
     """Detected semantic modality"""
 
     output_configuration: OutputConfiguration | None = None

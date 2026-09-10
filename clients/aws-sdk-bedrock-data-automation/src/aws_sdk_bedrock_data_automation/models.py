@@ -382,7 +382,7 @@ class BlueprintOptimizationJobStatus(UnknownEnumMixin, StrEnum):
 class GetBlueprintOptimizationStatusOutput:
     """Response of GetBlueprintOptimizationStatus API."""
 
-    status: BlueprintOptimizationJobStatus | None = None
+    status: str | None = None
     """Job Status."""
 
     error_type: str | None = None
@@ -774,7 +774,7 @@ class BlueprintOptimizationObject:
     blueprint_arn: str
     """Arn of blueprint."""
 
-    stage: BlueprintStage | None = None
+    stage: str | None = None
     """Stage of blueprint."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -1363,10 +1363,10 @@ class CreateBlueprintInput:
     blueprint_name: str | None = field(repr=False, default=None)
     """Name of the Blueprint"""
 
-    type: Type | None = None
+    type: str | None = None
     """Type"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     schema: str | None = field(repr=False, default=None)
@@ -1487,7 +1487,7 @@ class Blueprint:
     schema: str = field(repr=False)
     """Schema of the blueprint"""
 
-    type: Type
+    type: str
     """Type"""
 
     creation_time: datetime
@@ -1502,7 +1502,7 @@ class Blueprint:
     blueprint_version: str | None = None
     """Blueprint Version"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     kms_key_id: str | None = None
@@ -1876,7 +1876,7 @@ class GetBlueprintInput:
     blueprint_version: str | None = None
     """Optional field to get a specific Blueprint version"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Optional field to get a specific Blueprint stage"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2029,7 +2029,7 @@ class DataAutomationProjectFilter:
     project_arn: str
     """ARN of a DataAutomationProject"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2095,10 +2095,10 @@ class ListBlueprintsInput:
     blueprint_arn: str | None = None
     """ARN of a Blueprint"""
 
-    resource_owner: ResourceOwner | None = None
+    resource_owner: str | None = None
     """Resource Owner"""
 
-    blueprint_stage_filter: BlueprintStageFilter | None = None
+    blueprint_stage_filter: str | None = None
     """Blueprint Stage filter"""
 
     max_results: int | None = None
@@ -2214,7 +2214,7 @@ class BlueprintSummary:
     blueprint_version: str | None = None
     """Blueprint Version"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     blueprint_name: str | None = field(repr=False, default=None)
@@ -2433,7 +2433,7 @@ class UpdateBlueprintInput:
     schema: str | None = field(repr=False, default=None)
     """Schema of the blueprint"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     encryption_configuration: EncryptionConfiguration | None = None
@@ -2589,10 +2589,10 @@ class CopyBlueprintStageInput:
     blueprint_arn: str | None = None
     """Blueprint to be copied"""
 
-    source_stage: BlueprintStage | None = None
+    source_stage: str | None = None
     """Source stage to copy from"""
 
-    target_stage: BlueprintStage | None = None
+    target_stage: str | None = None
     """Target stage to copy to"""
 
     client_token: str | None = None
@@ -3006,13 +3006,13 @@ class DataAutomationLibraryIngestionJob:
     creation_time: datetime
     """Timestamp when the DataAutomationLibraryIngestionJob was created"""
 
-    entity_type: EntityType
+    entity_type: str
     """The entity type associated with DataAutomationLibraryIngestionJob"""
 
-    operation_type: LibraryIngestionJobOperationType
+    operation_type: str
     """The operation associated with DataAutomationLibraryIngestionJob"""
 
-    job_status: LibraryIngestionJobStatus
+    job_status: str
     """The status of the DataAutomationLibraryIngestionJob"""
 
     output_configuration: OutputConfiguration
@@ -3405,7 +3405,7 @@ def _deserialize_phrase_list(
 class VocabularyEntityInfo:
     """Vocabulary entity info with detailed information"""
 
-    language: Language
+    language: str
     """Supported input languages"""
 
     phrases: list[Phrase]
@@ -3847,10 +3847,10 @@ class InvokeDataAutomationLibraryIngestionJobInput:
     input_configuration: InputConfiguration | None = None
     """Input configuration of DataAutomationLibraryIngestionJob request"""
 
-    entity_type: EntityType | None = None
+    entity_type: str | None = None
     """The entity type for which DataAutomationLibraryIngestionJob is being run"""
 
-    operation_type: LibraryIngestionJobOperationType | None = None
+    operation_type: str | None = None
     """The operation to be performed by DataAutomationLibraryIngestionJob"""
 
     output_configuration: OutputConfiguration | None = None
@@ -4187,13 +4187,13 @@ class DataAutomationLibraryIngestionJobSummary:
     job_arn: str
     """ARN of the DataAutomationLibraryIngestionJob"""
 
-    job_status: LibraryIngestionJobStatus
+    job_status: str
     """Status of DataAutomationLibraryIngestionJob"""
 
-    entity_type: EntityType
+    entity_type: str
     """Entity types supported in DataAutomationLibraries"""
 
-    operation_type: LibraryIngestionJobOperationType
+    operation_type: str
     """DataAutomationLibraryIngestionJob operation type"""
 
     creation_time: datetime
@@ -4572,7 +4572,7 @@ class CreateDataAutomationLibraryOutput:
     library_arn: str | None = None
     """ARN generated at the server side when a DataAutomationLibrary is created"""
 
-    status: DataAutomationLibraryStatus | None = None
+    status: str | None = None
     """Status of DataAutomationLibrary"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4716,7 +4716,7 @@ class DeleteDataAutomationLibraryOutput:
     library_arn: str | None = None
     """ARN generated at the server side when a DataAutomationLibrary is created"""
 
-    status: DataAutomationLibraryStatus | None = None
+    status: str | None = None
     """Status of DataAutomationLibrary"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4855,7 +4855,7 @@ class GetDataAutomationLibraryInput:
 class EntityTypeInfo:
     """Information about an entity type in the DataAutomationLibrary"""
 
-    entity_type: EntityType
+    entity_type: str
     """Entity types supported in DataAutomationLibraries"""
 
     entity_metadata: str | None = None
@@ -4940,7 +4940,7 @@ class DataAutomationLibrary:
     library_name: str = field(repr=False)
     """Name of the DataAutomationLibrary"""
 
-    status: DataAutomationLibraryStatus
+    status: str
     """Status of DataAutomationLibrary"""
 
     library_description: str | None = field(repr=False, default=None)
@@ -5492,7 +5492,7 @@ class UpdateDataAutomationLibraryOutput:
     library_arn: str | None = None
     """ARN generated at the server side when a DataAutomationLibrary is created"""
 
-    status: DataAutomationLibraryStatus | None = None
+    status: str | None = None
     """Status of DataAutomationLibrary"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -5596,7 +5596,7 @@ class BlueprintItem:
     blueprint_version: str | None = None
     """Blueprint Version"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -5924,7 +5924,7 @@ class AudioGenerativeOutputLanguage(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_audio_input_languages(
-    serializer: ShapeSerializer, schema: Schema, value: list[Language]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -5934,8 +5934,8 @@ def _serialize_audio_input_languages(
 
 def _deserialize_audio_input_languages(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[Language]:
-    result: list[Language] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -5953,10 +5953,10 @@ def _deserialize_audio_input_languages(
 class AudioLanguageConfiguration:
     """Optional configuration for audio language settings"""
 
-    input_languages: list[Language] | None = None
+    input_languages: list[str] | None = None
     """List of supported audio languages"""
 
-    generative_output_language: AudioGenerativeOutputLanguage | None = None
+    generative_output_language: str | None = None
     """Configuration for Audio output language"""
 
     identify_multiple_languages: bool | None = None
@@ -6043,7 +6043,7 @@ class State(UnknownEnumMixin, StrEnum):
 class ModalityProcessingConfiguration:
     """Configuration to enable/disable processing of modality"""
 
-    state: State | None = None
+    state: str | None = None
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6100,9 +6100,7 @@ class SensitiveDataDetectionScopeType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_sensitive_data_detection_scope(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[SensitiveDataDetectionScopeType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -6112,8 +6110,8 @@ def _serialize_sensitive_data_detection_scope(
 
 def _deserialize_sensitive_data_detection_scope(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[SensitiveDataDetectionScopeType]:
-    result: list[SensitiveDataDetectionScopeType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -6236,7 +6234,7 @@ class PIIEntityType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_pii_entity_types(
-    serializer: ShapeSerializer, schema: Schema, value: list[PIIEntityType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -6246,8 +6244,8 @@ def _serialize_pii_entity_types(
 
 def _deserialize_pii_entity_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[PIIEntityType]:
-    result: list[PIIEntityType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -6274,10 +6272,10 @@ class PIIRedactionMaskMode(UnknownEnumMixin, StrEnum):
 class PIIEntitiesConfiguration:
     """Configuration for PII entities detection and redaction"""
 
-    pii_entity_types: list[PIIEntityType] | None = None
+    pii_entity_types: list[str] | None = None
     """Types of PII entities to detect"""
 
-    redaction_mask_mode: PIIRedactionMaskMode | None = None
+    redaction_mask_mode: str | None = None
     """Mode for redacting detected PII"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6332,10 +6330,10 @@ class PIIEntitiesConfiguration:
 class SensitiveDataConfiguration:
     """Configuration for sensitive data detection and redaction"""
 
-    detection_mode: SensitiveDataDetectionMode
+    detection_mode: str
     """Mode for sensitive data detection"""
 
-    detection_scope: list[SensitiveDataDetectionScopeType] | None = None
+    detection_scope: list[str] | None = None
     """Scope of detection - what types of sensitive data to detect"""
 
     pii_entities_configuration: PIIEntitiesConfiguration | None = None
@@ -6484,7 +6482,7 @@ class AudioOverrideConfiguration:
 class SplitterConfiguration:
     """Configuration of Splitter"""
 
-    state: State | None = None
+    state: str | None = None
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6657,16 +6655,16 @@ class DesiredModality(UnknownEnumMixin, StrEnum):
 class ModalityRoutingConfiguration:
     """Configuration for routing file type to desired modality"""
 
-    jpeg: DesiredModality | None = None
+    jpeg: str | None = None
     """Desired Modality types"""
 
-    png: DesiredModality | None = None
+    png: str | None = None
     """Desired Modality types"""
 
-    mp4: DesiredModality | None = None
+    mp4: str | None = None
     """Desired Modality types"""
 
-    mov: DesiredModality | None = None
+    mov: str | None = None
     """Desired Modality types"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6891,7 +6889,7 @@ class DataAutomationProjectType(UnknownEnumMixin, StrEnum):
 class ChannelLabelingConfiguration:
     """Channel labeling configuration"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6934,7 +6932,7 @@ class ChannelLabelingConfiguration:
 class SpeakerLabelingConfiguration:
     """Speaker labeling configuration"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7076,9 +7074,7 @@ class AudioExtractionCategoryType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_audio_extraction_category_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[AudioExtractionCategoryType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7088,8 +7084,8 @@ def _serialize_audio_extraction_category_types(
 
 def _deserialize_audio_extraction_category_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[AudioExtractionCategoryType]:
-    result: list[AudioExtractionCategoryType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -7107,10 +7103,10 @@ def _deserialize_audio_extraction_category_types(
 class AudioExtractionCategory:
     """Category of Audio Extraction"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[AudioExtractionCategoryType] | None = None
+    types: list[str] | None = None
     """List of Audio Extraction Category Type"""
 
     type_configuration: AudioExtractionCategoryTypeConfiguration | None = None
@@ -7220,9 +7216,7 @@ class AudioStandardGenerativeFieldType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_audio_standard_generative_field_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[AudioStandardGenerativeFieldType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7232,8 +7226,8 @@ def _serialize_audio_standard_generative_field_types(
 
 def _deserialize_audio_standard_generative_field_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[AudioStandardGenerativeFieldType]:
-    result: list[AudioStandardGenerativeFieldType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -7253,10 +7247,10 @@ def _deserialize_audio_standard_generative_field_types(
 class AudioStandardGenerativeField:
     """Standard Generative Field Configuration of Audio"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[AudioStandardGenerativeFieldType] | None = None
+    types: list[str] | None = None
     """List of Audio Standard Generative Field Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7365,7 +7359,7 @@ class AudioStandardOutputConfiguration:
 class DocumentBoundingBox:
     """Bounding Box Configuration of Document Extraction"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7413,9 +7407,7 @@ class DocumentExtractionGranularityType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_document_extraction_granularity_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[DocumentExtractionGranularityType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7425,8 +7417,8 @@ def _serialize_document_extraction_granularity_types(
 
 def _deserialize_document_extraction_granularity_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[DocumentExtractionGranularityType]:
-    result: list[DocumentExtractionGranularityType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -7446,7 +7438,7 @@ def _deserialize_document_extraction_granularity_types(
 class DocumentExtractionGranularity:
     """Granularity of Document Extraction"""
 
-    types: list[DocumentExtractionGranularityType] | None = None
+    types: list[str] | None = None
     """List of Document Extraction Granularity Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7548,7 +7540,7 @@ class DocumentStandardExtraction:
 class DocumentStandardGenerativeField:
     """Standard Generative Field Configuration of Document"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7591,7 +7583,7 @@ class DocumentStandardGenerativeField:
 class DocumentOutputAdditionalFileFormat:
     """Additional File Format of Document Output"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7644,9 +7636,7 @@ class DocumentOutputTextFormatType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_document_output_text_format_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[DocumentOutputTextFormatType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7656,8 +7646,8 @@ def _serialize_document_output_text_format_types(
 
 def _deserialize_document_output_text_format_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[DocumentOutputTextFormatType]:
-    result: list[DocumentOutputTextFormatType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -7675,7 +7665,7 @@ def _deserialize_document_output_text_format_types(
 class DocumentOutputTextFormat:
     """Text Format of Document Output"""
 
-    types: list[DocumentOutputTextFormatType] | None = None
+    types: list[str] | None = None
     """List of Document Output Text Format Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7841,7 +7831,7 @@ class DocumentStandardOutputConfiguration:
 class ImageBoundingBox:
     """Bounding Box Configuration of Image Extraction"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7885,9 +7875,7 @@ class ImageExtractionCategoryType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_image_extraction_category_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[ImageExtractionCategoryType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -7897,8 +7885,8 @@ def _serialize_image_extraction_category_types(
 
 def _deserialize_image_extraction_category_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ImageExtractionCategoryType]:
-    result: list[ImageExtractionCategoryType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -7916,10 +7904,10 @@ def _deserialize_image_extraction_category_types(
 class ImageExtractionCategory:
     """Category of Image Extraction"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[ImageExtractionCategoryType] | None = None
+    types: list[str] | None = None
     """List of Image Extraction Category"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8025,9 +8013,7 @@ class ImageStandardGenerativeFieldType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_image_standard_generative_field_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[ImageStandardGenerativeFieldType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -8037,8 +8023,8 @@ def _serialize_image_standard_generative_field_types(
 
 def _deserialize_image_standard_generative_field_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ImageStandardGenerativeFieldType]:
-    result: list[ImageStandardGenerativeFieldType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -8058,10 +8044,10 @@ def _deserialize_image_standard_generative_field_types(
 class ImageStandardGenerativeField:
     """Standard Generative Field Configuration of Image"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[ImageStandardGenerativeFieldType] | None = None
+    types: list[str] | None = None
     """List of Image Standard Generative Field Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8170,7 +8156,7 @@ class ImageStandardOutputConfiguration:
 class VideoBoundingBox:
     """Bounding Box Configuration of Video Extraction"""
 
-    state: State
+    state: str
     """State"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8215,9 +8201,7 @@ class VideoExtractionCategoryType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_video_extraction_category_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[VideoExtractionCategoryType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -8227,8 +8211,8 @@ def _serialize_video_extraction_category_types(
 
 def _deserialize_video_extraction_category_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[VideoExtractionCategoryType]:
-    result: list[VideoExtractionCategoryType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -8246,10 +8230,10 @@ def _deserialize_video_extraction_category_types(
 class VideoExtractionCategory:
     """Category of Video Extraction"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[VideoExtractionCategoryType] | None = None
+    types: list[str] | None = None
     """List of Video Extraction Category Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8356,9 +8340,7 @@ class VideoStandardGenerativeFieldType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_video_standard_generative_field_types(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[VideoStandardGenerativeFieldType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -8368,8 +8350,8 @@ def _serialize_video_standard_generative_field_types(
 
 def _deserialize_video_standard_generative_field_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[VideoStandardGenerativeFieldType]:
-    result: list[VideoStandardGenerativeFieldType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -8389,10 +8371,10 @@ def _deserialize_video_standard_generative_field_types(
 class VideoStandardGenerativeField:
     """Standard Generative Field Configuration of Video"""
 
-    state: State
+    state: str
     """State"""
 
-    types: list[VideoStandardGenerativeFieldType] | None = None
+    types: list[str] | None = None
     """List of Video Standard Generative Field Type"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8580,10 +8562,10 @@ class CreateDataAutomationProjectInput:
     project_description: str | None = field(repr=False, default=None)
     """Description of the DataAutomationProject"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
-    project_type: DataAutomationProjectType = DataAutomationProjectType("ASYNC")
+    project_type: str = DataAutomationProjectType("ASYNC")
     """Type of the DataAutomationProject"""
 
     standard_output_configuration: StandardOutputConfiguration | None = None
@@ -8795,10 +8777,10 @@ class CreateDataAutomationProjectOutput:
     project_arn: str
     """ARN of a DataAutomationProject"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
-    status: DataAutomationProjectStatus | None = None
+    status: str | None = None
     """Status of Data Automation Project"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8957,7 +8939,7 @@ class DeleteDataAutomationProjectOutput:
     project_arn: str
     """ARN of a DataAutomationProject"""
 
-    status: DataAutomationProjectStatus | None = None
+    status: str | None = None
     """Status of Data Automation Project"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9054,7 +9036,7 @@ class GetDataAutomationProjectInput:
     project_arn: str | None = None
     """ARN generated at the server side when a DataAutomationProject is created"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Optional field to delete a specific DataAutomationProject stage"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9122,13 +9104,13 @@ class DataAutomationProject:
     project_name: str = field(repr=False)
     """Name of the DataAutomationProject"""
 
-    status: DataAutomationProjectStatus
+    status: str
     """Status of Data Automation Project"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
-    project_type: DataAutomationProjectType | None = None
+    project_type: str | None = None
     """Type of the DataAutomationProject"""
 
     project_description: str | None = field(repr=False, default=None)
@@ -9433,7 +9415,7 @@ class BlueprintFilter:
     blueprint_version: str | None = None
     """Blueprint Version"""
 
-    blueprint_stage: BlueprintStage | None = None
+    blueprint_stage: str | None = None
     """Stage of the Blueprint"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9550,13 +9532,13 @@ class ListDataAutomationProjectsInput:
     next_token: str | None = None
     """Pagination token"""
 
-    project_stage_filter: DataAutomationProjectStageFilter | None = None
+    project_stage_filter: str | None = None
     """Project Stage filter"""
 
     blueprint_filter: BlueprintFilter | None = None
     """Blueprint Filter"""
 
-    resource_owner: ResourceOwner | None = None
+    resource_owner: str | None = None
     """Resource Owner"""
 
     library_filter: DataAutomationLibraryFilter | None = None
@@ -9671,10 +9653,10 @@ class DataAutomationProjectSummary:
     creation_time: datetime
     """Time Stamp"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
-    project_type: DataAutomationProjectType | None = None
+    project_type: str | None = None
     """Type of the DataAutomationProject"""
 
     project_name: str | None = field(repr=False, default=None)
@@ -9898,7 +9880,7 @@ class UpdateDataAutomationProjectInput:
     project_arn: str | None = None
     """ARN generated at the server side when a DataAutomationProject is created"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
     project_description: str | None = field(repr=False, default=None)
@@ -10059,10 +10041,10 @@ class UpdateDataAutomationProjectOutput:
     project_arn: str
     """ARN of a DataAutomationProject"""
 
-    project_stage: DataAutomationProjectStage | None = None
+    project_stage: str | None = None
     """Stage of the Project"""
 
-    status: DataAutomationProjectStatus | None = None
+    status: str | None = None
     """Status of Data Automation Project"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -10182,7 +10164,7 @@ class GetDataAutomationLibraryEntityInput:
     library_arn: str | None = None
     """ARN generated at the server side when a DataAutomationLibrary is created"""
 
-    entity_type: EntityType | None = None
+    entity_type: str | None = None
     """The entity type for which the entity is requested"""
 
     entity_id: str | None = None
@@ -10262,7 +10244,7 @@ class VocabularyEntity:
     description: str | None = field(repr=False, default=None)
     """Description of the entity"""
 
-    language: Language | None = None
+    language: str | None = None
     """Supported input languages"""
 
     phrases: list[Phrase] | None = None
@@ -10502,7 +10484,7 @@ class ListDataAutomationLibraryEntitiesInput:
     library_arn: str | None = None
     """ARN generated at the server side when a DataAutomationLibrary is created"""
 
-    entity_type: EntityType | None = None
+    entity_type: str | None = None
     """The entity type for which the entity list is requested"""
 
     max_results: int | None = None
@@ -10608,7 +10590,7 @@ class VocabularyEntitySummary:
     description: str | None = field(repr=False, default=None)
     """Description of the entity"""
 
-    language: Language | None = None
+    language: str | None = None
     """Supported input languages"""
 
     num_of_phrases: int | None = None
