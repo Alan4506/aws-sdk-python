@@ -1,6 +1,6 @@
-# AWS SDK for Python
+# AWS SDK for Python v4
 
-The AWS SDK for Python provides asynchronous clients for supported AWS services.
+The AWS SDK for Python v4 provides asynchronous clients for supported AWS services.
 Each service has its own package.
 
 !!! warning "Developer Preview: Not for production use"

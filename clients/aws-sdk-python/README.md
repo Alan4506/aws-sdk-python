@@ -1,4 +1,4 @@
-# AWS SDK for Python
+# AWS SDK for Python v4
 
 The `aws-sdk-python` meta-package provides a convenient way to install
 supported AWS service clients at compatible versions.
@@ -31,4 +31,4 @@ python -m pip install "aws-sdk-python[all]"
 - [API Reference](https://docs.aws.amazon.com/sdk-for-python/v1/reference/clients/) -
   the available clients, operations, and types.
 - [Developer Guide](https://docs.aws.amazon.com/sdk-for-python/v1/guide/) -
-  configuration, authentication, and usage of the AWS SDK for Python.
+  configuration, authentication, and usage of the AWS SDK for Python v4.
