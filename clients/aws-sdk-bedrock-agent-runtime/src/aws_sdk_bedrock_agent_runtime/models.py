@@ -516,7 +516,7 @@ class ActionGroupExecutorCustomControl:
     `InvokeInlineAgent` response, specify `RETURN_CONTROL`.
     """
 
-    value: CustomControlMethod
+    value: str
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_ACTION_GROUP_EXECUTOR, self)
@@ -783,7 +783,7 @@ class ActionGroupInvocationInput:
     function: str | None = field(repr=False, default=None)
     """The function in the action group to call."""
 
-    execution_type: ExecutionType | None = None
+    execution_type: str | None = None
     """
     How fulfillment of the action is handled. For more information, see
     [Handling fulfillment of the
@@ -1386,7 +1386,7 @@ class ParameterType(UnknownEnumMixin, StrEnum):
 class ParameterDetail:
     """Contains details about a parameter in a function for an action group."""
 
-    type: ParameterType
+    type: str
     """The data type of the parameter."""
 
     description: str | None = None
@@ -1500,7 +1500,7 @@ class FunctionDefinition:
     function.
     """
 
-    require_confirmation: RequireConfirmation | None = None
+    require_confirmation: str | None = None
     """
     Contains information if user confirmation is required to invoke the
     function.
@@ -1689,7 +1689,7 @@ class AgentActionGroup:
     description: str | None = field(repr=False, default=None)
     """A description of the action group."""
 
-    parent_action_group_signature: ActionGroupSignature | None = None
+    parent_action_group_signature: str | None = None
     """
     Specify a built-in or computer use action for this action group. If you
     specify a value, you must leave the `description`, `apiSchema`, and
@@ -2000,7 +2000,7 @@ class ImageInput:
     tools](https://docs.aws.amazon.com/bedrock/latest/userguide/agent-computer-use.html).
     """
 
-    format: ImageInputFormat
+    format: str
     """The type of image in the result."""
 
     source: ImageInputSource
@@ -2182,13 +2182,13 @@ class ApiResult:
     api_path: str | None = field(repr=False, default=None)
     """The path to the API operation."""
 
-    confirmation_state: ConfirmationState | None = None
+    confirmation_state: str | None = None
     """
     Controls the API operations or functions to invoke based on the user
     confirmation.
     """
 
-    response_state: ResponseState | None = None
+    response_state: str | None = None
     """
     Controls the final response state returned to end user when API/Function
     execution failed. When this state is FAILURE, the request would fail
@@ -2330,7 +2330,7 @@ class FunctionResult:
     action_group: str
     """The action group that the function belongs to."""
 
-    confirmation_state: ConfirmationState | None = None
+    confirmation_state: str | None = None
     """
     Contains the user confirmation information about the function that was
     called.
@@ -2352,7 +2352,7 @@ class FunctionResult:
     tools](https://docs.aws.amazon.com/bedrock/latest/userguide/agent-computer-use.html).
     """
 
-    response_state: ResponseState | None = None
+    response_state: str | None = None
     """
     Controls the final response state returned to end user when API/Function
     execution failed. When this state is FAILURE, the request would fail
@@ -2663,7 +2663,7 @@ class AgentCollaboratorInputPayload:
     invocation result.
     """
 
-    type: PayloadType | None = None
+    type: str | None = None
     """The input type."""
 
     text: str | None = field(repr=False, default=None)
@@ -3067,7 +3067,7 @@ class ApiInvocationInput:
     from the user.
     """
 
-    action_invocation_type: ActionInvocationType | None = None
+    action_invocation_type: str | None = None
     """Contains information about the API operation to invoke."""
 
     agent_id: str | None = None
@@ -3298,7 +3298,7 @@ class FunctionInvocationInput:
     function: str | None = None
     """The name of the function."""
 
-    action_invocation_type: ActionInvocationType | None = None
+    action_invocation_type: str | None = None
     """Contains information about the function to invoke,"""
 
     agent_id: str | None = None
@@ -3618,7 +3618,7 @@ class AgentCollaboratorOutputPayload:
     invocation result.
     """
 
-    type: PayloadType | None = None
+    type: str | None = None
     """The type of output."""
 
     text: str | None = field(repr=False, default=None)
@@ -4668,7 +4668,7 @@ class FoundationModelConfigurationType(UnknownEnumMixin, StrEnum):
 class FoundationModelConfiguration:
     """Configuration for the foundation model."""
 
-    type: FoundationModelConfigurationType
+    type: str
     """The type of foundation model configuration."""
 
     bedrock_foundation_model_configuration: (
@@ -4741,7 +4741,7 @@ class AgenticRetrieveRerankingConfigurationType(UnknownEnumMixin, StrEnum):
 class AgenticRetrieveRerankingConfiguration:
     """Configuration for the reranking model."""
 
-    type: AgenticRetrieveRerankingConfigurationType
+    type: str
     """The type of reranking configuration."""
 
     bedrock_reranking_configuration: (
@@ -4811,7 +4811,7 @@ class AgenticRetrieveRerankingModelType(UnknownEnumMixin, StrEnum):
 class AgenticRetrieveConfiguration:
     """Configuration settings for the agentic retrieval operation."""
 
-    foundation_model_type: FoundationModelType = FoundationModelType("MANAGED")
+    foundation_model_type: str = FoundationModelType("MANAGED")
     """
     The type of foundation model to use. CUSTOM uses a specified model,
     MANAGED uses the service default.
@@ -4823,7 +4823,7 @@ class AgenticRetrieveConfiguration:
     CUSTOM.
     """
 
-    reranking_model_type: AgenticRetrieveRerankingModelType | None = None
+    reranking_model_type: str | None = None
     """
     The type of reranking model to use. CUSTOM uses a specified model,
     MANAGED uses the service default. If not specified, defaults to MANAGED
@@ -5066,7 +5066,7 @@ class AgenticRetrieveGuardrailWarning:
     version: str
     """The version of the guardrail."""
 
-    action: GuardrailAction
+    action: str
     """The action taken by the guardrail."""
 
     message: str | None = None
@@ -5647,7 +5647,7 @@ class AgenticRetrieveMemoryMetadataFilter:
     left: AgenticRetrieveMemoryMetadataFilterLeft
     """The metadata key that the expression evaluates."""
 
-    operator: AgenticRetrieveMemoryMetadataFilterOperator
+    operator: str
     """
     The relationship that the metadata key and value must have for a memory
     record to match.
@@ -5998,7 +5998,7 @@ class AgenticRetrieveMemoryConfiguration:
     This field currently accepts at most one entry.
     """
 
-    persistence_mode: AgenticRetrieveMemoryPersistenceMode | None = None
+    persistence_mode: str | None = None
     """
     Specifies whether the agent-generated answer is written back to the
     given short-term memory session, and applies only when sessionBinding is
@@ -6106,7 +6106,7 @@ class AgenticRetrieveMessage:
     content: AgenticRetrieveMessageContent = field(repr=False)
     """The content of the message."""
 
-    role: ConversationRole
+    role: str
     """The role of the message sender (e.g., user or assistant)."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -6597,7 +6597,7 @@ class AgenticRetrieveSourceMetadata:
     identifier: str | None = None
     """The identifier of the retrieval source."""
 
-    retrieval_type: AgenticRetrieveType | None = None
+    retrieval_type: str | None = None
     """The type of retrieval source."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7350,10 +7350,10 @@ def _deserialize_agentic_retrieve_warnings(
 class AgenticRetrieveTraceEventAttributes:
     """Attributes describing the details of an agentic retrieval trace event."""
 
-    step: AgenticRetrieveStep
+    step: str
     """The current step in the retrieval process."""
 
-    status: AgenticRetrieveStatus
+    status: str
     """The status of the current step."""
 
     message: str
@@ -8377,16 +8377,16 @@ class GuardrailContentFilterType(UnknownEnumMixin, StrEnum):
 class GuardrailContentFilter:
     """Details of the content filter used in the Guardrail."""
 
-    type: GuardrailContentFilterType | None = None
+    type: str | None = None
     """The type of content detected in the filter by the Guardrail."""
 
-    confidence: GuardrailContentFilterConfidence | None = None
+    confidence: str | None = None
     """
     The confidence level regarding the content detected in the filter by the
     Guardrail.
     """
 
-    action: GuardrailContentPolicyAction | None = None
+    action: str | None = None
     """The action placed on the content by the Guardrail filter."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8561,7 +8561,7 @@ class GuardrailPiiEntityFilter:
     information (PII).
     """
 
-    type: GuardrailPiiEntityType | None = None
+    type: str | None = None
     """The type of PII the Guardrail filter has identified and removed."""
 
     match: str | None = None
@@ -8570,7 +8570,7 @@ class GuardrailPiiEntityFilter:
     PII.
     """
 
-    action: GuardrailSensitiveInformationPolicyAction | None = None
+    action: str | None = None
     """The action of the Guardrail filter to identify and remove PII."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8668,7 +8668,7 @@ class GuardrailRegexFilter:
     match: str | None = None
     """The match details for the regex filter used in the Guardrail."""
 
-    action: GuardrailSensitiveInformationPolicyAction | None = None
+    action: str | None = None
     """The action details for the regex filter used in the Guardrail."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8852,10 +8852,10 @@ class GuardrailTopic:
     name: str | None = None
     """The name details on a specific topic in the Guardrail."""
 
-    type: GuardrailTopicType | None = None
+    type: str | None = None
     """The type details on a specific topic in the Guardrail."""
 
-    action: GuardrailTopicPolicyAction | None = None
+    action: str | None = None
     """The action details on a specific topic in the Guardrail."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8983,7 +8983,7 @@ class GuardrailCustomWord:
     match: str | None = None
     """The match details for the custom word filter in the Guardrail."""
 
-    action: GuardrailWordPolicyAction | None = None
+    action: str | None = None
     """The action details for the custom word filter in the Guardrail."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9063,10 +9063,10 @@ class GuardrailManagedWord:
     match: str | None = None
     """The match details for the managed word filter in the Guardrail."""
 
-    type: GuardrailManagedWordType | None = None
+    type: str | None = None
     """The type details for the managed word filter in the Guardrail."""
 
-    action: GuardrailWordPolicyAction | None = None
+    action: str | None = None
     """The action details for the managed word filter in the Guardrail."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9324,7 +9324,7 @@ def _deserialize_guardrail_assessment_list(
 class GuardrailTrace:
     """The trace details used in the Guardrail."""
 
-    action: GuardrailAction | None = None
+    action: str | None = None
     """The trace action details used with the Guardrail."""
 
     trace_id: str | None = None
@@ -9570,7 +9570,7 @@ class InvocationInput:
     trace_id: str | None = None
     """The unique identifier of the trace."""
 
-    invocation_type: InvocationType | None = None
+    invocation_type: str | None = None
     """
     Specifies whether the agent is invoking an action group or a knowledge
     base.
@@ -9860,7 +9860,7 @@ class ModelInvocationInput:
     text: str | None = field(repr=False, default=None)
     """The text that prompted the agent at this step."""
 
-    type: PromptType | None = None
+    type: str | None = None
     """The step in the agent sequence."""
 
     override_lambda: str | None = None
@@ -9869,7 +9869,7 @@ class ModelInvocationInput:
     model output in parts of the agent sequence.
     """
 
-    prompt_creation_mode: CreationMode | None = None
+    prompt_creation_mode: str | None = None
     """
     Specifies whether the default prompt template was `OVERRIDDEN`. If it
     was, the `basePromptTemplate` that was set in the
@@ -9887,7 +9887,7 @@ class ModelInvocationInput:
     models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters.html).
     """
 
-    parser_mode: CreationMode | None = None
+    parser_mode: str | None = None
     """
     Specifies whether to override the default parser Lambda function when
     parsing the raw foundation model output in the part of the agent
@@ -10544,7 +10544,7 @@ class RetrievalResultContentColumn:
     column_value: str | None = None
     """The value in the column."""
 
-    type: RetrievalResultContentColumnType | None = None
+    type: str | None = None
     """The data type of the value."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -10722,7 +10722,7 @@ class RetrievalResultContent:
       -- in the `content` field
     """
 
-    type: RetrievalResultContentType | None = None
+    type: str | None = None
     """The type of content in the retrieval result."""
 
     text: str = ""
@@ -11286,7 +11286,7 @@ class RetrievalResultLocation:
       -- in the `location` field
     """
 
-    type: RetrievalResultLocationType
+    type: str
     """The type of data source location."""
 
     s3_location: RetrievalResultS3Location | None = None
@@ -11654,7 +11654,7 @@ class RepromptResponse:
     text: str | None = None
     """The text reprompting the input."""
 
-    source: Source | None = field(repr=False, default=None)
+    source: str | None = field(repr=False, default=None)
     """Specifies what output is prompting the agent to reprompt the input."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -11717,7 +11717,7 @@ class Observation:
     trace_id: str | None = None
     """The unique identifier of the trace."""
 
-    type: Type | None = None
+    type: str | None = None
     """
     Specifies what kind of information the agent returns in the observation.
     The following values are possible.
@@ -13818,7 +13818,7 @@ class FlowExecutionError:
     applicable).
     """
 
-    error: FlowExecutionErrorType | None = None
+    error: str | None = None
     """The error code for the type of error that occurred."""
 
     message: str | None = None
@@ -13918,7 +13918,7 @@ class GetFlowExecutionOutput:
     execution.
     """
 
-    status: FlowExecutionStatus
+    status: str
     """
     The current status of the flow execution.
 
@@ -14127,7 +14127,7 @@ class ListFlowExecutionEventsInput:
     the response if more results are available.
     """
 
-    event_type: FlowExecutionEventType | None = None
+    event_type: str | None = None
     """
     The type of events to retrieve. Specify `Node` for node-level events or
     `Flow` for flow-level events.
@@ -14399,7 +14399,7 @@ class FlowFailureEvent:
     timestamp: datetime
     """The timestamp when the failure occurred."""
 
-    error_code: FlowErrorCode
+    error_code: str
     """The error code that identifies the type of failure that occurred."""
 
     error_message: str
@@ -15166,7 +15166,7 @@ class NodeFailureEvent:
     timestamp: datetime
     """The timestamp when the node failure occurred."""
 
-    error_code: NodeErrorCode
+    error_code: str
     """
     The error code that identifies the type of failure that occurred at the
     node.
@@ -15348,7 +15348,7 @@ class NodeInputExecutionChainItem:
     node_name: str
     """The name of the node in the execution chain."""
 
-    type: FlowControlNodeType
+    type: str
     """
     The type of execution chain item. Supported values are Iterator and
     Loop.
@@ -15529,10 +15529,10 @@ class NodeInputField:
     source: NodeInputSource | None = None
     """The source node that provides input data to this field."""
 
-    type: FlowNodeIODataType | None = None
+    type: str | None = None
     """The data type of the input field for compatibility validation."""
 
-    category: FlowNodeInputCategory | None = None
+    category: str | None = None
     """The category of the input field."""
 
     execution_chain: list[NodeInputExecutionChainItem] | None = None
@@ -15811,7 +15811,7 @@ class NodeOutputField:
     next: list[NodeOutputNext] | None = None
     """The next node that receives output data from this field."""
 
-    type: FlowNodeIODataType | None = None
+    type: str | None = None
     """The data type of the output field for compatibility validation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -16517,7 +16517,7 @@ class FlowExecutionSummary:
     flow_version: str
     """The version of the flow used for the execution."""
 
-    status: FlowExecutionStatus
+    status: str
     """
     The current status of the flow execution.
 
@@ -16950,7 +16950,7 @@ class PerformanceConfigLatency(UnknownEnumMixin, StrEnum):
 class PerformanceConfiguration:
     """Performance settings for a model."""
 
-    latency: PerformanceConfigLatency = PerformanceConfigLatency("standard")
+    latency: str = PerformanceConfigLatency("standard")
     """To use a latency-optimized version of the model, set to `optimized`."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17302,7 +17302,7 @@ class StopFlowExecutionInput:
 class StopFlowExecutionOutput:
     """Dataclass for StopFlowExecutionOutput structure."""
 
-    status: FlowExecutionStatus
+    status: str
     """
     The updated status of the flow execution after the stop request. This
     will typically be ABORTED if the execution was successfully stopped.
@@ -17533,7 +17533,7 @@ class FlowCompletionReason(UnknownEnumMixin, StrEnum):
 class FlowCompletionEvent:
     """Contains information about why a flow completed."""
 
-    completion_reason: FlowCompletionReason
+    completion_reason: str
     """The reason that the flow completed."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17679,7 +17679,7 @@ class FlowMultiTurnInputRequestEvent:
     node_name: str
     """The name of the node in the flow that is requesting the input."""
 
-    node_type: NodeType
+    node_type: str
     """The type of the node in the flow that is requesting the input."""
 
     content: FlowMultiTurnInputContent
@@ -17841,7 +17841,7 @@ class FlowOutputEvent:
     node_name: str
     """The name of the flow output node that the output is from."""
 
-    node_type: NodeType
+    node_type: str
     """The type of the node that the output is from."""
 
     content: FlowOutputContent
@@ -18430,7 +18430,7 @@ class FlowTraceNodeInputExecutionChainItem:
     node_name: str
     """The name of the node in the execution chain."""
 
-    type: FlowControlNodeType
+    type: str
     """
     The type of execution chain item. Supported values are Iterator and
     Loop.
@@ -18619,10 +18619,10 @@ class FlowTraceNodeInputField:
     source: FlowTraceNodeInputSource | None = field(repr=False, default=None)
     """The source node that provides input data to this field."""
 
-    type: FlowNodeIODataType | None = None
+    type: str | None = None
     """The data type of the input field for compatibility validation."""
 
-    category: FlowNodeInputCategory | None = None
+    category: str | None = None
     """The category of the input field."""
 
     execution_chain: list[FlowTraceNodeInputExecutionChainItem] | None = field(
@@ -19013,7 +19013,7 @@ class FlowTraceNodeOutputField:
     next: list[FlowTraceNodeOutputNext] | None = None
     """The next node that receives output data from this field."""
 
-    type: FlowNodeIODataType | None = None
+    type: str | None = None
     """The data type of the output field for compatibility validation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -19907,7 +19907,7 @@ class QueryGenerationInput:
     SQL.
     """
 
-    type: InputQueryType
+    type: str
     """The type of the query."""
 
     text: str
@@ -20013,7 +20013,7 @@ class TextToSqlConfigurationType(UnknownEnumMixin, StrEnum):
 class TextToSqlConfiguration:
     """Contains configurations for transforming text to SQL."""
 
-    type: TextToSqlConfigurationType
+    type: str
     """The type of resource to use in transformation."""
 
     knowledge_base_configuration: TextToSqlKnowledgeBaseConfiguration | None = None
@@ -20070,7 +20070,7 @@ class TransformationConfiguration:
     SQL.
     """
 
-    mode: QueryTransformationMode
+    mode: str
     """The mode of the transformation."""
 
     text_to_sql_configuration: TextToSqlConfiguration | None = None
@@ -20194,7 +20194,7 @@ class GeneratedQuery:
     query.
     """
 
-    type: GeneratedQueryType | None = None
+    type: str | None = None
     """The type of transformed query."""
 
     sql: str | None = None
@@ -20375,7 +20375,7 @@ class GetDocumentContentInput:
     document_id: str | None = None
     """The unique identifier of the document to retrieve content for."""
 
-    output_format: DocumentOutputFormat | None = None
+    output_format: str | None = None
     """
     The output format for the document content. `RAW` returns the original
     file. `EXTRACTED` returns parsed text as JSON. Defaults to `RAW`.
@@ -20683,7 +20683,7 @@ class DocumentAclGroup:
     id: str
     """The identifier of the group."""
 
-    type: DocumentAclMembershipType
+    type: str
     """The membership type indicating the scope of the group entry."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -20756,7 +20756,7 @@ class DocumentAclUser:
     id: str
     """The identifier of the user."""
 
-    type: DocumentAclMembershipType
+    type: str
     """The membership type indicating the scope of the user entry."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -20829,7 +20829,7 @@ class DocumentAclCondition:
     specifying users and groups that are evaluated together.
     """
 
-    condition_operator: DocumentAclMemberRelation | None = None
+    condition_operator: str | None = None
     """
     The logical operator for combining users and groups within this
     condition. Valid values: `AND` -- Both a user match and a group match
@@ -20931,7 +20931,7 @@ class DocumentAclMembership:
     containing conditions and their logical relation.
     """
 
-    member_relation: DocumentAclMemberRelation | None = None
+    member_relation: str | None = None
     """
     The logical relation between conditions. Valid values: `AND` -- All
     conditions must match. `OR` -- At least one condition must match.
@@ -21350,7 +21350,7 @@ def _deserialize_content_blocks(
 class Message:
     """Details about a message."""
 
-    role: ConversationRole
+    role: str
     """The message's role."""
 
     content: list[ContentBlock]
@@ -21560,7 +21560,7 @@ class FileSourceType(UnknownEnumMixin, StrEnum):
 class FileSource:
     """The source file of the content contained in the wrapper object."""
 
-    source_type: FileSourceType
+    source_type: str
     """The source type of the files to attach."""
 
     s3_location: S3ObjectFile | None = None
@@ -21635,7 +21635,7 @@ class InputFile:
     source: FileSource
     """Specifies where the files are located."""
 
-    use_case: FileUseCase
+    use_case: str
     """Specifies how the source files will be used by the code interpreter."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -21943,7 +21943,7 @@ class _RerankingMetadataSelectiveModeConfigurationDeserializer:
 class MetadataConfigurationForReranking:
     """Contains configurations for the metadata to use in reranking."""
 
-    selection_mode: RerankingMetadataSelectionMode
+    selection_mode: str
     """
     Specifies whether to consider all metadata when reranking, or only the
     metadata that you select. If you specify `SELECTIVE`, include the
@@ -22179,7 +22179,7 @@ class ManagedSearchRerankingConfigurationType(UnknownEnumMixin, StrEnum):
 class ManagedSearchRerankingConfiguration:
     """Configuration for the reranking model used in managed search."""
 
-    type: ManagedSearchRerankingConfigurationType
+    type: str
     """The type of reranking configuration."""
 
     bedrock_reranking_configuration: (
@@ -22257,7 +22257,7 @@ class MetadataAttributeSchema:
     key: str
     """The attribute's key."""
 
-    type: AttributeType
+    type: str
     """The attribute's type."""
 
     description: str
@@ -22580,7 +22580,7 @@ class VectorSearchRerankingConfigurationType(UnknownEnumMixin, StrEnum):
 class VectorSearchRerankingConfiguration:
     """Contains configurations for reranking the retrieved results."""
 
-    type: VectorSearchRerankingConfigurationType
+    type: str
     """The type of reranker model."""
 
     bedrock_reranking_configuration: (
@@ -23837,7 +23837,7 @@ class CollaboratorConfiguration:
     agent_alias_arn: str | None = None
     """The Amazon Resource Name (ARN) of the inline collaborator agent."""
 
-    relay_conversation_history: RelayConversationHistory | None = None
+    relay_conversation_history: str | None = None
     """A relay conversation history for the inline collaborator agent."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24009,13 +24009,13 @@ class PromptConfiguration:
     prompts](https://docs.aws.amazon.com/bedrock/latest/userguide/advanced-prompts.html).
     """
 
-    prompt_type: PromptType | None = None
+    prompt_type: str | None = None
     """
     The step in the agent sequence that this prompt configuration applies
     to.
     """
 
-    prompt_creation_mode: CreationMode | None = None
+    prompt_creation_mode: str | None = None
     """
     Specifies whether to override the default prompt template for this
     `promptType`. Set this value to `OVERRIDDEN` to use the prompt that you
@@ -24023,7 +24023,7 @@ class PromptConfiguration:
     agent uses a default prompt template.
     """
 
-    prompt_state: PromptState | None = None
+    prompt_state: str | None = None
     """
     Specifies whether to allow the inline agent to carry out the step
     specified in the `promptType`. If you set this value to `DISABLED`, the
@@ -24058,7 +24058,7 @@ class PromptConfiguration:
     models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters.html).
     """
 
-    parser_mode: CreationMode | None = None
+    parser_mode: str | None = None
     """
     Specifies whether to override the default parser Lambda function when
     parsing the raw foundation model output in the part of the agent
@@ -25520,7 +25520,7 @@ class GetAgentMemoryInput:
     agent_alias_id: str | None = None
     """The unique identifier of an alias of an agent."""
 
-    memory_type: MemoryType | None = None
+    memory_type: str | None = None
     """The type of memory."""
 
     memory_id: str | None = None
@@ -26632,7 +26632,7 @@ class RerankQueryContentType(UnknownEnumMixin, StrEnum):
 class RerankQuery:
     """Contains information about a query to submit to the reranker model."""
 
-    type: RerankQueryContentType
+    type: str
     """The type of the query."""
 
     text_query: RerankTextDocument = field(repr=False)
@@ -26847,7 +26847,7 @@ class RerankingConfigurationType(UnknownEnumMixin, StrEnum):
 class RerankingConfiguration:
     """Contains configurations for reranking."""
 
-    type: RerankingConfigurationType
+    type: str
     """The type of reranker that the configurations apply to."""
 
     bedrock_reranking_configuration: BedrockRerankingConfiguration
@@ -26910,7 +26910,7 @@ class RerankDocument:
     define and include the field that corresponds to the type.
     """
 
-    type: RerankDocumentType
+    type: str
     """The type of document to rerank."""
 
     text_document: RerankTextDocument | None = field(repr=False, default=None)
@@ -26978,7 +26978,7 @@ class RerankSourceType(UnknownEnumMixin, StrEnum):
 class RerankSource:
     """Contains information about a source for reranking."""
 
-    type: RerankSourceType
+    type: str
     """The type of the source."""
 
     inline_document_source: RerankDocument = field(repr=False)
@@ -27914,7 +27914,7 @@ class ExternalSource:
     object.
     """
 
-    source_type: ExternalSourceType
+    source_type: str
     """The source type of the external source wrapper object."""
 
     s3_location: S3ObjectDoc | None = None
@@ -28226,7 +28226,7 @@ class QueryTransformationConfiguration:
     transformation type to `QUERY_DECOMPOSITION`.
     """
 
-    type: QueryTransformationType
+    type: str
     """The type of transformation to apply to the prompt."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -28529,7 +28529,7 @@ class RetrieveAndGenerateOperationOutput:
     in the knowledge base, alongside information about the sources.
     """
 
-    guardrail_action: GuadrailAction | None = None
+    guardrail_action: str | None = None
     """Specifies if there is a guardrail intervention in the response."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -28678,7 +28678,7 @@ class CitationEvent:
 class GuardrailEvent:
     """A guardrail event."""
 
-    action: GuadrailAction | None = None
+    action: str | None = None
     """The guardrail action."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -29277,7 +29277,7 @@ class InputImage:
       -- in the `image` field
     """
 
-    format: InputImageFormat
+    format: str
     """
     The format of the input image. Supported formats include png, gif, jpeg,
     and webp.
@@ -29346,7 +29346,7 @@ class KnowledgeBaseQuery:
       -- in the `retrievalQuery` field
     """
 
-    type: KnowledgeBaseQueryType = KnowledgeBaseQueryType("TEXT")
+    type: str = KnowledgeBaseQueryType("TEXT")
     """The type of query being performed."""
 
     text: str = ""
@@ -29540,7 +29540,7 @@ class RetrieveOutput:
     retrieval_results: list[KnowledgeBaseRetrievalResult] = field(repr=False)
     """A list of results from querying the knowledge base."""
 
-    guardrail_action: GuadrailAction | None = None
+    guardrail_action: str | None = None
     """Specifies if there is a guardrail intervention in the response."""
 
     next_token: str | None = None
@@ -29755,7 +29755,7 @@ class CreateSessionOutput:
     session_arn: str
     """The Amazon Resource Name (ARN) of the created session."""
 
-    session_status: SessionStatus
+    session_status: str
     """The current status of the session."""
 
     created_at: datetime
@@ -30026,7 +30026,7 @@ class EndSessionOutput:
     session_arn: str
     """The Amazon Resource Name (ARN) of the session you ended."""
 
-    session_status: SessionStatus
+    session_status: str
     """The current status of the session you ended."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -30175,7 +30175,7 @@ class GetSessionOutput:
     session_arn: str
     """The Amazon Resource Name (ARN) of the session."""
 
-    session_status: SessionStatus
+    session_status: str
     """The current status of the session."""
 
     created_at: datetime
@@ -30999,7 +30999,7 @@ class _ImageSourceDeserializer:
 class ImageBlock:
     """Image content for an invocation step."""
 
-    format: ImageFormat
+    format: str
     """The format of the image."""
 
     source: ImageSource
@@ -32044,7 +32044,7 @@ class SessionSummary:
     session_arn: str
     """The Amazon Resource Name (ARN) of the session."""
 
-    session_status: SessionStatus
+    session_status: str
     """The current status of the session."""
 
     created_at: datetime
@@ -32313,7 +32313,7 @@ class UpdateSessionOutput:
     session_arn: str
     """The Amazon Resource Name (ARN) of the session that was updated."""
 
-    session_status: SessionStatus
+    session_status: str
     """The status of the session you updated."""
 
     created_at: datetime
@@ -33361,7 +33361,7 @@ class KnowledgeBaseVectorSearchConfiguration:
     number_of_results: int = 5
     """The number of source chunks to retrieve."""
 
-    override_search_type: SearchType | None = None
+    override_search_type: str | None = None
     """
     By default, Amazon Bedrock decides a search strategy for you. If you're
     using an Amazon OpenSearch Serverless vector store that contains a
@@ -33498,7 +33498,7 @@ class ManagedSearchConfiguration:
     returns only results that match the filter.
     """
 
-    reranking_model_type: RerankingModelType | None = None
+    reranking_model_type: str | None = None
     """
     The type of reranking model to use when reranking results retrieved from
     the managed search. Use `CUSTOM` to specify a model, `MANAGED` to use
@@ -34636,7 +34636,7 @@ class RetrieveAndGenerateConfiguration:
       -- in the `retrieveAndGenerateConfiguration` field
     """
 
-    type: RetrieveAndGenerateType
+    type: str
     """
     The type of resource that contains your data for retrieving information
     and generating responses.
@@ -34771,7 +34771,7 @@ class Collaborator:
     prompts](https://docs.aws.amazon.com/bedrock/latest/userguide/advanced-prompts.html).
     """
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """
     Defines how the inline supervisor agent handles information across
     multiple collaborator agents to coordinate a final response.
@@ -35805,7 +35805,7 @@ class InvokeInlineAgentInput:
     to enhance the accuracy of the inline agent.
     """
 
-    agent_collaboration: AgentCollaboration | None = None
+    agent_collaboration: str | None = None
     """
     Defines how the inline collaborator agent handles information across
     multiple collaborator agents to coordinate a final response. The inline
@@ -35883,7 +35883,7 @@ class InvokeInlineAgentInput:
     bedrock_model_configurations: InlineBedrockModelConfigurations | None = None
     """Model settings for the request."""
 
-    orchestration_type: OrchestrationType | None = None
+    orchestration_type: str | None = None
     """
     Specifies the type of orchestration strategy for the agent. This is set
     to DEFAULT orchestration type, by default.

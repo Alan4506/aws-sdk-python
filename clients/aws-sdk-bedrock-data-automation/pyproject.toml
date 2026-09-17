@@ -2,7 +2,7 @@
 
 [project]
 name = "aws_sdk_bedrock_data_automation"
-version = "0.11.0"
+version = "0.11.1"
 description = "aws_sdk_bedrock_data_automation client"
 readme = "README.md"
 requires-python = ">=3.12"

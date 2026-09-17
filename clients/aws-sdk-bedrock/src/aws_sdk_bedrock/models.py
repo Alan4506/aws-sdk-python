@@ -774,10 +774,10 @@ class SelectiveGuardingMode(UnknownEnumMixin, StrEnum):
 class SelectiveContentGuarding:
     """Selective content guarding controls for enforced guardrails."""
 
-    system: SelectiveGuardingMode | None = None
+    system: str | None = None
     """Selective guarding mode for system prompts.\""""
 
-    messages: SelectiveGuardingMode | None = None
+    messages: str | None = None
     """Selective guarding mode for user messages."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -942,7 +942,7 @@ class AccountEnforcedGuardrailOutputConfiguration:
     guardrail_id: str | None = None
     """Unique ID for the guardrail."""
 
-    input_tags: InputTags | None = None
+    input_tags: str | None = None
     """Whether to honor or ignore input tags at runtime."""
 
     selective_content_guarding: SelectiveContentGuarding | None = None
@@ -1380,7 +1380,7 @@ class BatchDeleteAdvancedPromptOptimizationJobItem:
     job_identifier: str
     """The identifier of the deleted job."""
 
-    job_status: AdvancedPromptOptimizationJobStatus
+    job_status: str
     """The status of the deleted job."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -2683,7 +2683,7 @@ class GetAdvancedPromptOptimizationJobOutput:
     job_name: str
     """The name of the advanced prompt optimization job."""
 
-    job_status: AdvancedPromptOptimizationJobStatus
+    job_status: str
     """The status of the advanced prompt optimization job."""
 
     input_config: AdvancedPromptOptimizationInputConfig
@@ -2957,10 +2957,10 @@ class ListAdvancedPromptOptimizationJobsInput:
     the next set of results.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """The field to sort the results by."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """The sort order for the results."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -3060,7 +3060,7 @@ class AdvancedPromptOptimizationJobSummary:
     job_name: str
     """The name of the job."""
 
-    job_status: AdvancedPromptOptimizationJobStatus
+    job_status: str
     """The status of the job."""
 
     creation_time: datetime
@@ -3418,7 +3418,7 @@ class AgreementStatus(UnknownEnumMixin, StrEnum):
 class AgreementAvailability:
     """Information about the agreement availability"""
 
-    status: AgreementStatus
+    status: str
     """Status of the agreement."""
 
     error_message: str | None = None
@@ -4768,7 +4768,7 @@ class CreateAutomatedReasoningPolicyTestCaseInput:
     context for the validation.
     """
 
-    expected_aggregated_findings_result: AutomatedReasoningCheckResult | None = None
+    expected_aggregated_findings_result: str | None = None
     """
     The expected result of the Automated Reasoning check. Valid values
     include: , TOO_COMPLEX, and NO_TRANSLATIONS.
@@ -8522,13 +8522,13 @@ class GetAutomatedReasoningPolicyBuildWorkflowOutput:
     build_workflow_id: str
     """The unique identifier of the build workflow."""
 
-    status: AutomatedReasoningPolicyBuildWorkflowStatus
+    status: str
     """
     The current status of the build workflow (e.g., RUNNING, COMPLETED,
     FAILED, CANCELLED).
     """
 
-    build_workflow_type: AutomatedReasoningPolicyBuildWorkflowType
+    build_workflow_type: str
     """
     The type of build workflow being executed (e.g., DOCUMENT_INGESTION,
     POLICY_REPAIR).
@@ -8543,9 +8543,7 @@ class GetAutomatedReasoningPolicyBuildWorkflowOutput:
     document_name: str | None = field(repr=False, default=None)
     """The name of the source document used in the build workflow."""
 
-    document_content_type: AutomatedReasoningPolicyBuildDocumentContentType | None = (
-        None
-    )
+    document_content_type: str | None = None
     """
     The content type of the source document (e.g., text/plain,
     application/pdf).
@@ -8798,7 +8796,7 @@ class GetAutomatedReasoningPolicyBuildWorkflowResultAssetsInput:
     to retrieve.
     """
 
-    asset_type: AutomatedReasoningPolicyBuildResultAssetType | None = None
+    asset_type: str | None = None
     """
     The type of asset to retrieve (e.g., BUILD_LOG, QUALITY_REPORT,
     POLICY_DEFINITION, GENERATED_TEST_CASES, POLICY_SCENARIOS,
@@ -8909,7 +8907,7 @@ class AutomatedReasoningPolicyBuildResultAssetManifestEntry:
     produced by the build workflow.
     """
 
-    asset_type: AutomatedReasoningPolicyBuildResultAssetType
+    asset_type: str
     """
     The type of asset (e.g., BUILD_LOG, QUALITY_REPORT, POLICY_DEFINITION,
     GENERATED_TEST_CASES, POLICY_SCENARIOS, FIDELITY_REPORT, ASSET_MANIFEST,
@@ -10057,7 +10055,7 @@ class AutomatedReasoningPolicyBuildStepMessage:
     step.
     """
 
-    message_type: AutomatedReasoningPolicyBuildMessageType
+    message_type: str
     """
     The type of message (e.g., INFO, WARNING, ERROR) indicating its severity
     and purpose.
@@ -10465,7 +10463,7 @@ class AutomatedReasoningPolicyBuildLogEntry:
     was created.
     """
 
-    status: AutomatedReasoningPolicyAnnotationStatus
+    status: str
     """The status of the build step (e.g., SUCCESS, FAILED, IN_PROGRESS)."""
 
     build_steps: list[AutomatedReasoningPolicyBuildStep]
@@ -10636,7 +10634,7 @@ class AutomatedReasoningPolicySourceDocument:
     document: bytes = field(repr=False)
     """The raw content of the source document as a binary blob."""
 
-    document_content_type: AutomatedReasoningPolicyBuildDocumentContentType
+    document_content_type: str
     """The MIME type of the document (e.g., application/pdf, text/plain)."""
 
     document_name: str = field(repr=False)
@@ -12051,7 +12049,7 @@ class AutomatedReasoningPolicyGeneratedTestCase:
     accuracy.
     """
 
-    expected_aggregated_findings_result: AutomatedReasoningCheckResult
+    expected_aggregated_findings_result: str
     """
     The expected results of the generated test case. Possible values
     include:
@@ -12252,7 +12250,7 @@ class AutomatedReasoningPolicyScenario:
     validation and comparison purposes.
     """
 
-    expected_result: AutomatedReasoningCheckResult
+    expected_result: str
     """
     The expected outcome when this scenario is evaluated against the policy
     (e.g., PASS, FAIL, VIOLATION).
@@ -13703,7 +13701,7 @@ class AutomatedReasoningPolicyTestCase:
     context for the validation.
     """
 
-    expected_aggregated_findings_result: AutomatedReasoningCheckResult | None = None
+    expected_aggregated_findings_result: str | None = None
     """The expected result of the Automated Reasoning check for this test."""
 
     confidence_threshold: float | None = None
@@ -14224,7 +14222,7 @@ class AutomatedReasoningCheckLogicWarning:
     or always false.
     """
 
-    type: AutomatedReasoningCheckLogicWarningType | None = None
+    type: str | None = None
     """
     The category of the detected logical issue, such as statements that are
     always true or always false.
@@ -15610,7 +15608,7 @@ class AutomatedReasoningPolicyTestResult:
     was tested.
     """
 
-    test_run_status: AutomatedReasoningPolicyTestRunStatus
+    test_run_status: str
     """
     The overall status of the test run (e.g., COMPLETED, FAILED,
     IN_PROGRESS).
@@ -15625,13 +15623,13 @@ class AutomatedReasoningPolicyTestResult:
     or unexpected behaviors discovered.
     """
 
-    test_run_result: AutomatedReasoningPolicyTestRunResult | None = None
+    test_run_result: str | None = None
     """
     The overall result of the test run, indicating whether the policy passed
     or failed validation.
     """
 
-    aggregated_test_findings_result: AutomatedReasoningCheckResult | None = None
+    aggregated_test_findings_result: str | None = None
     """
     A summary of all test findings, aggregated to provide an overall
     assessment of policy quality and correctness.
@@ -16310,13 +16308,13 @@ class AutomatedReasoningPolicyBuildWorkflowSummary:
     build_workflow_id: str
     """The unique identifier of the build workflow."""
 
-    status: AutomatedReasoningPolicyBuildWorkflowStatus
+    status: str
     """
     The current status of the build workflow (e.g., RUNNING, COMPLETED,
     FAILED, CANCELLED).
     """
 
-    build_workflow_type: AutomatedReasoningPolicyBuildWorkflowType
+    build_workflow_type: str
     """The type of build workflow (e.g., DOCUMENT_INGESTION, POLICY_REPAIR)."""
 
     created_at: datetime
@@ -17086,7 +17084,7 @@ class AutomatedReasoningPolicyBuildWorkflowDocument:
     extract policy rules and concepts.
     """
 
-    document_content_type: AutomatedReasoningPolicyBuildDocumentContentType
+    document_content_type: str
     """
     The MIME type of the document content (e.g., text/plain,
     application/pdf, text/markdown).
@@ -17839,7 +17837,7 @@ class StartAutomatedReasoningPolicyBuildWorkflowInput:
     which to start the build workflow.
     """
 
-    build_workflow_type: AutomatedReasoningPolicyBuildWorkflowType | None = None
+    build_workflow_type: str | None = None
     """
     The type of build workflow to start (e.g., DOCUMENT_INGESTION for
     processing new documents, POLICY_REPAIR for fixing existing policies).
@@ -18807,7 +18805,7 @@ class UpdateAutomatedReasoningPolicyTestCaseInput:
     concurrency token to prevent conflicting modifications.
     """
 
-    expected_aggregated_findings_result: AutomatedReasoningCheckResult | None = None
+    expected_aggregated_findings_result: str | None = None
     """The updated expected result of the Automated Reasoning check."""
 
     confidence_threshold: float | None = None
@@ -19562,7 +19560,7 @@ class MarketplaceModelEndpoint:
     Failed).
     """
 
-    status: Status | None = None
+    status: str | None = None
     """
     The overall status of the endpoint in Amazon Bedrock Marketplace (e.g.,
     ACTIVE, INACTIVE).
@@ -20289,7 +20287,7 @@ class MarketplaceModelEndpointSummary:
     updated_at: datetime
     """The timestamp when the endpoint was last updated."""
 
-    status: Status | None = None
+    status: str | None = None
     """The overall status of the endpoint in Amazon Bedrock Marketplace."""
 
     status_message: str | None = None
@@ -21254,7 +21252,7 @@ class CustomModelDeploymentUpdateDetails:
     model_arn: str
     """ARN of the new custom model being deployed as part of the update."""
 
-    update_status: CustomModelDeploymentUpdateStatus
+    update_status: str
     """Current status of the deployment update."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -21328,7 +21326,7 @@ class GetCustomModelDeploymentOutput:
     created_at: datetime
     """The date and time when the custom model deployment was created."""
 
-    status: CustomModelDeploymentStatus
+    status: str
     """
     The status of the custom model deployment. Possible values are:
 
@@ -21555,19 +21553,19 @@ class ListCustomModelDeploymentsInput:
     additional results when the response is truncated.
     """
 
-    sort_by: SortModelsBy | None = None
+    sort_by: str | None = None
     """
     The field to sort the results by. The only supported value is
     `CreationTime`.
     """
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """
     The sort order for the results. Valid values are `Ascending` and
     `Descending`. Default is `Descending`.
     """
 
-    status_equals: CustomModelDeploymentStatus | None = None
+    status_equals: str | None = None
     """
     Filters deployments by status. Valid values are `CREATING`, `ACTIVE`,
     and `FAILED`.
@@ -21745,7 +21743,7 @@ class CustomModelDeploymentSummary:
     created_at: datetime
     """The date and time when the custom model deployment was created."""
 
-    status: CustomModelDeploymentStatus
+    status: str
     """
     The status of the custom model deployment. Possible values are
     `CREATING`, `ACTIVE`, and `FAILED`.
@@ -23080,7 +23078,7 @@ class RFTHyperParameters:
     prompt during RFT training.
     """
 
-    reasoning_effort: ReasoningEffort | None = None
+    reasoning_effort: str | None = None
     """
     Level of reasoning effort applied during RFT training. Higher values may
     improve response quality but increase training time.
@@ -24175,7 +24173,7 @@ class GetCustomModelOutput:
     base_model_arn: str | None = None
     """Amazon Resource Name (ARN) of the base model."""
 
-    customization_type: CustomizationType | None = None
+    customization_type: str | None = None
     """The type of model customization."""
 
     model_kms_key_arn: str | None = None
@@ -24206,7 +24204,7 @@ class GetCustomModelOutput:
     customization_config: CustomizationConfig | None = None
     """The customization configuration for the custom model."""
 
-    model_status: ModelStatus | None = None
+    model_status: str | None = None
     """
     The current status of the custom model. Possible values include:
 
@@ -24506,10 +24504,10 @@ class ListCustomModelsInput:
     field in the response in this field to return the next batch of results.
     """
 
-    sort_by: SortModelsBy | None = None
+    sort_by: str | None = None
     """The field to sort by in the returned list of models."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """The sort order of the results."""
 
     is_owned: bool | None = None
@@ -24518,7 +24516,7 @@ class ListCustomModelsInput:
     (`true`) or if they were shared with the current account (`false`).
     """
 
-    model_status: ModelStatus | None = None
+    model_status: str | None = None
     """
     The status of them model to filter results by. Possible values include:
 
@@ -24697,7 +24695,7 @@ class CustomModelSummary:
     base_model_name: str
     """The base model name."""
 
-    customization_type: CustomizationType | None = None
+    customization_type: str | None = None
     """
     Specifies whether to carry out continued pre-training of a model or
     whether to fine-tune it. For more information, see [Custom
@@ -24707,7 +24705,7 @@ class CustomModelSummary:
     owner_account_id: str | None = None
     """The unique identifier of the account that owns the model."""
 
-    model_status: ModelStatus | None = None
+    model_status: str | None = None
     """
     The current status of the custom model. Possible values include:
 
@@ -24991,7 +24989,7 @@ class DataRetentionMode(UnknownEnumMixin, StrEnum):
 class GetAccountDataRetentionOutput:
     """Dataclass for GetAccountDataRetentionOutput structure."""
 
-    mode: DataRetentionMode
+    mode: str
     """The data retention mode configured for the account."""
 
     updated_at: datetime | None = None
@@ -25078,7 +25076,7 @@ GET_ACCOUNT_DATA_RETENTION = APIOperation(
 class PutAccountDataRetentionInput:
     """Dataclass for PutAccountDataRetentionInput structure."""
 
-    mode: DataRetentionMode | None = None
+    mode: str | None = None
     """The data retention mode to set for the account."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -25120,7 +25118,7 @@ class PutAccountDataRetentionInput:
 class PutAccountDataRetentionOutput:
     """Dataclass for PutAccountDataRetentionOutput structure."""
 
-    mode: DataRetentionMode
+    mode: str
     """The data retention mode set for the account."""
 
     updated_at: datetime | None = None
@@ -25840,7 +25838,7 @@ class BatchDeleteEvaluationJobItem:
     job_identifier: str = field(repr=False)
     """The Amazon Resource Name (ARN) of the evaluation job for deletion."""
 
-    job_status: EvaluationJobStatus
+    job_status: str
     """The status of the evaluation job for deletion."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -26862,7 +26860,7 @@ class EvaluationDatasetMetricConfig:
     names, and the task type.
     """
 
-    task_type: EvaluationTaskType
+    task_type: str
     """
     The the type of task you want to evaluate for your evaluation job. This
     applies only to model evaluation jobs and is ignored for knowledge base
@@ -27634,7 +27632,7 @@ class PerformanceConfigLatency(UnknownEnumMixin, StrEnum):
 class PerformanceConfiguration:
     """Contains performance settings for a model."""
 
-    latency: PerformanceConfigLatency | None = None
+    latency: str | None = None
     """
     Specifies whether to use the latency-optimized or standard version of a
     model or inference profile.
@@ -28447,7 +28445,7 @@ class ExternalSource:
     object.
     """
 
-    source_type: ExternalSourceType
+    source_type: str
     """The source type of the external source wrapper object."""
 
     s3_location: S3ObjectDoc | None = None
@@ -28735,7 +28733,7 @@ class QueryTransformationType(UnknownEnumMixin, StrEnum):
 class QueryTransformationConfiguration:
     """The configuration details for transforming the prompt."""
 
-    type: QueryTransformationType
+    type: str
     """The type of transformation to apply to the prompt."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -28904,7 +28902,7 @@ class MetadataAttributeSchema:
     configurations.
     """
 
-    type: AttributeType
+    type: str
     """
     The data type of the metadata attribute. The type determines how the
     attribute can be used in filter expressions and reranking.
@@ -29314,7 +29312,7 @@ class MetadataConfigurationForReranking:
     metadata fields are included or excluded when reordering search results.
     """
 
-    selection_mode: RerankingMetadataSelectionMode
+    selection_mode: str
     """
     The mode for selecting which metadata fields to include in the reranking
     process. Valid values are ALL (use all available metadata fields) or
@@ -29579,7 +29577,7 @@ class VectorSearchRerankingConfiguration:
     vector search results based on more sophisticated criteria.
     """
 
-    type: VectorSearchRerankingConfigurationType
+    type: str
     """
     The type of reranking to apply to vector search results. Currently, the
     only supported value is BEDROCK, which uses Amazon Bedrock foundation
@@ -30073,10 +30071,10 @@ class ListEvaluationJobsInput:
     creation_time_before: datetime | None = None
     """A filter to only list evaluation jobs created before a specified time."""
 
-    status_equals: EvaluationJobStatus | None = None
+    status_equals: str | None = None
     """A filter to only list evaluation jobs that are of a certain status."""
 
-    application_type_equals: ApplicationType | None = None
+    application_type_equals: str | None = None
     """
     A filter to only list evaluation jobs that are either model evaluations
     or knowledge base evaluations.
@@ -30097,13 +30095,13 @@ class ListEvaluationJobsInput:
     list the next set of results.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """
     Specifies a creation time to sort the list of evaluation jobs by when
     they were created.
     """
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """
     Specifies whether to sort the list of evaluation jobs by either
     ascending or descending order.
@@ -30263,7 +30261,7 @@ def _deserialize_evaluator_model_identifiers(
 
 
 def _serialize_evaluation_task_types(
-    serializer: ShapeSerializer, schema: Schema, value: list[EvaluationTaskType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -30273,8 +30271,8 @@ def _serialize_evaluation_task_types(
 
 def _deserialize_evaluation_task_types(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[EvaluationTaskType]:
-    result: list[EvaluationTaskType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -30637,16 +30635,16 @@ class EvaluationSummary:
     job_name: str
     """The name for the evaluation job."""
 
-    status: EvaluationJobStatus
+    status: str
     """The current status of the evaluation job."""
 
     creation_time: datetime
     """The time the evaluation job was created."""
 
-    job_type: EvaluationJobType
+    job_type: str
     """Specifies whether the evaluation job is automated or human-based."""
 
-    evaluation_task_types: list[EvaluationTaskType]
+    evaluation_task_types: list[str]
     """The type of task for model evaluation."""
 
     model_identifiers: list[str] = field(default_factory=list[str])
@@ -30679,7 +30677,7 @@ class EvaluationSummary:
     in a model or Knowledge Base evaluation job.
     """
 
-    application_type: ApplicationType | None = None
+    application_type: str | None = None
     """
     Specifies whether the evaluation job is for evaluating a model or
     evaluating a knowledge base (retrieval and response generation).
@@ -31188,7 +31186,7 @@ class GuardrailModality(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_guardrail_modalities(
-    serializer: ShapeSerializer, schema: Schema, value: list[GuardrailModality]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -31198,8 +31196,8 @@ def _serialize_guardrail_modalities(
 
 def _deserialize_guardrail_modalities(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[GuardrailModality]:
-    result: list[GuardrailModality] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -31269,10 +31267,10 @@ class GuardrailContentFilterConfig:
     filters](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-filters.html).
     """
 
-    type: GuardrailContentFilterType
+    type: str
     """The harmful category that the content filter is applied to."""
 
-    input_strength: GuardrailFilterStrength
+    input_strength: str
     """
     The strength of the content filter to apply to prompts. As you increase
     the filter strength, the likelihood of filtering harmful content
@@ -31280,7 +31278,7 @@ class GuardrailContentFilterConfig:
     application reduces.
     """
 
-    output_strength: GuardrailFilterStrength
+    output_strength: str
     """
     The strength of the content filter to apply to model responses. As you
     increase the filter strength, the likelihood of filtering harmful
@@ -31288,19 +31286,19 @@ class GuardrailContentFilterConfig:
     application reduces.
     """
 
-    input_modalities: list[GuardrailModality] | None = None
+    input_modalities: list[str] | None = None
     """
     The input modalities selected for the guardrail content filter
     configuration.
     """
 
-    output_modalities: list[GuardrailModality] | None = None
+    output_modalities: list[str] | None = None
     """
     The output modalities selected for the guardrail content filter
     configuration.
     """
 
-    input_action: GuardrailContentFilterAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected. Supported
     values include:
@@ -31311,7 +31309,7 @@ class GuardrailContentFilterConfig:
       response.
     """
 
-    output_action: GuardrailContentFilterAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -31523,7 +31521,7 @@ class GuardrailContentFiltersTierConfig:
     existing generative AI workflows.
     """
 
-    tier_name: GuardrailContentFiltersTierName = field(repr=False)
+    tier_name: str = field(repr=False)
     """
     The tier that your guardrail uses for content filters. Valid values
     include:
@@ -31657,13 +31655,13 @@ class GuardrailContextualGroundingFilterConfig:
     filter.
     """
 
-    type: GuardrailContextualGroundingFilterType
+    type: str
     """The filter details for the guardrails contextual grounding filter."""
 
     threshold: float
     """The threshold details for the guardrails contextual grounding filter."""
 
-    action: GuardrailContextualGroundingAction | None = field(repr=False, default=None)
+    action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when content fails the contextual grounding
     evaluation. Supported values include:
@@ -31950,7 +31948,7 @@ class GuardrailPiiEntityType(UnknownEnumMixin, StrEnum):
 class GuardrailPiiEntityConfig:
     """The PII entity to configure for the guardrail."""
 
-    type: GuardrailPiiEntityType
+    type: str
     """
     Configure guardrail type when the PII entity is detected.
 
@@ -32169,10 +32167,10 @@ class GuardrailPiiEntityConfig:
         number, booking ID etc..
     """
 
-    action: GuardrailSensitiveInformationAction
+    action: str
     """Configure guardrail action when the PII entity is detected."""
 
-    input_action: GuardrailSensitiveInformationAction | None = None
+    input_action: str | None = None
     """
     Specifies the action to take when harmful content is detected in the
     input. Supported values include:
@@ -32185,7 +32183,7 @@ class GuardrailPiiEntityConfig:
       response.
     """
 
-    output_action: GuardrailSensitiveInformationAction | None = None
+    output_action: str | None = None
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -32342,7 +32340,7 @@ class GuardrailRegexConfig:
     pattern: str
     """The regular expression pattern to configure for the guardrail."""
 
-    action: GuardrailSensitiveInformationAction
+    action: str
     """
     The guardrail action to configure when matching regular expression is
     detected.
@@ -32354,7 +32352,7 @@ class GuardrailRegexConfig:
     guardrail.
     """
 
-    input_action: GuardrailSensitiveInformationAction | None = None
+    input_action: str | None = None
     """
     Specifies the action to take when harmful content is detected in the
     input. Supported values include:
@@ -32365,7 +32363,7 @@ class GuardrailRegexConfig:
       response.
     """
 
-    output_action: GuardrailSensitiveInformationAction | None = None
+    output_action: str | None = None
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -32610,7 +32608,7 @@ class GuardrailTopicsTierConfig:
     your existing generative AI workflows.
     """
 
-    tier_name: GuardrailTopicsTierName = field(repr=False)
+    tier_name: str = field(repr=False)
     """
     The tier that your guardrail uses for denied topic filters. Valid values
     include:
@@ -32705,7 +32703,7 @@ class GuardrailTopicConfig:
     definition: str = field(repr=False)
     """A definition of the topic to deny."""
 
-    type: GuardrailTopicType
+    type: str
     """Specifies to deny the topic."""
 
     examples: list[str] | None = None
@@ -32714,7 +32712,7 @@ class GuardrailTopicConfig:
     categorized as belonging to the topic.
     """
 
-    input_action: GuardrailTopicAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     input. Supported values include:
@@ -32725,7 +32723,7 @@ class GuardrailTopicConfig:
       response.
     """
 
-    output_action: GuardrailTopicAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -32956,10 +32954,10 @@ class GuardrailManagedWordsType(UnknownEnumMixin, StrEnum):
 class GuardrailManagedWordsConfig:
     """The managed word list to configure for the guardrail."""
 
-    type: GuardrailManagedWordsType
+    type: str
     """The managed word type to configure for the guardrail."""
 
-    input_action: GuardrailWordAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     input. Supported values include:
@@ -32970,7 +32968,7 @@ class GuardrailManagedWordsConfig:
       response.
     """
 
-    output_action: GuardrailWordAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -33116,7 +33114,7 @@ class GuardrailWordConfig:
     text: str
     """Text of the word configured for the guardrail to block."""
 
-    input_action: GuardrailWordAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     input. Supported values include:
@@ -33127,7 +33125,7 @@ class GuardrailWordConfig:
       response.
     """
 
-    output_action: GuardrailWordAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     Specifies the action to take when harmful content is detected in the
     output. Supported values include:
@@ -34168,10 +34166,10 @@ class GuardrailContentFilter:
       body](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_GetGuardrail.html#API_GetGuardrail_ResponseSyntax)
     """
 
-    type: GuardrailContentFilterType
+    type: str
     """The harmful category that the content filter is applied to."""
 
-    input_strength: GuardrailFilterStrength
+    input_strength: str
     """
     The strength of the content filter to apply to prompts. As you increase
     the filter strength, the likelihood of filtering harmful content
@@ -34179,7 +34177,7 @@ class GuardrailContentFilter:
     application reduces.
     """
 
-    output_strength: GuardrailFilterStrength
+    output_strength: str
     """
     The strength of the content filter to apply to model responses. As you
     increase the filter strength, the likelihood of filtering harmful
@@ -34187,13 +34185,13 @@ class GuardrailContentFilter:
     application reduces.
     """
 
-    input_modalities: list[GuardrailModality] | None = None
+    input_modalities: list[str] | None = None
     """The input modalities selected for the guardrail content filter."""
 
-    output_modalities: list[GuardrailModality] | None = None
+    output_modalities: list[str] | None = None
     """The output modalities selected for the guardrail content filter."""
 
-    input_action: GuardrailContentFilterAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -34204,7 +34202,7 @@ class GuardrailContentFilter:
       response.
     """
 
-    output_action: GuardrailContentFilterAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -34387,7 +34385,7 @@ def _deserialize_guardrail_content_filters(
 class GuardrailContentFiltersTier:
     """The tier that your guardrail uses for content filters."""
 
-    tier_name: GuardrailContentFiltersTierName = field(repr=False)
+    tier_name: str = field(repr=False)
     """
     The tier that your guardrail uses for content filters. Valid values
     include:
@@ -34502,13 +34500,13 @@ class GuardrailContentPolicy:
 class GuardrailContextualGroundingFilter:
     """The details for the guardrails contextual grounding filter."""
 
-    type: GuardrailContextualGroundingFilterType
+    type: str
     """The filter type details for the guardrails contextual grounding filter."""
 
     threshold: float
     """The threshold details for the guardrails contextual grounding filter."""
 
-    action: GuardrailContextualGroundingAction | None = field(repr=False, default=None)
+    action: str | None = field(repr=False, default=None)
     """
     The action to take when content fails the contextual grounding
     evaluation. Supported values include:
@@ -34780,13 +34778,13 @@ def _deserialize_guardrail_failure_recommendations(
 class GuardrailPiiEntity:
     """The PII entity configured for the guardrail."""
 
-    type: GuardrailPiiEntityType
+    type: str
     """The type of PII entity. For example, Social Security Number."""
 
-    action: GuardrailSensitiveInformationAction
+    action: str
     """The configured guardrail action when PII entity is detected."""
 
-    input_action: GuardrailSensitiveInformationAction | None = None
+    input_action: str | None = None
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -34799,7 +34797,7 @@ class GuardrailPiiEntity:
       response.
     """
 
-    output_action: GuardrailSensitiveInformationAction | None = None
+    output_action: str | None = None
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -34945,13 +34943,13 @@ class GuardrailRegex:
     pattern: str
     """The pattern of the regular expression configured for the guardrail."""
 
-    action: GuardrailSensitiveInformationAction
+    action: str
     """The action taken when a match to the regular expression is detected."""
 
     description: str | None = None
     """The description of the regular expression for the guardrail."""
 
-    input_action: GuardrailSensitiveInformationAction | None = None
+    input_action: str | None = None
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -34962,7 +34960,7 @@ class GuardrailRegex:
       response.
     """
 
-    output_action: GuardrailSensitiveInformationAction | None = None
+    output_action: str | None = None
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -35214,7 +35212,7 @@ def _deserialize_guardrail_status_reasons(
 class GuardrailTopicsTier:
     """The tier that your guardrail uses for denied topic filters."""
 
-    tier_name: GuardrailTopicsTierName = field(repr=False)
+    tier_name: str = field(repr=False)
     """
     The tier that your guardrail uses for denied topic filters. Valid values
     include:
@@ -35285,10 +35283,10 @@ class GuardrailTopic:
     categorized as belonging to the topic.
     """
 
-    type: GuardrailTopicType | None = None
+    type: str | None = None
     """Specifies to deny the topic."""
 
-    input_action: GuardrailTopicAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -35299,7 +35297,7 @@ class GuardrailTopic:
       response.
     """
 
-    output_action: GuardrailTopicAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -35510,13 +35508,13 @@ class GuardrailManagedWords:
     list of words that are pre-defined and managed by guardrails only.)
     """
 
-    type: GuardrailManagedWordsType
+    type: str
     """
     ManagedWords$type The managed word type that was configured for the
     guardrail. (For now, we only offer profanity word list)
     """
 
-    input_action: GuardrailWordAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -35527,7 +35525,7 @@ class GuardrailManagedWords:
       response.
     """
 
-    output_action: GuardrailWordAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -35663,7 +35661,7 @@ class GuardrailWord:
     text: str
     """Text of the word configured for the guardrail to block."""
 
-    input_action: GuardrailWordAction | None = field(repr=False, default=None)
+    input_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the input.
     Supported values include:
@@ -35674,7 +35672,7 @@ class GuardrailWord:
       response.
     """
 
-    output_action: GuardrailWordAction | None = field(repr=False, default=None)
+    output_action: str | None = field(repr=False, default=None)
     """
     The action to take when harmful content is detected in the output.
     Supported values include:
@@ -35865,7 +35863,7 @@ class GetGuardrailOutput:
     version: str
     """The version of the guardrail."""
 
-    status: GuardrailStatus
+    status: str
     """The status of the guardrail."""
 
     created_at: datetime
@@ -36276,7 +36274,7 @@ class GuardrailSummary:
     arn: str
     """The ARN of the guardrail."""
 
-    status: GuardrailStatus
+    status: str
     """The status of the guardrail."""
 
     name: str = field(repr=False)
@@ -37095,7 +37093,7 @@ class CreateInferenceProfileOutput:
     inference_profile_arn: str
     """The ARN of the inference profile that you created."""
 
-    status: InferenceProfileStatus | None = None
+    status: str | None = None
     """
     The status of the inference profile. `ACTIVE` means that the inference
     profile is ready to be used.
@@ -37435,13 +37433,13 @@ class GetInferenceProfileOutput:
     inference_profile_id: str
     """The unique identifier of the inference profile."""
 
-    status: InferenceProfileStatus
+    status: str
     """
     The status of the inference profile. `ACTIVE` means that the inference
     profile is ready to be used.
     """
 
-    type: InferenceProfileType
+    type: str
     """
     The type of the inference profile. The following types are possible:
 
@@ -37650,7 +37648,7 @@ class ListInferenceProfilesInput:
     field in the response in this field to return the next batch of results.
     """
 
-    type_equals: InferenceProfileType | None = None
+    type_equals: str | None = None
     """
     Filters for inference profiles that match the type you specify.
 
@@ -37738,13 +37736,13 @@ class InferenceProfileSummary:
     inference_profile_id: str
     """The unique identifier of the inference profile."""
 
-    status: InferenceProfileStatus
+    status: str
     """
     The status of the inference profile. `ACTIVE` means that the inference
     profile is ready to be used.
     """
 
-    type: InferenceProfileType
+    type: str
     """
     The type of the inference profile. The following types are possible:
 
@@ -38784,7 +38782,7 @@ class GetModelCopyJobOutput:
     job_arn: str
     """The Amazon Resource Name (ARN) of the model copy job."""
 
-    status: ModelCopyJobStatus
+    status: str
     """The status of the model copy job."""
 
     creation_time: datetime
@@ -39010,7 +39008,7 @@ class ListModelCopyJobsInput:
     creation_time_before: datetime | None = None
     """Filters for model copy jobs created before the specified time."""
 
-    status_equals: ModelCopyJobStatus | None = None
+    status_equals: str | None = None
     """
     Filters for model copy jobs whose status matches the value that you
     specify.
@@ -39049,10 +39047,10 @@ class ListModelCopyJobsInput:
     field in the response in this field to return the next batch of results.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """The field to sort by in the returned list of model copy jobs."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """Specifies whether to sort the results in ascending or descending order."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -39209,7 +39207,7 @@ class ModelCopyJobSummary:
     job_arn: str
     """The Amazon Resoource Name (ARN) of the model copy job."""
 
-    status: ModelCopyJobStatus
+    status: str
     """The status of the model copy job."""
 
     creation_time: datetime
@@ -40245,7 +40243,7 @@ class GetModelImportJobOutput:
     model_data_source: ModelDataSource | None = None
     """The data source for the imported model."""
 
-    status: ModelImportJobStatus | None = None
+    status: str | None = None
     """
     The status of the job. A successful job transitions from in-progress to
     completed when the imported model is ready to use. If the job failed,
@@ -40496,10 +40494,10 @@ class ListImportedModelsInput:
     field in the response in this field to return the next batch of results.
     """
 
-    sort_by: SortModelsBy | None = None
+    sort_by: str | None = None
     """The field to sort by in the returned list of imported models."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """Specifies whetehr to sort the results in ascending or descending order."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -40824,7 +40822,7 @@ class ListModelImportJobsInput:
     creation_time_before: datetime | None = None
     """Return import jobs that were created before the specified time."""
 
-    status_equals: ModelImportJobStatus | None = None
+    status_equals: str | None = None
     """Return imported jobs with the specified status."""
 
     name_contains: str | None = None
@@ -40845,10 +40843,10 @@ class ListModelImportJobsInput:
     field in the response in this field to return the next batch of results.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """The field to sort by in the returned list of imported jobs."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """Specifies whether to sort the results in ascending or descending order."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -40981,7 +40979,7 @@ class ModelImportJobSummary:
     job_name: str
     """The name of the import job."""
 
-    status: ModelImportJobStatus
+    status: str
     """The status of the imported job."""
 
     creation_time: datetime
@@ -41239,7 +41237,7 @@ class ModelInvocationJobS3InputDataConfig:
     s3_uri: str
     """The S3 location of the input data."""
 
-    s3_input_format: S3InputFormat | None = None
+    s3_input_format: str | None = None
     """The format of the input data."""
 
     s3_bucket_owner: str | None = None
@@ -41650,7 +41648,7 @@ class CreateModelInvocationJobInput:
     resources](https://docs.aws.amazon.com/bedrock/latest/userguide/tagging.html).
     """
 
-    model_invocation_type: ModelInvocationType = ModelInvocationType("InvokeModel")
+    model_invocation_type: str = ModelInvocationType("InvokeModel")
     """The invocation endpoint for ModelInvocationJob"""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -41975,7 +41973,7 @@ class GetModelInvocationJobOutput:
     idempotency](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
     """
 
-    status: ModelInvocationJobStatus | None = None
+    status: str | None = None
     """
     The status of the batch inference job.
 
@@ -42051,7 +42049,7 @@ class GetModelInvocationJobOutput:
     job_expiration_time: datetime | None = None
     """The time at which the batch inference job times or timed out."""
 
-    model_invocation_type: ModelInvocationType | None = None
+    model_invocation_type: str | None = None
     """The invocation endpoint for ModelInvocationJob"""
 
     total_record_count: int | None = None
@@ -42389,7 +42387,7 @@ class ListModelInvocationJobsInput:
     before the time you specify.
     """
 
-    status_equals: ModelInvocationJobStatus | None = None
+    status_equals: str | None = None
     """
     Specify a status to filter for batch inference jobs whose statuses match
     the string you specify.
@@ -42461,10 +42459,10 @@ class ListModelInvocationJobsInput:
     of results, send the `nextToken` value in another request.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """An attribute by which to sort the results."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """Specifies whether to sort the results by ascending or descending order."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -42631,7 +42629,7 @@ class ModelInvocationJobSummary:
     idempotency](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
     """
 
-    status: ModelInvocationJobStatus | None = None
+    status: str | None = None
     """
     The status of the batch inference job.
 
@@ -42710,7 +42708,7 @@ class ModelInvocationJobSummary:
     job_expiration_time: datetime | None = None
     """The time at which the batch inference job times or timed out."""
 
-    model_invocation_type: ModelInvocationType | None = None
+    model_invocation_type: str | None = None
     """The invocation endpoint for ModelInvocationJob"""
 
     total_record_count: int | None = None
@@ -43265,7 +43263,7 @@ class ModelCustomization(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_model_customization_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[ModelCustomization]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -43275,8 +43273,8 @@ def _serialize_model_customization_list(
 
 def _deserialize_model_customization_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ModelCustomization]:
-    result: list[ModelCustomization] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -43296,7 +43294,7 @@ class InferenceType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_inference_type_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[InferenceType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -43306,8 +43304,8 @@ def _serialize_inference_type_list(
 
 def _deserialize_inference_type_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[InferenceType]:
-    result: list[InferenceType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -43328,7 +43326,7 @@ class ModelModality(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_model_modality_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[ModelModality]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -43338,8 +43336,8 @@ def _serialize_model_modality_list(
 
 def _deserialize_model_modality_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ModelModality]:
-    result: list[ModelModality] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -43362,7 +43360,7 @@ class FoundationModelLifecycleStatus(UnknownEnumMixin, StrEnum):
 class FoundationModelLifecycle:
     """Details about whether a model version is available or deprecated."""
 
-    status: FoundationModelLifecycleStatus
+    status: str
     """
     Specifies whether a model version is available (`ACTIVE`) or deprecated
     (`LEGACY`.
@@ -43482,19 +43480,19 @@ class FoundationModelDetails:
     provider_name: str | None = None
     """The model's provider name."""
 
-    input_modalities: list[ModelModality] | None = None
+    input_modalities: list[str] | None = None
     """The input modalities that the model supports."""
 
-    output_modalities: list[ModelModality] | None = None
+    output_modalities: list[str] | None = None
     """The output modalities that the model supports."""
 
     response_streaming_supported: bool | None = None
     """Indicates whether the model supports streaming."""
 
-    customizations_supported: list[ModelCustomization] | None = None
+    customizations_supported: list[str] | None = None
     """The customization that the model supports."""
 
-    inference_types_supported: list[InferenceType] | None = None
+    inference_types_supported: list[str] | None = None
     """The inference types that the model supports."""
 
     model_lifecycle: FoundationModelLifecycle | None = None
@@ -43726,7 +43724,7 @@ class ListFoundationModelsInput:
     by_provider: str | None = None
     """Return models belonging to the model provider that you specify."""
 
-    by_customization_type: ModelCustomization | None = None
+    by_customization_type: str | None = None
     """
     Return models that support the customization type that you specify. For
     more information, see [Custom
@@ -43735,10 +43733,10 @@ class ListFoundationModelsInput:
     Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-service.html).
     """
 
-    by_output_modality: ModelModality | None = None
+    by_output_modality: str | None = None
     """Return models that support the output modality that you specify."""
 
-    by_inference_type: InferenceType | None = None
+    by_inference_type: str | None = None
     """
     Return models that support the inference type that you specify. For more
     information, see [Provisioned
@@ -43842,19 +43840,19 @@ class FoundationModelSummary:
     provider_name: str | None = None
     """The model's provider name."""
 
-    input_modalities: list[ModelModality] | None = None
+    input_modalities: list[str] | None = None
     """The input modalities that the model supports."""
 
-    output_modalities: list[ModelModality] | None = None
+    output_modalities: list[str] | None = None
     """The output modalities that the model supports."""
 
     response_streaming_supported: bool | None = None
     """Indicates whether the model supports streaming."""
 
-    customizations_supported: list[ModelCustomization] | None = None
+    customizations_supported: list[str] | None = None
     """Whether the model supports fine-tuning or continual pre-training."""
 
-    inference_types_supported: list[InferenceType] | None = None
+    inference_types_supported: list[str] | None = None
     """The inference types that the model supports."""
 
     model_lifecycle: FoundationModelLifecycle | None = None
@@ -44616,10 +44614,10 @@ class GetPromptRouterOutput:
     fallback_model: PromptRouterTargetModel
     """The router's fallback model."""
 
-    status: PromptRouterStatus
+    status: str
     """The router's status."""
 
-    type: PromptRouterType
+    type: str
     """The router's type."""
 
     description: str | None = field(repr=False, default=None)
@@ -44804,7 +44802,7 @@ class ListPromptRoutersInput:
     next page of results.
     """
 
-    type: PromptRouterType = PromptRouterType("default")
+    type: str = PromptRouterType("default")
     """The type of the prompt routers, such as whether it's default or custom."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -44880,10 +44878,10 @@ class PromptRouterSummary:
     fallback_model: PromptRouterTargetModel
     """The router's fallback model."""
 
-    status: PromptRouterStatus
+    status: str
     """The router's status."""
 
-    type: PromptRouterType
+    type: str
     """The summary's type."""
 
     description: str | None = field(repr=False, default=None)
@@ -45186,7 +45184,7 @@ class CreateProvisionedModelThroughputInput:
     Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-service.html).
     """
 
-    commitment_duration: CommitmentDuration | None = None
+    commitment_duration: str | None = None
     """
     The commitment duration requested for the Provisioned Throughput.
     Billing occurs hourly and is discounted for longer commitment terms. To
@@ -45606,7 +45604,7 @@ class GetProvisionedModelThroughputOutput:
     model for which the Provisioned Throughput was created was customized.
     """
 
-    status: ProvisionedModelStatus
+    status: str
     """The status of the Provisioned Throughput."""
 
     creation_time: datetime
@@ -45624,7 +45622,7 @@ class GetProvisionedModelThroughputOutput:
     updating, or deletion of the Provisioned Throughput.
     """
 
-    commitment_duration: CommitmentDuration | None = None
+    commitment_duration: str | None = None
     """Commitment duration of the Provisioned Throughput."""
 
     commitment_expiration_time: datetime | None = None
@@ -45898,7 +45896,7 @@ class ListProvisionedModelThroughputsInput:
     specified time.
     """
 
-    status_equals: ProvisionedModelStatus | None = None
+    status_equals: str | None = None
     """
     A filter that returns Provisioned Throughputs if their statuses matches
     the value that you specify.
@@ -45931,10 +45929,10 @@ class ListProvisionedModelThroughputsInput:
     next batch of results, specify the `nextToken` value in this field.
     """
 
-    sort_by: SortByProvisionedModels | None = None
+    sort_by: str | None = None
     """The field by which to sort the returned list of Provisioned Throughputs."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """The sort order of the results."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -46139,7 +46137,7 @@ class ProvisionedModelSummary:
     Provisioned Throughput.
     """
 
-    status: ProvisionedModelStatus
+    status: str
     """The status of the Provisioned Throughput."""
 
     creation_time: datetime
@@ -46148,7 +46146,7 @@ class ProvisionedModelSummary:
     last_modified_time: datetime
     """The time that the Provisioned Throughput was last modified."""
 
-    commitment_duration: CommitmentDuration | None = None
+    commitment_duration: str | None = None
     """The duration for which the Provisioned Throughput was committed."""
 
     commitment_expiration_time: datetime | None = None
@@ -47269,13 +47267,13 @@ class GetFoundationModelAvailabilityOutput:
     agreement_availability: AgreementAvailability
     """Agreement availability."""
 
-    authorization_status: AuthorizationStatus
+    authorization_status: str
     """Authorization status."""
 
-    entitlement_availability: EntitlementAvailability
+    entitlement_availability: str
     """Entitlement availability."""
 
-    region_availability: RegionAvailability
+    region_availability: str
     """Region availability."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -47426,7 +47424,7 @@ class ListFoundationModelAgreementOffersInput:
     model_id: str | None = None
     """Model Id of the foundation model."""
 
-    offer_type: OfferType | None = None
+    offer_type: str | None = None
     """Type of offer associated with the model."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -48412,7 +48410,7 @@ class CreateModelCustomizationJobInput:
     base_model_identifier: str | None = None
     """Name of the base model."""
 
-    customization_type: CustomizationType | None = None
+    customization_type: str | None = None
     """The customization type."""
 
     custom_model_kms_key_id: str | None = None
@@ -48825,7 +48823,7 @@ class DataProcessingDetails:
     sub-task of the job.
     """
 
-    status: JobStatusDetails | None = None
+    status: str | None = None
     """The status of the data processing sub-task of the job."""
 
     creation_time: datetime | None = None
@@ -48896,7 +48894,7 @@ class TrainingDetails:
     the job.
     """
 
-    status: JobStatusDetails | None = None
+    status: str | None = None
     """The status of the training sub-task of the job."""
 
     creation_time: datetime | None = None
@@ -48964,7 +48962,7 @@ class ValidationDetails:
     of the job.
     """
 
-    status: JobStatusDetails | None = None
+    status: str | None = None
     """The status of the validation sub-task of the job."""
 
     creation_time: datetime | None = None
@@ -49139,7 +49137,7 @@ class GetModelCustomizationJobOutput:
     client_request_token: str | None = None
     """The token that you specified in the `CreateCustomizationJob` request."""
 
-    status: ModelCustomizationJobStatus | None = None
+    status: str | None = None
     """
     The status of the job. A successful job transitions from in-progress to
     completed when the output model is ready to use. If the job failed, the
@@ -49168,7 +49166,7 @@ class GetModelCustomizationJobOutput:
     hyperparameters](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models-hp.html).
     """
 
-    customization_type: CustomizationType | None = None
+    customization_type: str | None = None
     """The type of model customization."""
 
     output_model_kms_key_arn: str | None = None
@@ -49543,7 +49541,7 @@ class ListModelCustomizationJobsInput:
     creation_time_before: datetime | None = None
     """Return customization jobs created before the specified time."""
 
-    status_equals: FineTuningJobStatus | None = None
+    status_equals: str | None = None
     """Return customization jobs with the specified status."""
 
     name_contains: str | None = None
@@ -49567,10 +49565,10 @@ class ListModelCustomizationJobsInput:
     field in the response in this field to return the next batch of results.
     """
 
-    sort_by: SortJobsBy | None = None
+    sort_by: str | None = None
     """The field to sort by in the returned list of jobs."""
 
-    sort_order: SortOrder | None = None
+    sort_order: str | None = None
     """The sort order of the results."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -49721,7 +49719,7 @@ class ModelCustomizationJobSummary:
     job_name: str
     """Name of the customization job."""
 
-    status: ModelCustomizationJobStatus
+    status: str
     """Status of the customization job."""
 
     creation_time: datetime
@@ -49742,7 +49740,7 @@ class ModelCustomizationJobSummary:
     custom_model_name: str | None = None
     """Name of the custom model."""
 
-    customization_type: CustomizationType | None = None
+    customization_type: str | None = None
     """
     Specifies whether to carry out continued pre-training of a model or
     whether to fine-tune it. For more information, see [Custom
@@ -50636,7 +50634,7 @@ class KnowledgeBaseVectorSearchConfiguration:
     number_of_results: int | None = None
     """The number of text chunks to retrieve; the number of results to return."""
 
-    override_search_type: SearchType | None = None
+    override_search_type: str | None = None
     """
     By default, Amazon Bedrock decides a search strategy for you. If you're
     using an Amazon OpenSearch Serverless vector store that contains a
@@ -51012,7 +51010,7 @@ class RetrieveAndGenerateConfiguration:
     response generation.
     """
 
-    type: RetrieveAndGenerateType
+    type: str
     """
     The type of resource that contains your data for retrieving information
     and generating responses.
@@ -51521,7 +51519,7 @@ class CreateEvaluationJobInput:
     job_tags: list[Tag] | None = None
     """Tags to attach to the model evaluation job."""
 
-    application_type: ApplicationType | None = None
+    application_type: str | None = None
     """
     Specifies whether the evaluation job is for evaluating a model or
     evaluating a knowledge base (retrieval and response generation).
@@ -51698,7 +51696,7 @@ class GetEvaluationJobOutput:
     job_name: str
     """The name for the evaluation job."""
 
-    status: EvaluationJobStatus
+    status: str
     """The current status of the evaluation job."""
 
     job_arn: str
@@ -51710,7 +51708,7 @@ class GetEvaluationJobOutput:
     evaluation job.
     """
 
-    job_type: EvaluationJobType
+    job_type: str
     """Specifies whether the evaluation job is automated or human-based."""
 
     evaluation_config: EvaluationConfig
@@ -51743,7 +51741,7 @@ class GetEvaluationJobOutput:
     specified when the evaluation job was created.
     """
 
-    application_type: ApplicationType | None = None
+    application_type: str | None = None
     """
     Specifies whether the evaluation job is for evaluating a model or
     evaluating a knowledge base (retrieval and response generation).

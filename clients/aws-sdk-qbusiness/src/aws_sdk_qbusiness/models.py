@@ -460,7 +460,7 @@ class MembershipType(UnknownEnumMixin, StrEnum):
 class PrincipalGroup:
     """Provides information about a group associated with the principal."""
 
-    access: ReadAccessType
+    access: str
     """
     Provides information about whether to allow or deny access to the
     principal.
@@ -469,7 +469,7 @@ class PrincipalGroup:
     name: str | None = None
     """The name of the group."""
 
-    membership_type: MembershipType | None = None
+    membership_type: str | None = None
     """The type of group."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -525,7 +525,7 @@ class PrincipalGroup:
 class PrincipalUser:
     """Provides information about a user associated with a principal."""
 
-    access: ReadAccessType
+    access: str
     """
     Provides information about whether to allow or deny access to the
     principal.
@@ -534,7 +534,7 @@ class PrincipalUser:
     id: str | None = None
     """The identifier of the user."""
 
-    membership_type: MembershipType | None = None
+    membership_type: str | None = None
     """The type of group."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -720,7 +720,7 @@ class AccessControl:
     access: `ALLOW` or `DENY`.
     """
 
-    member_relation: MemberRelation | None = None
+    member_relation: str | None = None
     """Describes the member relation within a principal list."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -796,7 +796,7 @@ class AccessConfiguration:
     access_controls: list[AccessControl]
     """A list of `AccessControlList` objects."""
 
-    member_relation: MemberRelation | None = None
+    member_relation: str | None = None
     """Describes the member relation within the `AccessControlList` object."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -1476,7 +1476,7 @@ class ActionReviewPayloadField:
     help users understand the field.
     """
 
-    type: ActionPayloadFieldType | None = None
+    type: str | None = None
     """The type of field."""
 
     value: _Document | None = None
@@ -1696,7 +1696,7 @@ class ActionReview:
     plugin_id: str | None = None
     """The identifier of the plugin associated with the action review."""
 
-    plugin_type: PluginType | None = None
+    plugin_type: str | None = None
     """The type of plugin."""
 
     payload: dict[str, ActionReviewPayloadField] | None = None
@@ -1803,7 +1803,7 @@ class ActionReviewEvent:
     plugin_id: str | None = None
     """The identifier of the plugin associated with the action review event."""
 
-    plugin_type: PluginType | None = None
+    plugin_type: str | None = None
     """The type of plugin."""
 
     payload: dict[str, ActionReviewPayloadField] | None = None
@@ -2276,13 +2276,13 @@ class Application:
     updated.
     """
 
-    status: ApplicationStatus | None = None
+    status: str | None = None
     """
     The status of the Amazon Q Business application. The application is
     ready to use when the status is `ACTIVE`.
     """
 
-    identity_type: IdentityType | None = None
+    identity_type: str | None = None
     """The authentication type being used by a Amazon Q Business application."""
 
     quick_sight_configuration: QuickSightConfiguration | None = None
@@ -2456,7 +2456,7 @@ class AttachmentsControlMode(UnknownEnumMixin, StrEnum):
 class AttachmentsConfiguration:
     """Configuration information for the file upload during chat feature."""
 
-    attachments_control_mode: AttachmentsControlMode
+    attachments_control_mode: str
     """
     Status information about whether file upload functionality is activated
     or deactivated for your end user.
@@ -2582,7 +2582,7 @@ class PersonalizationConfiguration:
     responses](https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/personalizing-chat-responses.html).
     """
 
-    personalization_control_mode: PersonalizationControlMode
+    personalization_control_mode: str
     """
     An option to allow Amazon Q Business to customize chat responses using
     user specific metadata---specifically, location and job information---in
@@ -2639,7 +2639,7 @@ class QAppsControlMode(UnknownEnumMixin, StrEnum):
 class QAppsConfiguration:
     """Configuration information about Amazon Q Apps."""
 
-    q_apps_control_mode: QAppsControlMode
+    q_apps_control_mode: str
     """
     Status information about whether end users can create and use Amazon Q
     Apps in the web experience.
@@ -2773,7 +2773,7 @@ class CreateApplicationInput:
     and use it as the application's role.
     """
 
-    identity_type: IdentityType | None = None
+    identity_type: str | None = None
     """The authentication type being used by a Amazon Q Business application."""
 
     iam_identity_provider_arn: str | None = None
@@ -3382,7 +3382,7 @@ class ValidationException(ServiceError):
 
     fault: Literal["client", "server"] | None = "client"
 
-    reason: ValidationExceptionReason
+    reason: str
     """The reason for the `ValidationException`."""
 
     fields: list[ValidationExceptionField] | None = None
@@ -3678,7 +3678,7 @@ class DataAccessorAuthenticationDetail:
     through the data accessor.
     """
 
-    authentication_type: DataAccessorAuthenticationType
+    authentication_type: str
     """
     The type of authentication to use for the data accessor. This determines
     how the ISV authenticates when accessing data. You can use one of two
@@ -4513,7 +4513,7 @@ class AppliedAttachmentsConfiguration:
     your application.
     """
 
-    attachments_control_mode: AttachmentsControlMode | None = None
+    attachments_control_mode: str | None = None
     """
     Information about whether file upload during chat functionality is
     activated for your application.
@@ -4576,13 +4576,13 @@ class AutoSubscriptionConfiguration:
     application using IAM identity federation for user management.
     """
 
-    auto_subscribe: AutoSubscriptionStatus
+    auto_subscribe: str
     """
     Describes whether automatic subscriptions are enabled for an Amazon Q
     Business application using IAM identity federation for user management.
     """
 
-    default_subscription_type: SubscriptionType | None = None
+    default_subscription_type: str | None = None
     """
     Describes the default subscription type assigned to an Amazon Q Business
     application using IAM identity federation for user management. If the
@@ -4659,7 +4659,7 @@ class ErrorDetail:
     error_message: str | None = None
     """The message explaining the Amazon Q Business request error."""
 
-    error_code: ErrorCode | None = None
+    error_code: str | None = None
     """The code associated with the Amazon Q Business request error."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4716,7 +4716,7 @@ class GetApplicationOutput:
     application_arn: str | None = None
     """The Amazon Resource Name (ARN) of the Amazon Q Business application."""
 
-    identity_type: IdentityType | None = None
+    identity_type: str | None = None
     """The authentication type being used by a Amazon Q Business application."""
 
     iam_identity_provider_arn: str | None = None
@@ -4737,7 +4737,7 @@ class GetApplicationOutput:
     your CloudWatch logs and metrics.
     """
 
-    status: ApplicationStatus | None = None
+    status: str | None = None
     """The status of the Amazon Q Business application."""
 
     description: str | None = None
@@ -5113,7 +5113,7 @@ class CreateIndexInput:
     description: str | None = None
     """A description for the Amazon Q Business index."""
 
-    type: IndexType | None = None
+    type: str | None = None
     """
     The index type that's suitable for your needs. For more information on
     what's included in each type of index, see [Amazon Q Business
@@ -5369,7 +5369,7 @@ class DocumentAttributeCondition:
     attribute key used for the condition.
     """
 
-    operator: DocumentEnrichmentConditionOperator
+    operator: str
     """
     The identifier of the document attribute used for the condition.
 
@@ -5488,7 +5488,7 @@ class DocumentAttributeTarget:
     document attribute.
     """
 
-    attribute_value_operator: AttributeValueOperator | None = None
+    attribute_value_operator: str | None = None
     """
     `TRUE` to delete the existing target value for your specified target
     attribute key. You cannot create a target value and set this to `TRUE`.
@@ -5611,7 +5611,7 @@ class InlineDocumentEnrichmentConfiguration:
     .
     """
 
-    document_content_operator: DocumentContentOperator | None = None
+    document_content_operator: str | None = None
     """
     `TRUE` to delete content if the condition used for the target attribute
     is met.
@@ -5954,7 +5954,7 @@ class AudioExtractionStatus(UnknownEnumMixin, StrEnum):
 class AudioExtractionConfiguration:
     """Configuration settings for audio content extraction and processing."""
 
-    audio_extraction_status: AudioExtractionStatus
+    audio_extraction_status: str
     """
     The status of audio extraction (ENABLED or DISABLED) for processing
     audio content from files.
@@ -6013,7 +6013,7 @@ class ImageExtractionConfiguration:
     visuals](https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/extracting-meaning-from-images.html).
     """
 
-    image_extraction_status: ImageExtractionStatus
+    image_extraction_status: str
     """
     Specify whether to extract semantic meaning from images and visuals from
     documents.
@@ -6067,7 +6067,7 @@ class VideoExtractionStatus(UnknownEnumMixin, StrEnum):
 class VideoExtractionConfiguration:
     """Configuration settings for video content extraction and processing."""
 
-    video_extraction_status: VideoExtractionStatus
+    video_extraction_status: str
     """
     The status of video extraction (ENABLED or DISABLED) for processing
     video content from files.
@@ -6923,7 +6923,7 @@ class GetDataSourceOutput:
     description: str | None = None
     """The description for the data source connector."""
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """
     The current status of the data source connector. When the `Status` field
     value is `FAILED`, the `ErrorMessage` field contains a description of
@@ -7303,7 +7303,7 @@ class DataSource:
     updated.
     """
 
-    status: DataSourceStatus | None = None
+    status: str | None = None
     """The status of the Amazon Q Business data source."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7953,10 +7953,10 @@ class DocumentAttributeConfiguration:
     name: str | None = None
     """The name of the document attribute."""
 
-    type: AttributeType | None = None
+    type: str | None = None
     """The type of document attribute."""
 
-    search: Status | None = None
+    search: str | None = None
     """
     Information about whether the document attribute can be used by an end
     user to search for information on their web experience.
@@ -8167,14 +8167,14 @@ class GetIndexOutput:
     index_arn: str | None = None
     """The Amazon Resource Name (ARN) of the Amazon Q Business index."""
 
-    status: IndexStatus | None = None
+    status: str | None = None
     """
     The current status of the index. When the value is `ACTIVE`, the index
     is ready for use. If the `Status` field value is `FAILED`, the
     `ErrorMessage` field contains a message that explains why.
     """
 
-    type: IndexType | None = None
+    type: str | None = None
     """The type of index attached to your Amazon Q Business application."""
 
     description: str | None = None
@@ -8483,7 +8483,7 @@ class Index:
     updated_at: datetime | None = None
     """The Unix timestamp when the index was last updated."""
 
-    status: IndexStatus | None = None
+    status: str | None = None
     """
     The current status of the index. When the status is `ACTIVE`, the index
     is ready.
@@ -9474,7 +9474,7 @@ class CustomPluginConfiguration:
     description: str
     """A description for your custom plugin configuration."""
 
-    api_schema_type: APISchemaType
+    api_schema_type: str
     """The type of OpenAPI schema to use."""
 
     api_schema: APISchema | None = None
@@ -9549,7 +9549,7 @@ class CreatePluginInput:
     display_name: str | None = None
     """A the name for your plugin."""
 
-    type: PluginType | None = None
+    type: str | None = None
     """The type of plugin you want to create."""
 
     auth_configuration: PluginAuthConfiguration | None = None
@@ -9702,7 +9702,7 @@ class CreatePluginOutput:
     plugin_arn: str | None = None
     """The Amazon Resource Name (ARN) of a plugin."""
 
-    build_status: PluginBuildStatus | None = None
+    build_status: str | None = None
     """The current status of a plugin. A plugin is modified asynchronously."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9978,7 +9978,7 @@ class GetPluginOutput:
     display_name: str | None = None
     """The name of the plugin."""
 
-    type: PluginType | None = None
+    type: str | None = None
     """The type of the plugin."""
 
     server_url: str | None = None
@@ -9993,7 +9993,7 @@ class GetPluginOutput:
     custom_plugin_configuration: CustomPluginConfiguration | None = None
     """Configuration information required to create a custom plugin."""
 
-    build_status: PluginBuildStatus | None = None
+    build_status: str | None = None
     """The current status of a plugin. A plugin is modified asynchronously."""
 
     plugin_arn: str | None = None
@@ -10002,7 +10002,7 @@ class GetPluginOutput:
     resources needed to create the plugin.
     """
 
-    state: PluginState | None = None
+    state: str | None = None
     """The current state of the plugin."""
 
     created_at: datetime | None = None
@@ -10265,16 +10265,16 @@ class Plugin:
     display_name: str | None = None
     """The name of the plugin."""
 
-    type: PluginType | None = None
+    type: str | None = None
     """The type of the plugin."""
 
     server_url: str | None = None
     """The plugin server URL used for configuration."""
 
-    state: PluginState | None = None
+    state: str | None = None
     """The current status of the plugin."""
 
-    build_status: PluginBuildStatus | None = None
+    build_status: str | None = None
     """The status of the plugin."""
 
     created_at: datetime | None = None
@@ -10504,7 +10504,7 @@ class UpdatePluginInput:
     display_name: str | None = None
     """The name of the plugin."""
 
-    state: PluginState | None = None
+    state: str | None = None
     """The status of the plugin."""
 
     server_url: str | None = None
@@ -10734,7 +10734,7 @@ class DateAttributeBoostingConfiguration:
     attributes](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/metadata-boosting.html).
     """
 
-    boosting_level: DocumentAttributeBoostingLevel
+    boosting_level: str
     """
     Specifies the priority tier ranking of boosting applied to document
     attributes. For version 2, this parameter indicates the relative ranking
@@ -10827,7 +10827,7 @@ class NumberAttributeBoostingConfiguration:
     attributes](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/metadata-boosting.html).
     """
 
-    boosting_level: DocumentAttributeBoostingLevel
+    boosting_level: str
     """
     Specifies the priority of boosted document attributes in relation to
     other boosted attributes. This parameter determines how strongly the
@@ -10836,7 +10836,7 @@ class NumberAttributeBoostingConfiguration:
     not supported when using `NativeIndexConfiguration` version 2.
     """
 
-    boosting_type: NumberAttributeBoostingType | None = None
+    boosting_type: str | None = None
     """
     Specifies whether higher or lower numeric values should be prioritized
     when boosting. Valid values are ASCENDING (higher numbers are more
@@ -10909,9 +10909,7 @@ class StringAttributeValueBoostingLevel(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_string_attribute_value_boosting(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: dict[str, StringAttributeValueBoostingLevel],
+    serializer: ShapeSerializer, schema: Schema, value: dict[str, str]
 ) -> None:
     with serializer.begin_map(schema, len(value)) as m:
         value_schema = schema.members["value"]
@@ -10921,8 +10919,8 @@ def _serialize_string_attribute_value_boosting(
 
 def _deserialize_string_attribute_value_boosting(
     deserializer: ShapeDeserializer, schema: Schema
-) -> dict[str, StringAttributeValueBoostingLevel]:
-    result: dict[str, StringAttributeValueBoostingLevel] = {}
+) -> dict[str, str]:
+    result: dict[str, str] = {}
     value_schema = schema.members["value"]
 
     def _read_value(k: str, d: ShapeDeserializer):
@@ -10956,7 +10954,7 @@ class StringAttributeBoostingConfiguration:
     attributes](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/metadata-boosting.html).
     """
 
-    boosting_level: DocumentAttributeBoostingLevel
+    boosting_level: str
     """
     Specifies the priority tier ranking of boosting applied to document
     attributes. For version 2, this parameter indicates the relative ranking
@@ -10969,7 +10967,7 @@ class StringAttributeBoostingConfiguration:
     value TWO.
     """
 
-    attribute_value_boosting: dict[str, StringAttributeValueBoostingLevel] | None = None
+    attribute_value_boosting: dict[str, str] | None = None
     """
     Specifies specific values of a `STRING` type document attribute being
     boosted. When using `NativeIndexConfiguration` version 2, you can
@@ -11059,7 +11057,7 @@ class StringListAttributeBoostingConfiguration:
     attributes](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/metadata-boosting.html).
     """
 
-    boosting_level: DocumentAttributeBoostingLevel
+    boosting_level: str
     """
     Specifies the priority of boosted document attributes in relation to
     other boosted attributes. This parameter determines how strongly the
@@ -11604,7 +11602,7 @@ class CreateRetrieverInput:
     application_id: str | None = None
     """The identifier of your Amazon Q Business application."""
 
-    type: RetrieverType | None = None
+    type: str | None = None
     """The type of retriever you are using."""
 
     display_name: str | None = None
@@ -12010,10 +12008,10 @@ class GetRetrieverOutput:
     retriever.
     """
 
-    type: RetrieverType | None = None
+    type: str | None = None
     """The type of the retriever."""
 
-    status: RetrieverStatus | None = None
+    status: str | None = None
     """The status of the retriever."""
 
     display_name: str | None = None
@@ -12277,10 +12275,10 @@ class Retriever:
     application.
     """
 
-    type: RetrieverType | None = None
+    type: str | None = None
     """The type of your retriever."""
 
-    status: RetrieverStatus | None = None
+    status: str | None = None
     """The status of your retriever."""
 
     display_name: str | None = None
@@ -13344,7 +13342,7 @@ class CreateWebExperienceInput:
     experience.
     """
 
-    sample_prompts_control_mode: WebExperienceSamplePromptsControlMode | None = None
+    sample_prompts_control_mode: str | None = None
     """
     Determines whether sample prompts are enabled in the web experience for
     an end user.
@@ -14064,7 +14062,7 @@ class GetWebExperienceOutput:
     default_endpoint: str | None = None
     """The endpoint of your Amazon Q Business web experience."""
 
-    status: WebExperienceStatus | None = None
+    status: str | None = None
     """
     The current status of the Amazon Q Business web experience. When the
     `Status` field value is `FAILED`, the `ErrorMessage` field contains a
@@ -14095,7 +14093,7 @@ class GetWebExperienceOutput:
     experience.
     """
 
-    sample_prompts_control_mode: WebExperienceSamplePromptsControlMode | None = None
+    sample_prompts_control_mode: str | None = None
     """
     Determines whether sample prompts are enabled in the web experience for
     an end user.
@@ -14502,7 +14500,7 @@ class WebExperience:
     are unique and fully hosted by Amazon Web Services.
     """
 
-    status: WebExperienceStatus | None = None
+    status: str | None = None
     """The status of your Amazon Q Business web experience."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -14734,7 +14732,7 @@ class UpdateWebExperienceInput:
     experience.
     """
 
-    sample_prompts_control_mode: WebExperienceSamplePromptsControlMode | None = None
+    sample_prompts_control_mode: str | None = None
     """
     Determines whether sample prompts are enabled in the web experience for
     an end user.
@@ -15028,7 +15026,7 @@ class AppliedCreatorModeConfiguration:
     settings](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/using-web-experience.html#chat-source-scope).
     """
 
-    creator_mode_control: CreatorModeControl
+    creator_mode_control: str
     """
     Information about whether creator mode is enabled or disabled for an
     Amazon Q Business application.
@@ -15090,7 +15088,7 @@ class AppliedOrchestrationConfiguration:
     settings](https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/guardrails-global-controls.html#guardrails-global-orchestration).
     """
 
-    control: OrchestrationControl
+    control: str
     """
     Information about whether chat orchestration is enabled or disabled for
     an Amazon Q Business application.
@@ -15147,7 +15145,7 @@ class AssociatedGroup:
     the group in access control decisions.
     """
 
-    type: MembershipType | None = None
+    type: str | None = None
     """
     The type of the associated group. This indicates the scope of the
     group's applicability.
@@ -15225,7 +15223,7 @@ class AssociatedUser:
     the user in access control decisions.
     """
 
-    type: MembershipType | None = None
+    type: str | None = None
     """
     The type of the associated user. This indicates the scope of the user's
     association.
@@ -15355,7 +15353,7 @@ class PermissionCondition:
     the request.
     """
 
-    condition_operator: PermissionConditionOperator
+    condition_operator: str
     """
     The operator to use for the condition evaluation. This determines how
     the condition values are compared.
@@ -15809,7 +15807,7 @@ class Attachment:
     created_at: datetime | None = None
     """The Unix timestamp when the Amazon Q Business attachment was created."""
 
-    status: AttachmentStatus | None = None
+    status: str | None = None
     """AttachmentStatus of the Amazon Q Business attachment."""
 
     error: ErrorDetail | None = None
@@ -16064,7 +16062,7 @@ class AttachmentOutput:
     name: str | None = None
     """The name of a file uploaded during chat."""
 
-    status: AttachmentStatus | None = None
+    status: str | None = None
     """The status of a file uploaded during chat."""
 
     error: ErrorDetail | None = None
@@ -16220,7 +16218,7 @@ class AudioSourceDetails:
     end_time_milliseconds: int | None = None
     """The ending timestamp in milliseconds for the relevant audio segment."""
 
-    audio_extraction_type: AudioExtractionType | None = None
+    audio_extraction_type: str | None = None
     """The type of audio extraction performed on the content."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17010,7 +17008,7 @@ class Document:
     content: DocumentContent | None = None
     """The contents of the document."""
 
-    content_type: ContentType | None = None
+    content_type: str | None = None
     """
     The file type of the document in the Blob field.
 
@@ -17595,7 +17593,7 @@ class CancelSubscriptionInput:
 class SubscriptionDetails:
     """The details of an Amazon Q Business subscription."""
 
-    type: SubscriptionType | None = None
+    type: str | None = None
     """The type of an Amazon Q Business subscription."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -18170,7 +18168,7 @@ class VideoSourceDetails:
     end_time_milliseconds: int | None = None
     """The ending timestamp in milliseconds for the relevant video segment."""
 
-    video_extraction_type: VideoExtractionType | None = None
+    video_extraction_type: str | None = None
     """The type of video extraction performed on the content."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -18853,7 +18851,7 @@ class TextOutputEvent:
     experience.
     """
 
-    system_message_type: SystemMessageType | None = None
+    system_message_type: str | None = None
     """
     The type of AI-generated message in a `TextOutputEvent`. Amazon Q
     Business currently supports two types of messages:
@@ -19294,7 +19292,7 @@ class ChatResponseConfiguration:
     organization.
     """
 
-    status: ChatResponseConfigurationStatus
+    status: str
     """
     The current status of the chat response configuration, indicating
     whether it is active, pending, or in another state that affects its
@@ -19703,7 +19701,7 @@ class ChatResponseConfigurationDetail:
     generation behavior.
     """
 
-    status: ChatResponseConfigurationStatus | None = None
+    status: str | None = None
     """
     The current status of the chat response configuration, indicating
     whether it is active, pending, or in another state that affects its
@@ -20105,7 +20103,7 @@ class DocumentAclGroup:
     the group when applying access rules.
     """
 
-    type: MembershipType | None = None
+    type: str | None = None
     """
     The type of the group. This indicates the scope of the group's
     applicability in access control.
@@ -20190,7 +20188,7 @@ class DocumentAclUser:
     to identify the user when applying access rules.
     """
 
-    type: MembershipType | None = None
+    type: str | None = None
     """
     The type of the user. This indicates the scope of the user's
     applicability in access control.
@@ -20267,7 +20265,7 @@ class DocumentAclCondition:
     for users and groups.
     """
 
-    member_relation: MemberRelation | None = None
+    member_relation: str | None = None
     """
     The logical relation between members in the condition, determining how
     multiple user or group conditions are combined.
@@ -20373,7 +20371,7 @@ class DocumentAclMembership:
     or groups are associated with access permissions.
     """
 
-    member_relation: MemberRelation | None = None
+    member_relation: str | None = None
     """
     The logical relation between members in the membership rule, determining
     how multiple conditions are combined.
@@ -21555,7 +21553,7 @@ class CreateSubscriptionInput:
     application.
     """
 
-    type: SubscriptionType | None = None
+    type: str | None = None
     """The type of Amazon Q Business subscription you want to create."""
 
     client_token: str | None = None
@@ -21995,7 +21993,7 @@ class CreatorModeConfiguration:
     settings](https://docs.aws.amazon.com/amazonq/latest/business-use-dg/using-web-experience.html#chat-source-scope).
     """
 
-    creator_mode_control: CreatorModeControl
+    creator_mode_control: str
     """
     Status information about whether `CREATOR_MODE` has been enabled or
     disabled. The default status is `DISABLED`.
@@ -22207,7 +22205,7 @@ class DataSourceSyncJob:
     end_time: datetime | None = None
     """The Unix timestamp when the synchronization job completed."""
 
-    status: DataSourceSyncJobStatus | None = None
+    status: str | None = None
     """
     The status of the synchronization job. When the `Status` field is set to
     `SUCCEEDED`, the synchronization job is done. If the status code is
@@ -23266,7 +23264,7 @@ class DocumentDetails:
     document_id: str | None = None
     """The identifier of the document."""
 
-    status: DocumentStatus | None = None
+    status: str | None = None
     """The current status of the document."""
 
     error: ErrorDetail | None = None
@@ -23498,7 +23496,7 @@ class HallucinationReductionConfiguration:
         controls are enabled for your application.
     """
 
-    hallucination_reduction_control: HallucinationReductionControl | None = None
+    hallucination_reduction_control: str | None = None
     """
     Controls whether hallucination reduction has been enabled or disabled
     for your application. The default status is `DISABLED`.
@@ -23754,7 +23752,7 @@ class Rule:
     supports only one rule at a time.
     """
 
-    rule_type: RuleType
+    rule_type: str
     """The type of rule."""
 
     included_users_and_groups: UsersAndGroups | None = None
@@ -23966,7 +23964,7 @@ def _deserialize_topic_configurations(
 class GetChatControlsConfigurationOutput:
     """Dataclass for GetChatControlsConfigurationOutput structure."""
 
-    response_scope: ResponseScope | None = None
+    response_scope: str | None = None
     """
     The response scope configured for a Amazon Q Business application. This
     determines whether your application uses its retrieval augmented
@@ -24440,7 +24438,7 @@ class GetDocumentContentInput:
     in chat or chatSync response.
     """
 
-    output_format: OutputFormat | None = None
+    output_format: str | None = None
     """Document outputFormat. Defaults to RAW if not selected."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24708,7 +24706,7 @@ class GroupStatus(UnknownEnumMixin, StrEnum):
 class GroupStatusDetail:
     """Provides the details of a group's status."""
 
-    status: GroupStatus | None = None
+    status: str | None = None
     """The status of a group."""
 
     last_updated_at: datetime | None = None
@@ -25925,7 +25923,7 @@ class ListDataSourceSyncJobsInput:
     end_time: datetime | None = None
     """The end time of the data source connector sync."""
 
-    status_filter: DataSourceSyncJobStatus | None = None
+    status_filter: str | None = None
     """
     Only returns synchronization jobs with the `Status` field equal to the
     specified status.
@@ -26720,7 +26718,7 @@ class Message:
     time: datetime | None = None
     """The timestamp of the first Amazon Q Business web experience message."""
 
-    type: MessageType | None = None
+    type: str | None = None
     """
     The type of Amazon Q Business message, whether `HUMAN` or `AI`
     generated.
@@ -27134,7 +27132,7 @@ LIST_PLUGIN_ACTIONS = APIOperation(
 class ListPluginTypeActionsInput:
     """Dataclass for ListPluginTypeActionsInput structure."""
 
-    plugin_type: PluginType | None = None
+    plugin_type: str | None = None
     """The type of the plugin."""
 
     next_token: str | None = None
@@ -27362,10 +27360,10 @@ class PluginTypeCategory(UnknownEnumMixin, StrEnum):
 class PluginTypeMetadataSummary:
     """Summary metadata information for a Amazon Q Business plugin."""
 
-    type: PluginType | None = None
+    type: str | None = None
     """The type of the plugin."""
 
-    category: PluginTypeCategory | None = None
+    category: str | None = None
     """The category of the plugin type."""
 
     description: str | None = None
@@ -27989,13 +27987,13 @@ class MessageUsefulnessFeedback:
     usefulness.
     """
 
-    usefulness: MessageUsefulness
+    usefulness: str
     """The usefulness value assigned by an end user to a message."""
 
     submitted_at: datetime
     """The timestamp for when the feedback was submitted."""
 
-    reason: MessageUsefulnessReason | None = None
+    reason: str | None = None
     """The reason for a usefulness rating."""
 
     comment: str | None = None
@@ -28245,7 +28243,7 @@ class MemberGroup:
     group_name: str
     """The name of the sub group."""
 
-    type: MembershipType | None = None
+    type: str | None = None
     """The type of the sub group."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -28319,7 +28317,7 @@ class MemberUser:
     user_id: str
     """The identifier of the user you want to map to a group."""
 
-    type: MembershipType | None = None
+    type: str | None = None
     """The type of the user."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -28501,7 +28499,7 @@ class PutGroupInput:
     in Salesforce.
     """
 
-    type: MembershipType | None = None
+    type: str | None = None
     """The type of the group."""
 
     group_members: GroupMembers | None = None
@@ -28681,7 +28679,7 @@ class ScoreConfidence(UnknownEnumMixin, StrEnum):
 class ScoreAttributes:
     """Provides information about the relevance score of content."""
 
-    score_confidence: ScoreConfidence | None = None
+    score_confidence: str | None = None
     """The confidence level of the relevance score."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -29471,7 +29469,7 @@ class OrchestrationConfiguration:
         languages](https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/supported-languages.html).
     """
 
-    control: OrchestrationControl
+    control: str
     """
     Status information about whether chat orchestration is activated or
     deactivated for your Amazon Q Business application.
@@ -29529,7 +29527,7 @@ class UpdateChatControlsConfigurationInput:
     Business application chat configuration.
     """
 
-    response_scope: ResponseScope | None = None
+    response_scope: str | None = None
     """
     The response scope configured for your application. This determines
     whether your application uses its retrieval augmented generation (RAG)
@@ -29995,7 +29993,7 @@ class UpdateSubscriptionInput:
     subscription_id: str | None = None
     """The identifier of the Amazon Q Business subscription to be updated."""
 
-    type: SubscriptionType | None = None
+    type: str | None = None
     """The type of the Amazon Q Business subscription to be updated."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -30651,7 +30649,7 @@ class ChatSyncInput:
     document attributes or metadata fields.
     """
 
-    chat_mode: ChatMode | None = None
+    chat_mode: str | None = None
     """
     The `chatMode` parameter determines the chat modes available to Amazon Q
     Business users:
@@ -30853,7 +30851,7 @@ class ConfigurationEvent:
     specific chat mode.
     """
 
-    chat_mode: ChatMode | None = None
+    chat_mode: str | None = None
     """
     The chat modes available to an Amazon Q Business end user.
 

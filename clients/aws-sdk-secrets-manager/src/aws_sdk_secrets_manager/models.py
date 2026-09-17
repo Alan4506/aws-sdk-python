@@ -349,7 +349,7 @@ class Filter:
     Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_search-secret.html).
     """
 
-    key: FilterNameStringType | None = None
+    key: str | None = None
     """
     The following are keys you can use:
 
@@ -1644,7 +1644,7 @@ class ReplicationStatusType:
     kms_key_id: str | None = None
     """Can be an `ARN`, `Key ID`, or `Alias`."""
 
-    status: StatusType | None = None
+    status: str | None = None
     """The status can be `InProgress`, `Failed`, or `InSync`."""
 
     status_message: str | None = None
@@ -3908,10 +3908,10 @@ class ListSecretsInput:
     filters: list[Filter] | None = None
     """The filters to apply to the list of secrets."""
 
-    sort_order: SortOrderType | None = None
+    sort_order: str | None = None
     """Secrets are listed by `CreatedDate`."""
 
-    sort_by: SortByType | None = None
+    sort_by: str | None = None
     """If not specified, secrets are listed by `CreatedDate`."""
 
     def serialize(self, serializer: ShapeSerializer):
