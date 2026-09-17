@@ -926,7 +926,7 @@ class Authorizer:
     name: str | None = None
     """The name of the authorizer."""
 
-    type: AuthorizerType | None = None
+    type: str | None = None
     """
     The authorizer type. Valid values are `TOKEN` for a Lambda function
     using a single authorization token submitted in a custom header,
@@ -1834,7 +1834,7 @@ class CreateAuthorizerInput:
     name: str | None = None
     """The name of the authorizer."""
 
-    type: AuthorizerType | None = None
+    type: str | None = None
     """
     The authorizer type. Valid values are `TOKEN` for a Lambda function
     using a single authorization token submitted in a custom header,
@@ -2068,7 +2068,7 @@ class CreateAuthorizerOutput:
     name: str | None = None
     """The name of the authorizer."""
 
-    type: AuthorizerType | None = None
+    type: str | None = None
     """
     The authorizer type. Valid values are `TOKEN` for a Lambda function
     using a single authorization token submitted in a custom header,
@@ -2662,7 +2662,7 @@ class CreateDeploymentInput:
     cache_cluster_enabled: bool | None = None
     """Enables a cache cluster for the Stage resource specified in the input."""
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
@@ -3123,7 +3123,7 @@ class DocumentationPartType(UnknownEnumMixin, StrEnum):
 class DocumentationPartLocation:
     """Specifies the target API entity to which the documentation applies."""
 
-    type: DocumentationPartType
+    type: str
     """
     The type of API entity to which the documentation content applies. Valid
     values are `API`, `AUTHORIZER`, `MODEL`, `RESOURCE`, `METHOD`,
@@ -3666,7 +3666,7 @@ class EndpointType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_list_of_endpoint_type(
-    serializer: ShapeSerializer, schema: Schema, value: list[EndpointType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -3676,8 +3676,8 @@ def _serialize_list_of_endpoint_type(
 
 def _deserialize_list_of_endpoint_type(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[EndpointType]:
-    result: list[EndpointType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -3699,7 +3699,7 @@ class EndpointConfiguration:
     types that can invoke it.
     """
 
-    types: list[EndpointType] | None = None
+    types: list[str] | None = None
     """
     A list of endpoint types of an API (RestApi) or its custom domain name
     (DomainName). For an edge-optimized API and its custom domain name, the
@@ -3708,7 +3708,7 @@ class EndpointConfiguration:
     type is `PRIVATE`.
     """
 
-    ip_address_type: IpAddressType | None = None
+    ip_address_type: str | None = None
     """
     The IP address types that can invoke an API (RestApi) or a DomainName.
     Use `ipv4` to allow only IPv4 addresses to invoke an API or DomainName,
@@ -3946,13 +3946,13 @@ class CreateDomainNameInput:
     start with `aws:`. The tag value can be up to 256 characters.
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     DomainName.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """
     The endpoint access mode of the DomainName. Only available for
     DomainNames that use security policies that start with
@@ -3982,7 +3982,7 @@ class CreateDomainNameInput:
     configuration. Supported only for private custom domain names.
     """
 
-    routing_mode: RoutingMode | None = None
+    routing_mode: str | None = None
     """
     The routing mode for this domain name. The routing mode determines how
     API Gateway sends traffic from your custom domain name to your private
@@ -4393,7 +4393,7 @@ class CreateDomainNameOutput:
     and IP address types of the domain name.
     """
 
-    domain_name_status: DomainNameStatus | None = None
+    domain_name_status: str | None = None
     """
     The status of the DomainName migration. The valid values are `AVAILABLE`
     and `UPDATING`. If the status is `UPDATING`, the domain cannot be
@@ -4407,13 +4407,13 @@ class CreateDomainNameOutput:
     the DomainName migration.
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     DomainName.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the DomainName."""
 
     tags: dict[str, str] | None = None
@@ -4454,7 +4454,7 @@ class CreateDomainNameOutput:
     configuration. Supported only for private custom domain names.
     """
 
-    routing_mode: RoutingMode | None = None
+    routing_mode: str | None = None
     """
     The routing mode for this domain name. The routing mode determines how
     API Gateway sends traffic from your custom domain name to your private
@@ -4804,7 +4804,7 @@ class CreateDomainNameAccessAssociationInput:
     domain_name_arn: str | None = None
     """The ARN of the domain name."""
 
-    access_association_source_type: AccessAssociationSourceType | None = None
+    access_association_source_type: str | None = None
     """The type of the domain name access association source."""
 
     access_association_source: str | None = None
@@ -4924,7 +4924,7 @@ class CreateDomainNameAccessAssociationOutput:
     domain_name_arn: str | None = None
     """The ARN of the domain name."""
 
-    access_association_source_type: AccessAssociationSourceType | None = None
+    access_association_source_type: str | None = None
     """The type of the domain name access association source."""
 
     access_association_source: str | None = None
@@ -5646,7 +5646,7 @@ class IntegrationResponse:
     content-type as the key and a template as the value.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle response payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -5847,7 +5847,7 @@ class Integration:
     integration.
     """
 
-    type: IntegrationType | None = None
+    type: str | None = None
     """
     Specifies an API method integration type. The valid value is one of the
     following:
@@ -5894,7 +5894,7 @@ class Integration:
     or `arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}`
     """
 
-    connection_type: ConnectionType | None = None
+    connection_type: str | None = None
     """
     The type of the network connection to the integration endpoint. The
     valid value is `INTERNET` for connections through the public routable
@@ -5961,7 +5961,7 @@ class Integration:
     defined in the integration request.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle request payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -6001,7 +6001,7 @@ class Integration:
     tls_config: TlsConfig | None = None
     """Specifies the TLS configuration for an integration."""
 
-    response_transfer_mode: ResponseTransferMode | None = None
+    response_transfer_mode: str | None = None
     """The response transfer mode of the integration."""
 
     integration_target: str | None = None
@@ -6763,7 +6763,7 @@ class CreateRestApiInput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: `HEADER` to read the API key from the
@@ -6799,13 +6799,13 @@ class CreateRestApiInput:
     disable the default endpoint
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """
     The endpoint access mode of the RestApi. Only available for RestApis
     that use security policies that start with `SecurityPolicy_`.
@@ -7022,7 +7022,7 @@ class CreateRestApiOutput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -7060,16 +7060,16 @@ class CreateRestApiOutput:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -7443,7 +7443,7 @@ class CreateStageInput:
     cache_cluster_enabled: bool = False
     """Whether cache clustering is enabled for the stage."""
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
@@ -7678,9 +7678,7 @@ class MethodSetting:
     request.
     """
 
-    unauthorized_cache_control_header_strategy: (
-        UnauthorizedCacheControlHeaderStrategy | None
-    ) = None
+    unauthorized_cache_control_header_strategy: str | None = None
     """Specifies how to handle unauthorized requests for cache invalidation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -7860,14 +7858,14 @@ class CreateStageOutput:
     a method-level cache, set `CachingEnabled` to `true` for a method.
     """
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
     responsiveness](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).
     """
 
-    cache_cluster_status: CacheClusterStatus | None = None
+    cache_cluster_status: str | None = None
     """The status of the cache cluster for the stage, if enabled."""
 
     method_settings: dict[str, MethodSetting] | None = None
@@ -8194,7 +8192,7 @@ class QuotaSettings:
     time period.
     """
 
-    period: QuotaPeriodType | None = None
+    period: str | None = None
     """
     The time period in which the limit applies. Valid values are \"DAY\",
     \"WEEK\" or \"MONTH\".
@@ -8854,7 +8852,7 @@ class CreateVpcLinkOutput:
     Services account of the API owner.
     """
 
-    status: VpcLinkStatus | None = None
+    status: str | None = None
     """
     The status of the VPC link. The valid values are `AVAILABLE`, `PENDING`,
     `DELETING`, or `FAILED`. Deploying an API will wait if the status is
@@ -10058,7 +10056,7 @@ class DeleteGatewayResponseInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -12714,7 +12712,7 @@ class GetAuthorizerOutput:
     name: str | None = None
     """The name of the authorizer."""
 
-    type: AuthorizerType | None = None
+    type: str | None = None
     """
     The authorizer type. Valid values are `TOKEN` for a Lambda function
     using a single authorization token submitted in a custom header,
@@ -14714,7 +14712,7 @@ class GetDocumentationPartsInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    type: DocumentationPartType | None = None
+    type: str | None = None
     """The type of API entities of the to-be-retrieved documentation parts."""
 
     name_query: str | None = None
@@ -14732,7 +14730,7 @@ class GetDocumentationPartsInput:
     and the maximum value is 500.
     """
 
-    location_status: LocationStatusType | None = None
+    location_status: str | None = None
     """
     The status of the API documentation parts to retrieve. Valid values are
     `DOCUMENTED` for retrieving DocumentationPart resources with content and
@@ -15575,7 +15573,7 @@ class GetDomainNameOutput:
     and IP address types of the domain name.
     """
 
-    domain_name_status: DomainNameStatus | None = None
+    domain_name_status: str | None = None
     """
     The status of the DomainName migration. The valid values are `AVAILABLE`
     and `UPDATING`. If the status is `UPDATING`, the domain cannot be
@@ -15589,13 +15587,13 @@ class GetDomainNameOutput:
     the DomainName migration.
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     DomainName.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the DomainName."""
 
     tags: dict[str, str] | None = None
@@ -15636,7 +15634,7 @@ class GetDomainNameOutput:
     configuration. Supported only for private custom domain names.
     """
 
-    routing_mode: RoutingMode | None = None
+    routing_mode: str | None = None
     """
     The routing mode for this domain name. The routing mode determines how
     API Gateway sends traffic from your custom domain name to your private
@@ -15979,7 +15977,7 @@ class GetDomainNameAccessAssociationsInput:
     and the maximum value is 500.
     """
 
-    resource_owner: ResourceOwner | None = None
+    resource_owner: str | None = None
     """
     The owner of the domain name access association. Use `SELF` to only list
     the domain name access associations owned by your own account. Use
@@ -16068,7 +16066,7 @@ class DomainNameAccessAssociation:
     domain_name_arn: str | None = None
     """The ARN of the domain name."""
 
-    access_association_source_type: AccessAssociationSourceType | None = None
+    access_association_source_type: str | None = None
     """The type of the domain name access association source."""
 
     access_association_source: str | None = None
@@ -16313,7 +16311,7 @@ class GetDomainNamesInput:
     and the maximum value is 500.
     """
 
-    resource_owner: ResourceOwner | None = None
+    resource_owner: str | None = None
     """The owner of the domain name access association."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -16463,7 +16461,7 @@ class DomainName:
     and IP address types of the domain name.
     """
 
-    domain_name_status: DomainNameStatus | None = None
+    domain_name_status: str | None = None
     """
     The status of the DomainName migration. The valid values are `AVAILABLE`
     and `UPDATING`. If the status is `UPDATING`, the domain cannot be
@@ -16477,13 +16475,13 @@ class DomainName:
     the DomainName migration.
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     DomainName.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the DomainName."""
 
     tags: dict[str, str] | None = None
@@ -16524,7 +16522,7 @@ class DomainName:
     configuration. Supported only for private custom domain names.
     """
 
-    routing_mode: RoutingMode | None = None
+    routing_mode: str | None = None
     """
     The routing mode for this domain name. The routing mode determines how
     API Gateway sends traffic from your custom domain name to your private
@@ -17123,7 +17121,7 @@ class GetGatewayResponseInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17178,7 +17176,7 @@ class GetGatewayResponseOutput:
     optional response parameters and mapping templates.
     """
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     status_code: str | None = None
@@ -17410,7 +17408,7 @@ class GatewayResponse:
     optional response parameters and mapping templates.
     """
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     status_code: str | None = None
@@ -17701,7 +17699,7 @@ class GetIntegrationOutput:
     integration.
     """
 
-    type: IntegrationType | None = None
+    type: str | None = None
     """
     Specifies an API method integration type. The valid value is one of the
     following:
@@ -17748,7 +17746,7 @@ class GetIntegrationOutput:
     or `arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}`
     """
 
-    connection_type: ConnectionType | None = None
+    connection_type: str | None = None
     """
     The type of the network connection to the integration endpoint. The
     valid value is `INTERNET` for connections through the public routable
@@ -17815,7 +17813,7 @@ class GetIntegrationOutput:
     defined in the integration request.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle request payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -17855,7 +17853,7 @@ class GetIntegrationOutput:
     tls_config: TlsConfig | None = None
     """Specifies the TLS configuration for an integration."""
 
-    response_transfer_mode: ResponseTransferMode | None = None
+    response_transfer_mode: str | None = None
     """The response transfer mode of the integration."""
 
     integration_target: str | None = None
@@ -18238,7 +18236,7 @@ class GetIntegrationResponseOutput:
     content-type as the key and a template as the value.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle response payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -20467,7 +20465,7 @@ class GetRestApiOutput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -20505,16 +20503,16 @@ class GetRestApiOutput:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -20865,7 +20863,7 @@ class RestApi:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -20903,16 +20901,16 @@ class RestApi:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -21984,14 +21982,14 @@ class GetStageOutput:
     a method-level cache, set `CachingEnabled` to `true` for a method.
     """
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
     responsiveness](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).
     """
 
-    cache_cluster_status: CacheClusterStatus | None = None
+    cache_cluster_status: str | None = None
     """The status of the cache cluster for the stage, if enabled."""
 
     method_settings: dict[str, MethodSetting] | None = None
@@ -22354,14 +22352,14 @@ class Stage:
     a method-level cache, set `CachingEnabled` to `true` for a method.
     """
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
     responsiveness](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).
     """
 
-    cache_cluster_status: CacheClusterStatus | None = None
+    cache_cluster_status: str | None = None
     """The status of the cache cluster for the stage, if enabled."""
 
     method_settings: dict[str, MethodSetting] | None = None
@@ -24178,7 +24176,7 @@ class GetVpcLinkOutput:
     Services account of the API owner.
     """
 
-    status: VpcLinkStatus | None = None
+    status: str | None = None
     """
     The status of the VPC link. The valid values are `AVAILABLE`, `PENDING`,
     `DELETING`, or `FAILED`. Deploying an API will wait if the status is
@@ -24399,7 +24397,7 @@ class VpcLink:
     Services account of the API owner.
     """
 
-    status: VpcLinkStatus | None = None
+    status: str | None = None
     """
     The status of the VPC link. The valid values are `AVAILABLE`, `PENDING`,
     `DELETING`, or `FAILED`. Deploying an API will wait if the status is
@@ -24615,7 +24613,7 @@ class ImportApiKeysInput:
     format, see API Key File Format.
     """
 
-    format: ApiKeysFormat | None = None
+    format: str | None = None
     """
     A query parameter to specify the input format to imported API keys.
     Currently, only the `csv` format is supported.
@@ -24783,7 +24781,7 @@ class ImportDocumentationPartsInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    mode: PutMode | None = None
+    mode: str | None = None
     """
     A query parameter to indicate whether to overwrite (`overwrite`) any
     existing DocumentationParts definition or to merge (`merge`) the new
@@ -25107,7 +25105,7 @@ class ImportRestApiOutput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -25145,16 +25143,16 @@ class ImportRestApiOutput:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -25430,7 +25428,7 @@ class PutGatewayResponseInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse"""
 
     status_code: str | None = None
@@ -25541,7 +25539,7 @@ class PutGatewayResponseOutput:
     optional response parameters and mapping templates.
     """
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     status_code: str | None = None
@@ -25705,7 +25703,7 @@ class PutIntegrationInput:
     http_method: str | None = None
     """Specifies the HTTP method for the integration."""
 
-    type: IntegrationType | None = None
+    type: str | None = None
     """Specifies a put integration input's type."""
 
     integration_http_method: str | None = None
@@ -25737,7 +25735,7 @@ class PutIntegrationInput:
     or `arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}`.
     """
 
-    connection_type: ConnectionType | None = None
+    connection_type: str | None = None
     """
     The type of the network connection to the integration endpoint. The
     valid value is `INTERNET` for connections through the public routable
@@ -25798,7 +25796,7 @@ class PutIntegrationInput:
     specified for Method `requestParameters`.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle request payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -25820,7 +25818,7 @@ class PutIntegrationInput:
     tls_config: TlsConfig | None = None
     """Specifies the TLS configuration for an integration."""
 
-    response_transfer_mode: ResponseTransferMode | None = None
+    response_transfer_mode: str | None = None
     """The response transfer mode of the integration."""
 
     integration_target: str | None = None
@@ -26065,7 +26063,7 @@ class PutIntegrationOutput:
     integration.
     """
 
-    type: IntegrationType | None = None
+    type: str | None = None
     """
     Specifies an API method integration type. The valid value is one of the
     following:
@@ -26112,7 +26110,7 @@ class PutIntegrationOutput:
     or `arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}`
     """
 
-    connection_type: ConnectionType | None = None
+    connection_type: str | None = None
     """
     The type of the network connection to the integration endpoint. The
     valid value is `INTERNET` for connections through the public routable
@@ -26179,7 +26177,7 @@ class PutIntegrationOutput:
     defined in the integration request.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle request payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -26219,7 +26217,7 @@ class PutIntegrationOutput:
     tls_config: TlsConfig | None = None
     """Specifies the TLS configuration for an integration."""
 
-    response_transfer_mode: ResponseTransferMode | None = None
+    response_transfer_mode: str | None = None
     """The response transfer mode of the integration."""
 
     integration_target: str | None = None
@@ -26517,7 +26515,7 @@ class PutIntegrationResponseInput:
     response_templates: dict[str, str] | None = None
     """Specifies a put integration response's templates."""
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle response payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -26703,7 +26701,7 @@ class PutIntegrationResponseOutput:
     content-type as the key and a template as the value.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle response payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -27606,7 +27604,7 @@ class PutRestApiInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    mode: PutMode | None = None
+    mode: str | None = None
     """
     The `mode` query parameter to specify the update mode. Valid values are
     \"merge\" and \"overwrite\". By default, the update mode is \"merge\".
@@ -27750,7 +27748,7 @@ class PutRestApiOutput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -27788,16 +27786,16 @@ class PutRestApiOutput:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -29086,7 +29084,7 @@ class PatchOperation:
     Operations](https://docs.aws.amazon.com/apigateway/latest/api/patch-operations.html).
     """
 
-    op: Op | None = None
+    op: str | None = None
     """
     An update operation to be performed with this PATCH request. The valid
     value can be add, remove, replace or copy. Not all valid operations are
@@ -29714,7 +29712,7 @@ class UpdateAuthorizerOutput:
     name: str | None = None
     """The name of the authorizer."""
 
-    type: AuthorizerType | None = None
+    type: str | None = None
     """
     The authorizer type. Valid values are `TOKEN` for a Lambda function
     using a single authorization token submitted in a custom header,
@@ -31166,7 +31164,7 @@ class UpdateDomainNameOutput:
     and IP address types of the domain name.
     """
 
-    domain_name_status: DomainNameStatus | None = None
+    domain_name_status: str | None = None
     """
     The status of the DomainName migration. The valid values are `AVAILABLE`
     and `UPDATING`. If the status is `UPDATING`, the domain cannot be
@@ -31180,13 +31178,13 @@ class UpdateDomainNameOutput:
     the DomainName migration.
     """
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     DomainName.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the DomainName."""
 
     tags: dict[str, str] | None = None
@@ -31227,7 +31225,7 @@ class UpdateDomainNameOutput:
     configuration. Supported only for private custom domain names.
     """
 
-    routing_mode: RoutingMode | None = None
+    routing_mode: str | None = None
     """
     The routing mode for this domain name. The routing mode determines how
     API Gateway sends traffic from your custom domain name to your private
@@ -31582,7 +31580,7 @@ class UpdateGatewayResponseInput:
     rest_api_id: str | None = None
     """The string identifier of the associated RestApi."""
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     patch_operations: list[PatchOperation] | None = None
@@ -31662,7 +31660,7 @@ class UpdateGatewayResponseOutput:
     optional response parameters and mapping templates.
     """
 
-    response_type: GatewayResponseType | None = None
+    response_type: str | None = None
     """The response type of the associated GatewayResponse."""
 
     status_code: str | None = None
@@ -31906,7 +31904,7 @@ class UpdateIntegrationOutput:
     integration.
     """
 
-    type: IntegrationType | None = None
+    type: str | None = None
     """
     Specifies an API method integration type. The valid value is one of the
     following:
@@ -31953,7 +31951,7 @@ class UpdateIntegrationOutput:
     or `arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}`
     """
 
-    connection_type: ConnectionType | None = None
+    connection_type: str | None = None
     """
     The type of the network connection to the integration endpoint. The
     valid value is `INTERNET` for connections through the public routable
@@ -32020,7 +32018,7 @@ class UpdateIntegrationOutput:
     defined in the integration request.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle request payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -32060,7 +32058,7 @@ class UpdateIntegrationOutput:
     tls_config: TlsConfig | None = None
     """Specifies the TLS configuration for an integration."""
 
-    response_transfer_mode: ResponseTransferMode | None = None
+    response_transfer_mode: str | None = None
     """The response transfer mode of the integration."""
 
     integration_target: str | None = None
@@ -32477,7 +32475,7 @@ class UpdateIntegrationResponseOutput:
     content-type as the key and a template as the value.
     """
 
-    content_handling: ContentHandlingStrategy | None = None
+    content_handling: str | None = None
     """
     Specifies how to handle response payload content type conversions.
     Supported values are `CONVERT_TO_BINARY` and `CONVERT_TO_TEXT`, with the
@@ -33909,7 +33907,7 @@ class UpdateRestApiOutput:
     payload size.
     """
 
-    api_key_source: ApiKeySourceType | None = None
+    api_key_source: str | None = None
     """
     The source of the API key for metering requests according to a usage
     plan. Valid values are: >`HEADER` to read the API key from the
@@ -33947,16 +33945,16 @@ class UpdateRestApiOutput:
     root_resource_id: str | None = None
     """The API's root resource ID."""
 
-    security_policy: SecurityPolicy | None = None
+    security_policy: str | None = None
     """
     The Transport Layer Security (TLS) version + cipher suite for this
     RestApi.
     """
 
-    endpoint_access_mode: EndpointAccessMode | None = None
+    endpoint_access_mode: str | None = None
     """The endpoint access mode of the RestApi."""
 
-    api_status: ApiStatus | None = None
+    api_status: str | None = None
     """The ApiStatus of the RestApi."""
 
     api_status_message: str | None = None
@@ -34321,14 +34319,14 @@ class UpdateStageOutput:
     a method-level cache, set `CachingEnabled` to `true` for a method.
     """
 
-    cache_cluster_size: CacheClusterSize | None = None
+    cache_cluster_size: str | None = None
     """
     The stage's cache capacity in GB. For more information about choosing a
     cache size, see [Enabling API caching to enhance
     responsiveness](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).
     """
 
-    cache_cluster_status: CacheClusterStatus | None = None
+    cache_cluster_status: str | None = None
     """The status of the cache cluster for the stage, if enabled."""
 
     method_settings: dict[str, MethodSetting] | None = None
@@ -35144,7 +35142,7 @@ class UpdateVpcLinkOutput:
     Services account of the API owner.
     """
 
-    status: VpcLinkStatus | None = None
+    status: str | None = None
     """
     The status of the VPC link. The valid values are `AVAILABLE`, `PENDING`,
     `DELETING`, or `FAILED`. Deploying an API will wait if the status is

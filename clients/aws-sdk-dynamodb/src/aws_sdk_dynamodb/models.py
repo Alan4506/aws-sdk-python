@@ -471,7 +471,7 @@ class AttributeDefinition:
     attribute_name: str
     """A name for the attribute."""
 
-    attribute_type: ScalarAttributeType
+    attribute_type: str
     """
     The data type for the attribute, where:
 
@@ -1325,10 +1325,10 @@ class BackupDetails:
     backup_name: str
     """Name of the requested backup."""
 
-    backup_status: BackupStatus
+    backup_status: str
     """Backup can be in one of the following states: CREATING, ACTIVE, DELETED."""
 
-    backup_type: BackupType
+    backup_type: str
     """
     BackupType:
 
@@ -1490,7 +1490,7 @@ class KeySchemaElement:
     attribute_name: str
     """The name of a key attribute."""
 
-    key_type: KeyType
+    key_type: str
     """
     The role that this key attribute will assume:
 
@@ -1766,7 +1766,7 @@ class SourceTableDetails:
     item_count: int | None = None
     """Number of items in the table. Note that this is an approximate value."""
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     Controls how you are charged for read and write throughput and how you
     manage capacity. This setting can be changed later.
@@ -1948,7 +1948,7 @@ class Projection:
     attributes, which are automatically projected.
     """
 
-    projection_type: ProjectionType | None = None
+    projection_type: str | None = None
     """
     The set of attributes that are projected into the index:
 
@@ -2314,7 +2314,7 @@ class SSEDescription:
     table.
     """
 
-    status: SSEStatus | None = None
+    status: str | None = None
     """
     Represents the current state of server-side encryption. The only
     supported values are:
@@ -2324,7 +2324,7 @@ class SSEDescription:
     - `UPDATING` - Server-side encryption is being updated.
     """
 
-    sse_type: SSEType | None = None
+    sse_type: str | None = None
     """
     Server-side encryption type. The only supported value is:
 
@@ -2428,7 +2428,7 @@ class StreamSpecification:
     on the table.
     """
 
-    stream_view_type: StreamViewType | None = None
+    stream_view_type: str | None = None
     """
     When an item in the table is modified, `StreamViewType` determines what
     information is written to the stream for this table. Valid values for
@@ -2502,7 +2502,7 @@ class TimeToLiveStatus(UnknownEnumMixin, StrEnum):
 class TimeToLiveDescription:
     """The description of the Time to Live (TTL) status on the specified table."""
 
-    time_to_live_status: TimeToLiveStatus | None = None
+    time_to_live_status: str | None = None
     """The TTL status for the table."""
 
     attribute_name: str | None = None
@@ -2571,7 +2571,7 @@ class SearchSchemaElement:
     attribute_name: str
     """The name of the attribute."""
 
-    search_schema_element_type: SearchSchemaElementType
+    search_schema_element_type: str
     """
     The role of the attribute in the search schema. Valid values:
 
@@ -2732,7 +2732,7 @@ class VectorIndexInfo:
     dimensions: int | None = None
     """The number of dimensions in each vector."""
 
-    distance_function: VectorDistanceFunction | None = None
+    distance_function: str | None = None
     """The distance function used to calculate similarity between vectors."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -3156,10 +3156,10 @@ class BackupSummary:
     after its creation.
     """
 
-    backup_status: BackupStatus | None = None
+    backup_status: str | None = None
     """Backup can be in one of the following states: CREATING, ACTIVE, DELETED."""
 
-    backup_type: BackupType | None = None
+    backup_type: str | None = None
     """
     BackupType:
 
@@ -4365,7 +4365,7 @@ class BillingModeSummary:
         return a `BillingModeSummary` response.
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     Controls how you are charged for read and write throughput and how you
     manage capacity. This setting can be changed later.
@@ -4469,7 +4469,7 @@ class PointInTimeRecoveryStatus(UnknownEnumMixin, StrEnum):
 class PointInTimeRecoveryDescription:
     """The description of the point in time settings applied to the table."""
 
-    point_in_time_recovery_status: PointInTimeRecoveryStatus | None = None
+    point_in_time_recovery_status: str | None = None
     """
     The current state of point in time recovery:
 
@@ -4589,7 +4589,7 @@ class ContinuousBackupsDescription:
     the table.
     """
 
-    continuous_backups_status: ContinuousBackupsStatus
+    continuous_backups_status: str
     """
     `ContinuousBackupsStatus` can be one of the following states: ENABLED,
     DISABLED
@@ -4748,13 +4748,13 @@ class ContributorInsightsSummary:
     index_name: str | None = None
     """Name of the index associated with the summary, if any."""
 
-    contributor_insights_status: ContributorInsightsStatus | None = None
+    contributor_insights_status: str | None = None
     """
     Describes the current status for contributor insights for the given
     table and index, if applicable.
     """
 
-    contributor_insights_mode: ContributorInsightsMode | None = None
+    contributor_insights_mode: str | None = None
     """
     Indicates the current mode of CloudWatch Contributor Insights,
     specifying whether it tracks all access and throttled events or
@@ -5589,7 +5589,7 @@ class GlobalSecondaryIndexWarmThroughputDescription:
     secondary index.
     """
 
-    status: IndexStatus | None = None
+    status: str | None = None
     """
     Represents the warm throughput status being created or updated on a
     global secondary index. The status can only be `UPDATING` or `ACTIVE`.
@@ -5822,7 +5822,7 @@ class TableClass(UnknownEnumMixin, StrEnum):
 class TableClassSummary:
     """Contains details of the table class."""
 
-    table_class: TableClass | None = None
+    table_class: str | None = None
     """
     The table class of the specified table. Valid values are `STANDARD` and
     `STANDARD_INFREQUENT_ACCESS`.
@@ -5907,7 +5907,7 @@ class TableWarmThroughputDescription:
     second.
     """
 
-    status: TableStatus | None = None
+    status: str | None = None
     """Represents warm throughput value of the base table."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -5980,7 +5980,7 @@ class ReplicaDescription:
     region_name: str | None = None
     """The name of the Region."""
 
-    replica_status: ReplicaStatus | None = None
+    replica_status: str | None = None
     """
     The current state of the replica:
 
@@ -6052,9 +6052,7 @@ class ReplicaDescription:
     replica_table_class_summary: TableClassSummary | None = None
     """Contains details of the table class."""
 
-    global_table_settings_replication_mode: (
-        GlobalTableSettingsReplicationMode | None
-    ) = None
+    global_table_settings_replication_mode: str | None = None
     """
     Indicates one of the settings synchronization modes for the global table
     replica:
@@ -6290,7 +6288,7 @@ class GlobalTableDescription:
     creation_date_time: datetime | None = None
     """The creation time of the global table."""
 
-    global_table_status: GlobalTableStatus | None = None
+    global_table_status: str | None = None
     """
     The current state of the global table:
 
@@ -6740,7 +6738,7 @@ class CreateReplicationGroupMemberAction:
     global_secondary_indexes: list[ReplicaGlobalSecondaryIndex] | None = None
     """Replica-specific global secondary index settings."""
 
-    table_class_override: TableClass | None = None
+    table_class_override: str | None = None
     """
     Replica-specific table class. If not specified, uses the source table's
     table class.
@@ -7160,7 +7158,7 @@ class SSESpecification:
     owned key.
     """
 
-    sse_type: SSEType | None = None
+    sse_type: str | None = None
     """
     Server-side encryption type. The only supported value is:
 
@@ -7336,7 +7334,7 @@ class VectorIndex:
     dimensions: int
     """The number of dimensions in each vector."""
 
-    distance_function: VectorDistanceFunction
+    distance_function: str
     """
     The distance function used to calculate similarity between vectors.
     Valid values: `COSINE`, `EUCLIDEAN`, `DOT_PRODUCT`.
@@ -7598,7 +7596,7 @@ class CreateTableInput:
       global secondary index, consisting of read and write capacity units.
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     Controls how you are charged for read and write throughput and how you
     manage capacity. This setting can be changed later.
@@ -7665,7 +7663,7 @@ class CreateTableInput:
     DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html).
     """
 
-    table_class: TableClass | None = None
+    table_class: str | None = None
     """
     The table class of the new table. Valid values are `STANDARD` and
     `STANDARD_INFREQUENT_ACCESS`.
@@ -7716,9 +7714,7 @@ class CreateTableInput:
     of a multi-account global table.
     """
 
-    global_table_settings_replication_mode: (
-        GlobalTableSettingsReplicationMode | None
-    ) = None
+    global_table_settings_replication_mode: str | None = None
     """
     Controls the settings synchronization mode for the global table. For
     multi-account global tables, this parameter is required and the only
@@ -8170,7 +8166,7 @@ class GlobalSecondaryIndexDescription:
     attributes and index key attributes, which are automatically projected.
     """
 
-    index_status: IndexStatus | None = None
+    index_status: str | None = None
     """
     The current state of the global secondary index:
 
@@ -8440,7 +8436,7 @@ class GlobalTableWitnessDescription:
     the MRSC global table.
     """
 
-    witness_status: WitnessStatus | None = None
+    witness_status: str | None = None
     """The current status of the witness Region in the MRSC global table."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -8806,10 +8802,10 @@ class VectorIndexDescription:
     dimensions: int | None = None
     """The number of dimensions in each vector."""
 
-    distance_function: VectorDistanceFunction | None = None
+    distance_function: str | None = None
     """The distance function used to calculate similarity between vectors."""
 
-    index_status: IndexStatus | None = None
+    index_status: str | None = None
     """
     The current state of the vector index:
 
@@ -9059,7 +9055,7 @@ class TableDescription:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    table_status: TableStatus | None = None
+    table_status: str | None = None
     """
     The current state of the table:
 
@@ -9294,9 +9290,7 @@ class TableDescription:
     one witness Region can be configured per MRSC global table.
     """
 
-    global_table_settings_replication_mode: (
-        GlobalTableSettingsReplicationMode | None
-    ) = None
+    global_table_settings_replication_mode: str | None = None
     """
     Indicates one of the settings synchronization modes for the global
     table:
@@ -9343,7 +9337,7 @@ class TableDescription:
     warm_throughput: TableWarmThroughputDescription | None = None
     """Describes the warm throughput value of the base table."""
 
-    multi_region_consistency: MultiRegionConsistency | None = None
+    multi_region_consistency: str | None = None
     """
     Indicates one of the following consistency modes for a global table:
 
@@ -9884,7 +9878,7 @@ class CreateVectorIndexAction:
     dimensions: int
     """The number of dimensions in each vector."""
 
-    distance_function: VectorDistanceFunction
+    distance_function: str
     """
     The distance function used to calculate similarity. Valid values:
     `COSINE`, `EUCLIDEAN`, `DOT_PRODUCT`.
@@ -11102,7 +11096,7 @@ class DescribeContributorInsightsOutput:
     contributor_insights_rule_list: list[str] | None = None
     """List of names of the associated contributor insights rules."""
 
-    contributor_insights_status: ContributorInsightsStatus | None = None
+    contributor_insights_status: str | None = None
     """Current status of contributor insights."""
 
     last_update_date_time: datetime | None = None
@@ -11129,7 +11123,7 @@ class DescribeContributorInsightsOutput:
       Insights rules. Please retry request.
     """
 
-    contributor_insights_mode: ContributorInsightsMode | None = None
+    contributor_insights_mode: str | None = None
     """
     The mode of CloudWatch Contributor Insights for DynamoDB that determines
     which events are emitted. Can be set to track all access and throttled
@@ -11520,7 +11514,7 @@ class IncrementalExportSpecification:
     available will be used.
     """
 
-    export_view_type: ExportViewType | None = None
+    export_view_type: str | None = None
     """
     The view type that was chosen for the export. Valid values are
     `NEW_AND_OLD_IMAGES` and `NEW_IMAGES`. The default value is
@@ -11610,7 +11604,7 @@ class ExportDescription:
     export_arn: str | None = None
     """The Amazon Resource Name (ARN) of the table export."""
 
-    export_status: ExportStatus | None = None
+    export_status: str | None = None
     """
     Export can be in one of the following states: IN_PROGRESS, COMPLETED, or
     FAILED.
@@ -11656,7 +11650,7 @@ class ExportDescription:
     exported snapshot.
     """
 
-    s3_sse_algorithm: S3SseAlgorithm | None = None
+    s3_sse_algorithm: str | None = None
     """
     Type of encryption used on the bucket where export data is stored. Valid
     values for `S3SseAlgorithm` are:
@@ -11678,7 +11672,7 @@ class ExportDescription:
     failure_message: str | None = None
     """Export failure reason description."""
 
-    export_format: ExportFormat | None = None
+    export_format: str | None = None
     """
     The format of the exported data. Valid values for `ExportFormat` are
     `DYNAMODB_JSON` or `ION`.
@@ -11690,7 +11684,7 @@ class ExportDescription:
     item_count: int | None = None
     """The number of items exported."""
 
-    export_type: ExportType | None = None
+    export_type: str | None = None
     """
     The type of export that was performed. Valid values are `FULL_EXPORT` or
     `INCREMENTAL_EXPORT`.
@@ -12247,7 +12241,7 @@ class ReplicaGlobalSecondaryIndexSettingsDescription:
     all other indexes on this table.
     """
 
-    index_status: IndexStatus | None = None
+    index_status: str | None = None
     """
     The current status of the global secondary index:
 
@@ -12436,7 +12430,7 @@ class ReplicaSettingsDescription:
     region_name: str
     """The Region name of the replica."""
 
-    replica_status: ReplicaStatus | None = None
+    replica_status: str | None = None
     """
     The current state of the Region:
 
@@ -12944,7 +12938,7 @@ class TableCreationParameters:
     import operation.
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     The billing mode for provisioning the table created as part of the
     import operation.
@@ -13122,7 +13116,7 @@ class ImportTableDescription:
     import_arn: str | None = None
     """The Amazon Resource Number (ARN) corresponding to the import request."""
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import."""
 
     table_arn: str | None = None
@@ -13156,7 +13150,7 @@ class ImportTableDescription:
     with the target table.
     """
 
-    input_format: InputFormat | None = None
+    input_format: str | None = None
     """The format of the source data going into the target table."""
 
     input_format_options: InputFormatOptions | None = None
@@ -13165,7 +13159,7 @@ class ImportTableDescription:
     There is one value, CsvOption.
     """
 
-    input_compression_type: InputCompressionType | None = None
+    input_compression_type: str | None = None
     """
     The compression options for the data that has been imported into the
     target table. The values are NONE, GZIP, or ZSTD.
@@ -13599,15 +13593,13 @@ class KinesisDataStreamDestination:
     stream_arn: str | None = None
     """The ARN for a specific Kinesis data stream."""
 
-    destination_status: DestinationStatus | None = None
+    destination_status: str | None = None
     """The current status of replication."""
 
     destination_status_description: str | None = None
     """The human-readable string that corresponds to the replica status."""
 
-    approximate_creation_date_time_precision: (
-        ApproximateCreationDateTimePrecision | None
-    ) = None
+    approximate_creation_date_time_precision: str | None = None
     """
     The precision of the Kinesis data stream timestamp. The values are
     either `MILLISECOND` or `MICROSECOND`.
@@ -14128,7 +14120,7 @@ class ReplicaGlobalSecondaryIndexAutoScalingDescription:
     index_name: str | None = None
     """The name of the global secondary index."""
 
-    index_status: IndexStatus | None = None
+    index_status: str | None = None
     """
     The current state of the replica global secondary index:
 
@@ -14299,7 +14291,7 @@ class ReplicaAutoScalingDescription:
     secondary index.
     """
 
-    replica_status: ReplicaStatus | None = None
+    replica_status: str | None = None
     """
     The current state of the replica:
 
@@ -14440,7 +14432,7 @@ class TableAutoScalingDescription:
     table_name: str | None = None
     """The name of the table."""
 
-    table_status: TableStatus | None = None
+    table_status: str | None = None
     """
     The current state of the table:
 
@@ -14699,9 +14691,7 @@ DESCRIBE_TIME_TO_LIVE = APIOperation(
 class EnableKinesisStreamingConfiguration:
     """Enables setting the configuration for Kinesis Streaming."""
 
-    approximate_creation_date_time_precision: (
-        ApproximateCreationDateTimePrecision | None
-    ) = None
+    approximate_creation_date_time_precision: str | None = None
     """
     Toggle for the precision of Kinesis data stream timestamp. The values
     are either `MILLISECOND` or `MICROSECOND`.
@@ -14845,7 +14835,7 @@ class DisableKinesisStreamingDestinationOutput:
     stream_arn: str | None = None
     """The ARN for the specific Kinesis data stream."""
 
-    destination_status: DestinationStatus | None = None
+    destination_status: str | None = None
     """The current status of the replication."""
 
     enable_kinesis_streaming_configuration: (
@@ -15107,7 +15097,7 @@ class EnableKinesisStreamingDestinationOutput:
     stream_arn: str | None = None
     """The ARN for the specific Kinesis data stream."""
 
-    destination_status: DestinationStatus | None = None
+    destination_status: str | None = None
     """The current status of the replication."""
 
     enable_kinesis_streaming_configuration: (
@@ -15455,7 +15445,7 @@ class ExportTableToPointInTimeInput:
     exported snapshot.
     """
 
-    s3_sse_algorithm: S3SseAlgorithm | None = None
+    s3_sse_algorithm: str | None = None
     """
     Type of encryption used on the bucket where export data will be stored.
     Valid values for `S3SseAlgorithm` are:
@@ -15471,13 +15461,13 @@ class ExportTableToPointInTimeInput:
     data will be stored (if applicable).
     """
 
-    export_format: ExportFormat | None = None
+    export_format: str | None = None
     """
     The format for the exported data. Valid values for `ExportFormat` are
     `DYNAMODB_JSON` or `ION`.
     """
 
-    export_type: ExportType | None = None
+    export_type: str | None = None
     """
     Choice of whether to execute as a full export or incremental export.
     Valid values are FULL_EXPORT or INCREMENTAL_EXPORT. The default value is
@@ -16019,7 +16009,7 @@ class ImportTableInput:
     s3_bucket_source: S3BucketSource | None = None
     """The S3 bucket that provides the source for the import."""
 
-    input_format: InputFormat | None = None
+    input_format: str | None = None
     """
     The format of the source data. Valid values for `ImportFormat` are
     `CSV`, `DYNAMODB_JSON` or `ION`.
@@ -16028,7 +16018,7 @@ class ImportTableInput:
     input_format_options: InputFormatOptions | None = None
     """Additional properties that specify how the input is formatted,"""
 
-    input_compression_type: InputCompressionType | None = None
+    input_compression_type: str | None = None
     """
     Type of compression to be used on the input coming from the imported
     table.
@@ -16230,7 +16220,7 @@ class ListBackupsInput:
     fetch the next page of results.
     """
 
-    backup_type: BackupTypeFilter | None = None
+    backup_type: str | None = None
     """
     The backups from the table specified by `BackupType` are listed.
 
@@ -16643,13 +16633,13 @@ class ExportSummary:
     export_arn: str | None = None
     """The Amazon Resource Name (ARN) of the export."""
 
-    export_status: ExportStatus | None = None
+    export_status: str | None = None
     """
     Export can be in one of the following states: IN_PROGRESS, COMPLETED, or
     FAILED.
     """
 
-    export_type: ExportType | None = None
+    export_type: str | None = None
     """
     The type of export that was performed. Valid values are `FULL_EXPORT` or
     `INCREMENTAL_EXPORT`.
@@ -17118,7 +17108,7 @@ class ImportSummary:
     import_arn: str | None = None
     """The Amazon Resource Number (ARN) corresponding to the import request."""
 
-    import_status: ImportStatus | None = None
+    import_status: str | None = None
     """The status of the import operation."""
 
     table_arn: str | None = None
@@ -17137,7 +17127,7 @@ class ImportSummary:
     with this import task.
     """
 
-    input_format: InputFormat | None = None
+    input_format: str | None = None
     """
     The format of the source data. Valid values are `CSV`, `DYNAMODB_JSON`
     or `ION`.
@@ -17893,7 +17883,7 @@ class RestoreTableFromBackupInput:
     backup_arn: str | None = None
     """The Amazon Resource Name (ARN) associated with the backup."""
 
-    billing_mode_override: BillingMode | None = None
+    billing_mode_override: str | None = None
     """The billing mode of the restored table."""
 
     global_secondary_index_override: list[GlobalSecondaryIndex] | None = None
@@ -18271,7 +18261,7 @@ class RestoreTableToPointInTimeInput:
     restore_date_time: datetime | None = None
     """Time in the past to restore the table to."""
 
-    billing_mode_override: BillingMode | None = None
+    billing_mode_override: str | None = None
     """The billing mode of the restored table."""
 
     global_secondary_index_override: list[GlobalSecondaryIndex] | None = None
@@ -19082,10 +19072,10 @@ class UpdateContributorInsightsInput:
     index_name: str | None = None
     """The global secondary index name, if applicable."""
 
-    contributor_insights_action: ContributorInsightsAction | None = None
+    contributor_insights_action: str | None = None
     """Represents the contributor insights action."""
 
-    contributor_insights_mode: ContributorInsightsMode | None = None
+    contributor_insights_mode: str | None = None
     """
     Specifies whether to track all access and throttled events or throttled
     events only for the DynamoDB table or index.
@@ -19180,10 +19170,10 @@ class UpdateContributorInsightsOutput:
     index_name: str | None = None
     """The name of the global secondary index, if applicable."""
 
-    contributor_insights_status: ContributorInsightsStatus | None = None
+    contributor_insights_status: str | None = None
     """The status of contributor insights"""
 
-    contributor_insights_mode: ContributorInsightsMode | None = None
+    contributor_insights_mode: str | None = None
     """
     The updated mode of CloudWatch Contributor Insights that determines
     whether to monitor all access and throttled events or to track throttled
@@ -19896,7 +19886,7 @@ class ReplicaSettingsUpdate:
     that will be modified.
     """
 
-    replica_table_class: TableClass | None = None
+    replica_table_class: str | None = None
     """
     Replica-specific table class. If not specified, uses the source table's
     table class.
@@ -20028,7 +20018,7 @@ class UpdateGlobalTableSettingsInput:
     global_table_name: str | None = None
     """The name of the global table"""
 
-    global_table_billing_mode: BillingMode | None = None
+    global_table_billing_mode: str | None = None
     """
     The billing mode of the global table. If `GlobalTableBillingMode` is not
     specified, the global table defaults to `PROVISIONED` capacity billing
@@ -20306,9 +20296,7 @@ UPDATE_GLOBAL_TABLE_SETTINGS = APIOperation(
 class UpdateKinesisStreamingConfiguration:
     """Enables updating the configuration for Kinesis Streaming."""
 
-    approximate_creation_date_time_precision: (
-        ApproximateCreationDateTimePrecision | None
-    ) = None
+    approximate_creation_date_time_precision: str | None = None
     """Enables updating the precision of Kinesis data stream timestamp."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -20445,7 +20433,7 @@ class UpdateKinesisStreamingDestinationOutput:
     stream_arn: str | None = None
     """The ARN for the Kinesis stream input."""
 
-    destination_status: DestinationStatus | None = None
+    destination_status: str | None = None
     """
     The status of the attempt to update the Kinesis streaming destination
     output.
@@ -20912,7 +20900,7 @@ class UpdateReplicationGroupMemberAction:
     global_secondary_indexes: list[ReplicaGlobalSecondaryIndex] | None = None
     """Replica-specific global secondary index settings."""
 
-    table_class_override: TableClass | None = None
+    table_class_override: str | None = None
     """
     Replica-specific table class. If not specified, uses the source table's
     table class.
@@ -21227,7 +21215,7 @@ class UpdateTableInput:
     Resource Name (ARN) of the table in this parameter.
     """
 
-    billing_mode: BillingMode | None = None
+    billing_mode: str | None = None
     """
     Controls how you are charged for read and write throughput and how you
     manage capacity. When switching from pay-per-request to provisioned
@@ -21293,7 +21281,7 @@ class UpdateTableInput:
     table.
     """
 
-    table_class: TableClass | None = None
+    table_class: str | None = None
     """
     The table class of the table to be updated. Valid values are `STANDARD`
     and `STANDARD_INFREQUENT_ACCESS`.
@@ -21305,7 +21293,7 @@ class UpdateTableInput:
     disabled (false) on the table.
     """
 
-    multi_region_consistency: MultiRegionConsistency | None = None
+    multi_region_consistency: str | None = None
     """
     Specifies the consistency mode for a new global table. This parameter is
     only valid when you create a global table by specifying one or more
@@ -21362,9 +21350,7 @@ class UpdateTableInput:
     per second) for updating a table.
     """
 
-    global_table_settings_replication_mode: (
-        GlobalTableSettingsReplicationMode | None
-    ) = None
+    global_table_settings_replication_mode: str | None = None
     """
     Controls the settings replication mode for a global table replica. This
     attribute can be defined using UpdateTable operation only on a regional
@@ -22864,7 +22850,7 @@ class AttributeValueUpdate:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    action: AttributeAction | None = None
+    action: str | None = None
     """
     Specifies how to perform the update. Valid values are `PUT` (default),
     `DELETE`, and `ADD`. The behavior depends on whether the specified
@@ -23159,7 +23145,7 @@ def _deserialize_attribute_updates(
 class BatchStatementError:
     """An error associated with a statement in a PartiQL batch that was run."""
 
-    code: BatchStatementErrorCodeEnum | None = None
+    code: str | None = None
     """The error code associated with the failed PartiQL batch statement."""
 
     message: str | None = None
@@ -23235,9 +23221,7 @@ class BatchStatementRequest:
     consistent_read: bool | None = None
     """The read consistency of the PartiQL batch request."""
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for a PartiQL
     batch request operation that failed a condition check.
@@ -23409,7 +23393,7 @@ class Condition:
       evaluates the scan results and returns only the desired values.
     """
 
-    comparison_operator: ComparisonOperator
+    comparison_operator: str
     """
     A comparator for evaluating attributes. For example, equals, greater
     than, less than, etc.
@@ -23742,7 +23726,7 @@ class ExecuteStatementInput:
     the statement response.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -23774,9 +23758,7 @@ class ExecuteStatementInput:
     apply in a subsequent operation to continue the operation.
     """
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for an
     `ExecuteStatement` operation that failed a condition check.
@@ -24028,7 +24010,7 @@ class GetItemInput:
     eventually consistent reads.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -24449,9 +24431,7 @@ class ParameterizedStatement:
     parameters: "list[AttributeValue] | None" = None
     """The parameter values."""
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for a PartiQL
     `ParameterizedStatement` operation that failed a condition check.
@@ -25073,7 +25053,7 @@ class BatchExecuteStatementInput:
     statements: "list[BatchStatementRequest] | None" = None
     """The list of PartiQL statements representing the batch to run."""
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -25181,7 +25161,7 @@ class ExecuteTransactionInput:
     the statement response.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response. For more
@@ -25808,7 +25788,7 @@ class BatchGetItemInput:
       in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -25943,7 +25923,7 @@ class ExpectedAttributeValue:
       an attribute to have a value, while also expecting it not to exist.)
     """
 
-    comparison_operator: ComparisonOperator | None = None
+    comparison_operator: str | None = None
     """
     A comparator for evaluating attributes in the `AttributeValueList`. For
     example, equals, greater than, less than, etc.
@@ -26188,7 +26168,7 @@ class TransactGetItemsInput:
     contains a `Get` structure.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     A value of `TOTAL` causes consumed capacity information to be returned,
     and a value of `NONE` prevents that information from being returned. No
@@ -26365,9 +26345,7 @@ class ConditionCheck:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     Use `ReturnValuesOnConditionCheckFailure` to get the item attributes if
     the `ConditionCheck` condition fails. For
@@ -26502,9 +26480,7 @@ class Delete:
     expression_attribute_values: "dict[str, AttributeValue] | None" = None
     """One or more values that can be substituted in an expression."""
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     Use `ReturnValuesOnConditionCheckFailure` to get the item attributes if
     the `Delete` condition fails. For `ReturnValuesOnConditionCheckFailure`,
@@ -26633,9 +26609,7 @@ class Put:
     expression_attribute_values: "dict[str, AttributeValue] | None" = None
     """One or more values that can be substituted in an expression."""
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     Use `ReturnValuesOnConditionCheckFailure` to get the item attributes if
     the `Put` condition fails. For `ReturnValuesOnConditionCheckFailure`,
@@ -26752,7 +26726,7 @@ class SearchVectorsInput:
     `ACTIVE` state.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -26987,9 +26961,7 @@ class Update:
     expression_attribute_values: "dict[str, AttributeValue] | None" = None
     """One or more values that can be substituted in an expression."""
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     Use `ReturnValuesOnConditionCheckFailure` to get the item attributes if
     the `Update` condition fails. For `ReturnValuesOnConditionCheckFailure`,
@@ -28244,7 +28216,7 @@ class ScanInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    select: Select | None = None
+    select: str | None = None
     """
     The attributes to be returned in the result. You can retrieve all item
     attributes, specific item attributes, the count of matching items, or in
@@ -28305,7 +28277,7 @@ class ScanInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    conditional_operator: ConditionalOperator | None = None
+    conditional_operator: str | None = None
     """
     This is a legacy parameter. Use `FilterExpression` instead. For more
     information, see
@@ -28327,7 +28299,7 @@ class ScanInput:
     corresponding value of `LastEvaluatedKey`.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -28759,7 +28731,7 @@ class BatchWriteItemInput:
         in the table's attribute definition.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -28778,7 +28750,7 @@ class BatchWriteItemInput:
     - `NONE` - No `ConsumedCapacity` details are included in the response.
     """
 
-    return_item_collection_metrics: ReturnItemCollectionMetrics | None = None
+    return_item_collection_metrics: str | None = None
     """
     Determines whether item collection metrics are returned. If set to
     `SIZE`, the response includes statistics about item collections, if any,
@@ -28880,7 +28852,7 @@ class DeleteItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    conditional_operator: ConditionalOperator | None = None
+    conditional_operator: str | None = None
     """
     This is a legacy parameter. Use `ConditionExpression` instead. For more
     information, see
@@ -28888,7 +28860,7 @@ class DeleteItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values: ReturnValue | None = None
+    return_values: str | None = None
     """
     Use `ReturnValues` if you want to get the item attributes as they
     appeared before they were deleted. For `DeleteItem`, the valid values
@@ -28910,7 +28882,7 @@ class DeleteItemInput:
         `ALL_OLD`.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -28929,7 +28901,7 @@ class DeleteItemInput:
     - `NONE` - No `ConsumedCapacity` details are included in the response.
     """
 
-    return_item_collection_metrics: ReturnItemCollectionMetrics | None = None
+    return_item_collection_metrics: str | None = None
     """
     Determines whether item collection metrics are returned. If set to
     `SIZE`, the response includes statistics about item collections, if any,
@@ -29023,9 +28995,7 @@ class DeleteItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for a
     `DeleteItem` operation that failed a condition check.
@@ -29309,7 +29279,7 @@ class PutItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values: ReturnValue | None = None
+    return_values: str | None = None
     """
     Use `ReturnValues` if you want to get the item attributes as they
     appeared before they were updated with the `PutItem` request. For
@@ -29334,7 +29304,7 @@ class PutItemInput:
         `ALL_OLD`.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -29353,7 +29323,7 @@ class PutItemInput:
     - `NONE` - No `ConsumedCapacity` details are included in the response.
     """
 
-    return_item_collection_metrics: ReturnItemCollectionMetrics | None = None
+    return_item_collection_metrics: str | None = None
     """
     Determines whether item collection metrics are returned. If set to
     `SIZE`, the response includes statistics about item collections, if any,
@@ -29361,7 +29331,7 @@ class PutItemInput:
     set to `NONE` (the default), no statistics are returned.
     """
 
-    conditional_operator: ConditionalOperator | None = None
+    conditional_operator: str | None = None
     """
     This is a legacy parameter. Use `ConditionExpression` instead. For more
     information, see
@@ -29455,9 +29425,7 @@ class PutItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for a `PutItem`
     operation that failed a condition check.
@@ -29690,7 +29658,7 @@ class QueryInput:
     `IndexName` parameter, you must also provide `TableName.`
     """
 
-    select: Select | None = None
+    select: str | None = None
     """
     The attributes to be returned in the result. You can retrieve all item
     attributes, specific item attributes, the count of matching items, or in
@@ -29794,7 +29762,7 @@ class QueryInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    conditional_operator: ConditionalOperator | None = None
+    conditional_operator: str | None = None
     """
     This is a legacy parameter. Use `FilterExpression` instead. For more
     information, see
@@ -29831,7 +29799,7 @@ class QueryInput:
     No set data types are allowed.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -30520,7 +30488,7 @@ class UpdateItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    conditional_operator: ConditionalOperator | None = None
+    conditional_operator: str | None = None
     """
     This is a legacy parameter. Use `ConditionExpression` instead. For more
     information, see
@@ -30528,7 +30496,7 @@ class UpdateItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values: ReturnValue | None = None
+    return_values: str | None = None
     """
     Use `ReturnValues` if you want to get the item attributes as they appear
     before or after they are successfully updated. For `UpdateItem`, the
@@ -30557,7 +30525,7 @@ class UpdateItemInput:
     The values returned are strongly consistent.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -30576,7 +30544,7 @@ class UpdateItemInput:
     - `NONE` - No `ConsumedCapacity` details are included in the response.
     """
 
-    return_item_collection_metrics: ReturnItemCollectionMetrics | None = None
+    return_item_collection_metrics: str | None = None
     """
     Determines whether item collection metrics are returned. If set to
     `SIZE`, the response includes statistics about item collections, if any,
@@ -30755,9 +30723,7 @@ class UpdateItemInput:
     in the *Amazon DynamoDB Developer Guide*.
     """
 
-    return_values_on_condition_check_failure: (
-        ReturnValuesOnConditionCheckFailure | None
-    ) = None
+    return_values_on_condition_check_failure: str | None = None
     """
     An optional parameter that returns the item attributes for an
     `UpdateItem` operation that failed a condition check.
@@ -31339,7 +31305,7 @@ class TransactWriteItemsInput:
     operate on the same item.
     """
 
-    return_consumed_capacity: ReturnConsumedCapacity | None = None
+    return_consumed_capacity: str | None = None
     """
     Determines the level of detail about either provisioned or on-demand
     throughput consumption that is returned in the response:
@@ -31358,7 +31324,7 @@ class TransactWriteItemsInput:
     - `NONE` - No `ConsumedCapacity` details are included in the response.
     """
 
-    return_item_collection_metrics: ReturnItemCollectionMetrics | None = None
+    return_item_collection_metrics: str | None = None
     """
     Determines whether item collection metrics are returned. If set to
     `SIZE`, the response includes statistics about item collections (if

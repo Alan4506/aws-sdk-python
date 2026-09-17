@@ -1209,7 +1209,7 @@ class TooManyRequestsException(ServiceError):
 
     type: str | None = None
 
-    reason: ThrottleReason | None = None
+    reason: str | None = None
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_TOO_MANY_REQUESTS_EXCEPTION, self)
@@ -1377,7 +1377,7 @@ class AddPermissionInput:
     operator.
     """
 
-    function_url_auth_type: FunctionUrlAuthType | None = None
+    function_url_auth_type: str | None = None
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -2105,7 +2105,7 @@ class KafkaSchemaRegistryAccessConfig:
     Manager secret ARN in the `URI` field.
     """
 
-    type: KafkaSchemaRegistryAuthType | None = None
+    type: str | None = None
     """The type of authentication Lambda uses to access your schema registry."""
 
     uri: str | None = None
@@ -2204,7 +2204,7 @@ class KafkaSchemaValidationConfig:
     registry.
     """
 
-    attribute: KafkaSchemaValidationAttribute | None = None
+    attribute: str | None = None
     """
     The attributes you want your schema registry to validate and filter for.
     If you selected `JSON` as the `EventRecordFormat`, Lambda also
@@ -2288,7 +2288,7 @@ class KafkaSchemaRegistryConfig:
     - For Confluent schema registries, use the URL of the registry.
     """
 
-    event_record_format: SchemaRegistryEventRecordFormat | None = None
+    event_record_format: str | None = None
     """
     The record format that Lambda delivers to your function after schema
     validation.
@@ -2485,7 +2485,7 @@ class Architecture(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_architectures_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[Architecture]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -2495,8 +2495,8 @@ def _serialize_architectures_list(
 
 def _deserialize_architectures_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[Architecture]:
-    result: list[Architecture] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -2592,7 +2592,7 @@ class TargetTrackingScalingPolicy:
     capacity to maintain a target value for a specific metric.
     """
 
-    predefined_metric_type: CapacityProviderPredefinedMetricType
+    predefined_metric_type: str
     """The predefined metric type to track for scaling decisions."""
 
     target_value: float
@@ -2695,7 +2695,7 @@ class CapacityProviderScalingConfig:
     across all compute instances.
     """
 
-    scaling_mode: CapacityProviderScalingMode | None = None
+    scaling_mode: str | None = None
     """
     The scaling mode that determines how the capacity provider responds to
     changes in demand.
@@ -2806,7 +2806,7 @@ class InstanceRequirements:
     compute instances used by the capacity provider.
     """
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     A list of supported CPU architectures for compute instances. Valid
     values include `x86_64` and `arm64`.
@@ -2982,7 +2982,7 @@ class PropagateTags:
     capacity provider.
     """
 
-    mode: PropagateTagsMode | None = None
+    mode: str | None = None
     """
     The tag propagation mode. Set to `Explicit` to propagate the tags
     specified in `ExplicitTags` to managed resources. Set to `None` to
@@ -3046,7 +3046,7 @@ class SystemLogLevel(UnknownEnumMixin, StrEnum):
 class CapacityProviderLoggingConfig:
     """The capacity provider's Amazon CloudWatch Logs configuration settings."""
 
-    system_log_level: SystemLogLevel | None = None
+    system_log_level: str | None = None
     """
     Set this property to filter the system logs for your capacity provider
     that Lambda sends to CloudWatch. Lambda only sends system logs at the
@@ -3475,7 +3475,7 @@ class CapacityProvider:
     capacity_provider_arn: str
     """The Amazon Resource Name (ARN) of the capacity provider."""
 
-    state: CapacityProviderState
+    state: str
     """The current state of the capacity provider."""
 
     vpc_config: CapacityProviderVpcConfig
@@ -3956,7 +3956,7 @@ GET_CAPACITY_PROVIDER = APIOperation(
 class ListCapacityProvidersInput:
     """Dataclass for ListCapacityProvidersInput structure."""
 
-    state: CapacityProviderState | None = None
+    state: str | None = None
     """Filter capacity providers by their current state."""
 
     marker: str | None = None
@@ -4242,7 +4242,7 @@ class FunctionVersionsByCapacityProviderListItem:
     function_arn: str
     """The Amazon Resource Name (ARN) of the function version."""
 
-    state: State
+    state: str
     """The current state of the function version."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -4621,7 +4621,7 @@ class CodeSigningPolicies:
     specify the validation failure action for signature mismatch or expiry.
     """
 
-    untrusted_artifact_on_deployment: CodeSigningPolicy | None = None
+    untrusted_artifact_on_deployment: str | None = None
     """
     Code signing configuration policy for deployment validation failure. If
     you set the policy to `Enforce`, Lambda blocks the deployment request if
@@ -6448,10 +6448,10 @@ class OperationUpdate:
     id: str
     """The unique identifier for this operation."""
 
-    type: OperationType
+    type: str
     """The type of operation to update."""
 
-    action: OperationAction
+    action: str
     """The action to take on the operation."""
 
     parent_id: str | None = None
@@ -7126,7 +7126,7 @@ class Operation:
     id: str
     """The unique identifier for this operation."""
 
-    type: OperationType
+    type: str
     """The type of operation."""
 
     start_timestamp: datetime
@@ -7135,7 +7135,7 @@ class Operation:
     format](https://www.w3.org/TR/NOTE-datetime) (YYYY-MM-DDThh:mm:ss.sTZD).
     """
 
-    status: OperationStatus
+    status: str
     """The current status of the operation."""
 
     parent_id: str | None = None
@@ -7956,7 +7956,7 @@ class GetDurableExecutionOutput:
     format.
     """
 
-    status: ExecutionStatus
+    status: str
     """
     The current status of the durable execution. Valid values are `RUNNING`,
     `SUCCEEDED`, `FAILED`, `TIMED_OUT`, and `STOPPED`.
@@ -9706,7 +9706,7 @@ class WaitSucceededDetails:
 class Event:
     """An event that occurred during the execution of a durable function."""
 
-    event_type: EventType | None = None
+    event_type: str | None = None
     """The type of event that occurred."""
 
     sub_type: str | None = None
@@ -10836,7 +10836,7 @@ class DocumentDBEventSourceConfig:
     specify a collection, Lambda consumes all collections.
     """
 
-    full_document: FullDocument | None = None
+    full_document: str | None = None
     """
     Determines what DocumentDB sends to your event stream during document
     update operations. If set to UpdateLookup, DocumentDB sends a delta
@@ -11018,7 +11018,7 @@ class FunctionResponseType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_function_response_type_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[FunctionResponseType]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -11028,8 +11028,8 @@ def _serialize_function_response_type_list(
 
 def _deserialize_function_response_type_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[FunctionResponseType]:
-    result: list[FunctionResponseType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -11057,7 +11057,7 @@ class EventSourceMappingLoggingConfig:
     define the level of logs for your event source mapping.
     """
 
-    system_log_level: EventSourceMappingSystemLogLevel | None = None
+    system_log_level: str | None = None
     """
     The log level you want your event source mapping to use. Lambda event
     poller only sends system logs at the selected level of detail and lower,
@@ -11111,7 +11111,7 @@ class EventSourceMappingMetric(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_event_source_mapping_metric_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[EventSourceMappingMetric]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -11121,8 +11121,8 @@ def _serialize_event_source_mapping_metric_list(
 
 def _deserialize_event_source_mapping_metric_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[EventSourceMappingMetric]:
-    result: list[EventSourceMappingMetric] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -11144,7 +11144,7 @@ class EventSourceMappingMetricsConfig:
     produce.
     """
 
-    metrics: list[EventSourceMappingMetric] | None = None
+    metrics: list[str] | None = None
     """
     The metrics you want your event source mapping to produce, including
     `EventCount`, `ErrorCount`, `KafkaMetrics`.
@@ -11547,7 +11547,7 @@ class SourceAccessConfiguration:
     authentication protocol, VPC components, or virtual host.
     """
 
-    type: SourceAccessType | None = None
+    type: str | None = None
     """
     The type of authentication protocol, VPC components, or virtual host for
     your event source. For example: `"Type":"SASL_SCRAM_512_AUTH"`.
@@ -11839,7 +11839,7 @@ class CreateEventSourceMappingInput:
     from each shard concurrently.
     """
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -11906,7 +11906,7 @@ class CreateEventSourceMappingInput:
     self_managed_event_source: SelfManagedEventSource | None = None
     """The self-managed Apache Kafka cluster to receive records from."""
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -12397,7 +12397,7 @@ class CreateEventSourceMappingOutput:
     uuid: str | None = None
     """The identifier of the event source mapping."""
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -12589,7 +12589,7 @@ class CreateEventSourceMappingOutput:
     value of 0 seconds indicates no tumbling window.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -13168,7 +13168,7 @@ class DeleteEventSourceMappingOutput:
     uuid: str | None = None
     """The identifier of the event source mapping."""
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -13360,7 +13360,7 @@ class DeleteEventSourceMappingOutput:
     value of 0 seconds indicates no tumbling window.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -13996,7 +13996,7 @@ class GetEventSourceMappingOutput:
     uuid: str | None = None
     """The identifier of the event source mapping."""
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -14188,7 +14188,7 @@ class GetEventSourceMappingOutput:
     value of 0 seconds indicates no tumbling window.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -14835,7 +14835,7 @@ class EventSourceMappingConfiguration:
     uuid: str | None = None
     """The identifier of the event source mapping."""
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -15027,7 +15027,7 @@ class EventSourceMappingConfiguration:
     value of 0 seconds indicates no tumbling window.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -15810,7 +15810,7 @@ class UpdateEventSourceMappingInput:
     secure your event source.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -16162,7 +16162,7 @@ class UpdateEventSourceMappingOutput:
     uuid: str | None = None
     """The identifier of the event source mapping."""
 
-    starting_position: EventSourcePosition | None = None
+    starting_position: str | None = None
     """
     The position in a stream from which to start reading. Required for
     Amazon Kinesis and Amazon DynamoDB Stream event sources. `AT_TIMESTAMP`
@@ -16354,7 +16354,7 @@ class UpdateEventSourceMappingOutput:
     value of 0 seconds indicates no tumbling window.
     """
 
-    function_response_types: list[FunctionResponseType] | None = None
+    function_response_types: list[str] | None = None
     """
     (Kinesis, DynamoDB Streams, Amazon MSK, self-managed Apache Kafka, and
     Amazon SQS) A list of current response type enums applied to the event
@@ -17255,7 +17255,7 @@ class FunctionCode:
     use.
     """
 
-    s3_object_storage_mode: S3ObjectStorageMode | None = None
+    s3_object_storage_mode: str | None = None
     """
     Specifies how the deployment package is stored. Valid values:
 
@@ -17754,13 +17754,13 @@ class LogFormat(UnknownEnumMixin, StrEnum):
 class LoggingConfig:
     """The function's Amazon CloudWatch Logs configuration settings."""
 
-    log_format: LogFormat | None = None
+    log_format: str | None = None
     """
     The format in which Lambda sends your function's application and system
     logs to CloudWatch. Select between plain text and structured JSON.
     """
 
-    application_log_level: ApplicationLogLevel | None = None
+    application_log_level: str | None = None
     """
     Set this property to filter the application logs for your function that
     Lambda sends to CloudWatch. Lambda only sends application logs at the
@@ -17768,7 +17768,7 @@ class LoggingConfig:
     and `FATAL` is the lowest.
     """
 
-    system_log_level: SystemLogLevel | None = None
+    system_log_level: str | None = None
     """
     Set this property to filter the system logs for your function that
     Lambda sends to CloudWatch. Lambda only sends system logs at the
@@ -17926,7 +17926,7 @@ class SnapStart:
     version.
     """
 
-    apply_on: SnapStartApplyOn | None = None
+    apply_on: str | None = None
     """
     Set to `PublishedVersions` to create a snapshot of the initialized
     execution environment when you publish a function version.
@@ -17976,7 +17976,7 @@ class TenancyConfig:
     modified after function creation.
     """
 
-    tenant_isolation_mode: TenantIsolationMode
+    tenant_isolation_mode: str
     """
     Tenant isolation mode allows for invocation to be sent to a
     corresponding execution environment dedicated to a specific tenant ID.
@@ -18031,7 +18031,7 @@ class TracingConfig:
     `Mode` to `Active`.
     """
 
-    mode: TracingMode | None = None
+    mode: str | None = None
     """The tracing mode."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -18211,7 +18211,7 @@ class CreateFunctionInput:
     the function name, it is limited to 64 characters in length.
     """
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -18270,7 +18270,7 @@ class CreateFunctionInput:
     creation.
     """
 
-    publish_to: FunctionVersionLatestPublished | None = None
+    publish_to: str | None = None
     """Specifies where to publish the function version or configuration."""
 
     vpc_config: VpcConfig | None = None
@@ -18283,7 +18283,7 @@ class CreateFunctionInput:
     VPC](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html).
     """
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set to `Zip` for .zip file archive.
@@ -18376,7 +18376,7 @@ class CreateFunctionInput:
     that override the values in the container image Dockerfile.
     """
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports. Enter a
     string array with one of the valid values (arm64 or x86_64). The default
@@ -19187,13 +19187,13 @@ class SnapStartResponse:
     setting.
     """
 
-    apply_on: SnapStartApplyOn | None = None
+    apply_on: str | None = None
     """
     When set to `PublishedVersions`, Lambda creates a snapshot of the
     execution environment when you publish a function version.
     """
 
-    optimization_status: SnapStartOptimizationStatus | None = None
+    optimization_status: str | None = None
     """
     When you provide a [qualified Amazon Resource Name
     (ARN)](https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html#versioning-versions-using),
@@ -19292,7 +19292,7 @@ class StateReasonCode(UnknownEnumMixin, StrEnum):
 class TracingConfigResponse:
     """The function's X-Ray tracing configuration."""
 
-    mode: TracingMode | None = None
+    mode: str | None = None
     """The tracing mode."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -19424,7 +19424,7 @@ class CreateFunctionOutput:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -19532,7 +19532,7 @@ class CreateFunctionOutput:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -19541,13 +19541,13 @@ class CreateFunctionOutput:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -19556,7 +19556,7 @@ class CreateFunctionOutput:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -19573,7 +19573,7 @@ class CreateFunctionOutput:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -19582,7 +19582,7 @@ class CreateFunctionOutput:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -20442,7 +20442,7 @@ class CreateFunctionUrlConfigInput:
     qualifier: str | None = None
     """The alias name."""
 
-    auth_type: FunctionUrlAuthType | None = None
+    auth_type: str | None = None
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -20458,7 +20458,7 @@ class CreateFunctionUrlConfigInput:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -20563,7 +20563,7 @@ class CreateFunctionUrlConfigOutput:
     function_arn: str
     """The Amazon Resource Name (ARN) of your function."""
 
-    auth_type: FunctionUrlAuthType
+    auth_type: str
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -20585,7 +20585,7 @@ class CreateFunctionUrlConfigOutput:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -21488,7 +21488,7 @@ class FunctionConfiguration:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -21596,7 +21596,7 @@ class FunctionConfiguration:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -21605,13 +21605,13 @@ class FunctionConfiguration:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -21620,7 +21620,7 @@ class FunctionConfiguration:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -21637,7 +21637,7 @@ class FunctionConfiguration:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -21646,7 +21646,7 @@ class FunctionConfiguration:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -22701,7 +22701,7 @@ class GetFunctionConfigurationOutput:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -22809,7 +22809,7 @@ class GetFunctionConfigurationOutput:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -22818,13 +22818,13 @@ class GetFunctionConfigurationOutput:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -22833,7 +22833,7 @@ class GetFunctionConfigurationOutput:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -22850,7 +22850,7 @@ class GetFunctionConfigurationOutput:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -22859,7 +22859,7 @@ class GetFunctionConfigurationOutput:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -23490,7 +23490,7 @@ class RecursiveLoop(UnknownEnumMixin, StrEnum):
 class GetFunctionRecursionConfigOutput:
     """Dataclass for GetFunctionRecursionConfigOutput structure."""
 
-    recursive_loop: RecursiveLoop | None = None
+    recursive_loop: str | None = None
     """
     If your function's recursive loop detection configuration is `Allow`,
     Lambda doesn't take any action when it detects your function being
@@ -23887,7 +23887,7 @@ class GetFunctionUrlConfigOutput:
     function_arn: str
     """The Amazon Resource Name (ARN) of your function."""
 
-    auth_type: FunctionUrlAuthType
+    auth_type: str
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -23915,7 +23915,7 @@ class GetFunctionUrlConfigOutput:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -24294,7 +24294,7 @@ class UpdateRuntimeOn(UnknownEnumMixin, StrEnum):
 class GetRuntimeManagementConfigOutput:
     """Dataclass for GetRuntimeManagementConfigOutput structure."""
 
-    update_runtime_on: UpdateRuntimeOn | None = None
+    update_runtime_on: str | None = None
     """The current runtime update mode of the function."""
 
     function_arn: str | None = None
@@ -25432,7 +25432,7 @@ class InvokeInput:
     function name, it is limited to 64 characters in length.
     """
 
-    invocation_type: InvocationType | None = None
+    invocation_type: str | None = None
     """
     Choose from the following options.
 
@@ -25449,7 +25449,7 @@ class InvokeInput:
       has permission to invoke the function.
     """
 
-    log_type: LogType | None = None
+    log_type: str | None = None
     """
     Set to `Tail` to include the execution log in the response. Applies to
     synchronously invoked functions only.
@@ -27049,7 +27049,7 @@ class InvokeWithResponseStreamInput:
     the function name, it is limited to 64 characters in length.
     """
 
-    log_type: LogType | None = None
+    log_type: str | None = None
     """
     Set to `Tail` to include the execution log in the response. Applies to
     synchronously invoked functions only.
@@ -27076,7 +27076,7 @@ class InvokeWithResponseStreamInput:
     tenant_id: str | None = None
     """The identifier of the tenant in a multi-tenant Lambda function."""
 
-    invocation_type: ResponseStreamingInvocationType | None = None
+    invocation_type: str | None = None
     """
     Use one of the following options:
 
@@ -27684,7 +27684,7 @@ INVOKE_WITH_RESPONSE_STREAM = APIOperation(
 
 
 def _serialize_execution_status_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[ExecutionStatus]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -27694,8 +27694,8 @@ def _serialize_execution_status_list(
 
 def _deserialize_execution_status_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ExecutionStatus]:
-    result: list[ExecutionStatus] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -27731,7 +27731,7 @@ class ListDurableExecutionsByFunctionInput:
     string are returned.
     """
 
-    statuses: list[ExecutionStatus] | None = None
+    statuses: list[str] | None = None
     """
     Filter executions by status. Valid values: RUNNING, SUCCEEDED, FAILED,
     TIMED_OUT, STOPPED.
@@ -27929,7 +27929,7 @@ class Execution:
     function_arn: str
     """The Amazon Resource Name (ARN) of the Lambda function."""
 
-    status: ExecutionStatus
+    status: str
     """The current status of the durable execution."""
 
     start_timestamp: datetime
@@ -28186,7 +28186,7 @@ class ListFunctionsInput:
     `ALL`.
     """
 
-    function_version: FunctionVersion | None = None
+    function_version: str | None = None
     """
     Set to `ALL` to include entries for all published versions of each
     function.
@@ -28484,7 +28484,7 @@ class FunctionUrlConfig:
     format](https://www.w3.org/TR/NOTE-datetime) (YYYY-MM-DDThh:mm:ss.sTZD).
     """
 
-    auth_type: FunctionUrlAuthType
+    auth_type: str
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -28501,7 +28501,7 @@ class FunctionUrlConfig:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -28849,7 +28849,7 @@ class ProvisionedConcurrencyConfigListItem:
     function versions.
     """
 
-    status: ProvisionedConcurrencyStatusEnum | None = None
+    status: str | None = None
     """The status of the allocation process."""
 
     status_reason: str | None = None
@@ -29490,7 +29490,7 @@ class PutFunctionRecursionConfigInput:
     the function name, it is limited to 64 characters in length.
     """
 
-    recursive_loop: RecursiveLoop | None = None
+    recursive_loop: str | None = None
     """
     If you set your function's recursive loop detection configuration to
     `Allow`, Lambda doesn't take any action when it detects your function
@@ -29571,7 +29571,7 @@ class PutFunctionRecursionConfigInput:
 class PutFunctionRecursionConfigOutput:
     """Dataclass for PutFunctionRecursionConfigOutput structure."""
 
-    recursive_loop: RecursiveLoop | None = None
+    recursive_loop: str | None = None
     """
     The status of your function's recursive loop detection configuration.
 
@@ -29738,7 +29738,7 @@ class PutFunctionScalingConfigInput:
 class PutFunctionScalingConfigOutput:
     """Dataclass for PutFunctionScalingConfigOutput structure."""
 
-    function_state: State | None = None
+    function_state: str | None = None
     """
     The current state of the function after applying the scaling
     configuration.
@@ -29844,7 +29844,7 @@ class PutRuntimeManagementConfigInput:
     `$LATEST` version is returned.
     """
 
-    update_runtime_on: UpdateRuntimeOn | None = None
+    update_runtime_on: str | None = None
     """
     Specify the runtime update mode.
 
@@ -29961,7 +29961,7 @@ class PutRuntimeManagementConfigInput:
 class PutRuntimeManagementConfigOutput:
     """Dataclass for PutRuntimeManagementConfigOutput structure."""
 
-    update_runtime_on: UpdateRuntimeOn
+    update_runtime_on: str
     """The runtime update mode."""
 
     function_arn: str
@@ -30122,7 +30122,7 @@ class UpdateFunctionCodeInput:
     use.
     """
 
-    s3_object_storage_mode: S3ObjectStorageMode | None = None
+    s3_object_storage_mode: str | None = None
     """
     Specifies how the deployment package is stored. Valid values:
 
@@ -30139,7 +30139,7 @@ class UpdateFunctionCodeInput:
     function defined with a .zip file archive.
     """
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports. Enter a
     string array with one of the valid values (arm64 or x86_64). The default
@@ -30152,7 +30152,7 @@ class UpdateFunctionCodeInput:
     code. This has the same effect as calling PublishVersion separately.
     """
 
-    publish_to: FunctionVersionLatestPublished | None = None
+    publish_to: str | None = None
     """Specifies where to publish the function version or configuration."""
 
     dry_run: bool = False
@@ -30350,7 +30350,7 @@ class UpdateFunctionCodeOutput:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -30458,7 +30458,7 @@ class UpdateFunctionCodeOutput:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -30467,13 +30467,13 @@ class UpdateFunctionCodeOutput:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -30482,7 +30482,7 @@ class UpdateFunctionCodeOutput:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -30499,7 +30499,7 @@ class UpdateFunctionCodeOutput:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -30508,7 +30508,7 @@ class UpdateFunctionCodeOutput:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -31153,7 +31153,7 @@ class UpdateFunctionConfigurationInput:
     execution.
     """
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -31546,7 +31546,7 @@ class UpdateFunctionConfigurationOutput:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -31654,7 +31654,7 @@ class UpdateFunctionConfigurationOutput:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -31663,13 +31663,13 @@ class UpdateFunctionConfigurationOutput:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -31678,7 +31678,7 @@ class UpdateFunctionConfigurationOutput:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -31695,7 +31695,7 @@ class UpdateFunctionConfigurationOutput:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -31704,7 +31704,7 @@ class UpdateFunctionConfigurationOutput:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -32357,7 +32357,7 @@ class UpdateFunctionUrlConfigInput:
     qualifier: str | None = None
     """The alias name."""
 
-    auth_type: FunctionUrlAuthType | None = None
+    auth_type: str | None = None
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -32373,7 +32373,7 @@ class UpdateFunctionUrlConfigInput:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -32478,7 +32478,7 @@ class UpdateFunctionUrlConfigOutput:
     function_arn: str
     """The Amazon Resource Name (ARN) of your function."""
 
-    auth_type: FunctionUrlAuthType
+    auth_type: str
     """
     The type of authentication that your function URL uses. Set to `AWS_IAM`
     if you want to restrict access to authenticated users only. Set to
@@ -32506,7 +32506,7 @@ class UpdateFunctionUrlConfigOutput:
     for your function URL.
     """
 
-    invoke_mode: InvokeMode | None = None
+    invoke_mode: str | None = None
     """
     Use one of the following options:
 
@@ -33912,7 +33912,7 @@ class PublishVersionInput:
     configuration has changed since you last updated it.
     """
 
-    publish_to: FunctionVersionLatestPublished | None = None
+    publish_to: str | None = None
     """Specifies where to publish the function version or configuration."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -33999,7 +33999,7 @@ class PublishVersionOutput:
     function_arn: str | None = None
     """The function's Amazon Resource Name (ARN)."""
 
-    runtime: Runtime | None = None
+    runtime: str | None = None
     """
     The identifier of the function's
     [runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -34107,7 +34107,7 @@ class PublishVersionOutput:
     [layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html).
     """
 
-    state: State | None = None
+    state: str | None = None
     """
     The current state of the function. When the state is `Inactive`, you can
     reactivate the function by invoking it.
@@ -34116,13 +34116,13 @@ class PublishVersionOutput:
     state_reason: str | None = None
     """The reason for the function's current state."""
 
-    state_reason_code: StateReasonCode | None = None
+    state_reason_code: str | None = None
     """
     The reason code for the function's current state. When the code is
     `Creating`, you can't invoke or modify the function.
     """
 
-    last_update_status: LastUpdateStatus | None = None
+    last_update_status: str | None = None
     """
     The status of the last update that was performed on the function. This
     is first set to `Successful` after function creation completes.
@@ -34131,7 +34131,7 @@ class PublishVersionOutput:
     last_update_status_reason: str | None = None
     """The reason for the last update that was performed on the function."""
 
-    last_update_status_reason_code: LastUpdateStatusReasonCode | None = None
+    last_update_status_reason_code: str | None = None
     """The reason code for the last update that was performed on the function."""
 
     file_system_configs: list[FileSystemConfig] | None = None
@@ -34148,7 +34148,7 @@ class PublishVersionOutput:
     signing_job_arn: str | None = None
     """The ARN of the signing job."""
 
-    package_type: PackageType | None = None
+    package_type: str | None = None
     """
     The type of deployment package. Set to `Image` for container image and
     set `Zip` for .zip file archive.
@@ -34157,7 +34157,7 @@ class PublishVersionOutput:
     image_config_response: ImageConfigResponse | None = None
     """The function's image configuration values."""
 
-    architectures: list[Architecture] | None = None
+    architectures: list[str] | None = None
     """
     The instruction set architecture that the function supports.
     Architecture is a string array with one of the valid values. The default
@@ -35165,13 +35165,13 @@ GET_RESOURCE_POLICY = APIOperation(
 class ListLayersInput:
     """Dataclass for ListLayersInput structure."""
 
-    compatible_architecture: Architecture | None = None
+    compatible_architecture: str | None = None
     """
     The compatible [instruction set
     architecture](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtime: Runtime | None = None
+    compatible_runtime: str | None = None
     """
     A runtime identifier.
 
@@ -35257,7 +35257,7 @@ class ListLayersInput:
 
 
 def _serialize_compatible_architectures(
-    serializer: ShapeSerializer, schema: Schema, value: list[Architecture]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -35267,8 +35267,8 @@ def _serialize_compatible_architectures(
 
 def _deserialize_compatible_architectures(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[Architecture]:
-    result: list[Architecture] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -35283,7 +35283,7 @@ def _deserialize_compatible_architectures(
 
 
 def _serialize_compatible_runtimes(
-    serializer: ShapeSerializer, schema: Schema, value: list[Runtime]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -35293,8 +35293,8 @@ def _serialize_compatible_runtimes(
 
 def _deserialize_compatible_runtimes(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[Runtime]:
-    result: list[Runtime] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -35330,13 +35330,13 @@ class LayerVersionsListItem:
     `2018-11-27T15:10:45.123+0000`.
     """
 
-    compatible_architectures: list[Architecture] | None = None
+    compatible_architectures: list[str] | None = None
     """
     A list of compatible [instruction set
     architectures](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtimes: list[Runtime] | None = None
+    compatible_runtimes: list[str] | None = None
     """
     The layer's compatible runtimes.
 
@@ -35927,13 +35927,13 @@ class GetLayerVersionOutput:
     version: int = 0
     """The version number."""
 
-    compatible_architectures: list[Architecture] | None = None
+    compatible_architectures: list[str] | None = None
     """
     A list of compatible [instruction set
     architectures](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtimes: list[Runtime] | None = None
+    compatible_runtimes: list[str] | None = None
     """
     The layer's compatible runtimes.
 
@@ -36164,13 +36164,13 @@ class GetLayerVersionByArnOutput:
     version: int = 0
     """The version number."""
 
-    compatible_architectures: list[Architecture] | None = None
+    compatible_architectures: list[str] | None = None
     """
     A list of compatible [instruction set
     architectures](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtimes: list[Runtime] | None = None
+    compatible_runtimes: list[str] | None = None
     """
     The layer's compatible runtimes.
 
@@ -36488,13 +36488,13 @@ GET_LAYER_VERSION_POLICY = APIOperation(
 class ListLayerVersionsInput:
     """Dataclass for ListLayerVersionsInput structure."""
 
-    compatible_architecture: Architecture | None = None
+    compatible_architecture: str | None = None
     """
     The compatible [instruction set
     architecture](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtime: Runtime | None = None
+    compatible_runtime: str | None = None
     """
     A runtime identifier.
 
@@ -36726,7 +36726,7 @@ class LayerVersionContentInput:
     s3_object_version: str | None = None
     """For versioned objects, the version of the layer archive object to use."""
 
-    s3_object_storage_mode: S3ObjectStorageMode | None = None
+    s3_object_storage_mode: str | None = None
     """
     Specifies how the layer archive is stored. Valid values:
 
@@ -36834,13 +36834,13 @@ class PublishLayerVersionInput:
     content: LayerVersionContentInput | None = None
     """The function layer archive."""
 
-    compatible_architectures: list[Architecture] | None = None
+    compatible_architectures: list[str] | None = None
     """
     A list of compatible [instruction set
     architectures](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtimes: list[Runtime] | None = None
+    compatible_runtimes: list[str] | None = None
     """
     A list of compatible [function
     runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html).
@@ -36985,13 +36985,13 @@ class PublishLayerVersionOutput:
     version: int = 0
     """The version number."""
 
-    compatible_architectures: list[Architecture] | None = None
+    compatible_architectures: list[str] | None = None
     """
     A list of compatible [instruction set
     architectures](https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html).
     """
 
-    compatible_runtimes: list[Runtime] | None = None
+    compatible_runtimes: list[str] | None = None
     """
     The layer's compatible runtimes.
 
@@ -38173,7 +38173,7 @@ class GetProvisionedConcurrencyConfigOutput:
     function versions.
     """
 
-    status: ProvisionedConcurrencyStatusEnum | None = None
+    status: str | None = None
     """The status of the allocation process."""
 
     status_reason: str | None = None
@@ -38519,7 +38519,7 @@ class PutProvisionedConcurrencyConfigOutput:
     available_provisioned_concurrent_executions: int | None = None
     """The amount of provisioned concurrency available."""
 
-    status: ProvisionedConcurrencyStatusEnum | None = None
+    status: str | None = None
     """The status of the allocation process."""
 
     status_reason: str | None = None

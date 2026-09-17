@@ -2322,7 +2322,7 @@ class AddDatasetExamplesOutput:
     dataset_id: str
     """The unique identifier of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset."""
 
     added_count: int
@@ -2715,7 +2715,7 @@ class ValidationException(ServiceError):
 
     fault: Literal["client", "server"] | None = "client"
 
-    reason: ValidationExceptionReason
+    reason: str
 
     field_list: list[ValidationExceptionField] | None = None
 
@@ -3045,7 +3045,7 @@ class CreateAgentRuntimeEndpointOutput:
     agent_runtime_arn: str
     """The Amazon Resource Name (ARN) of the AgentCore Runtime."""
 
-    status: AgentRuntimeEndpointStatus
+    status: str
     """The current status of the AgentCore Runtime endpoint."""
 
     created_at: datetime
@@ -3304,7 +3304,7 @@ class DeleteAgentRuntimeEndpointInput:
 class DeleteAgentRuntimeEndpointOutput:
     """Dataclass for DeleteAgentRuntimeEndpointOutput structure."""
 
-    status: AgentRuntimeEndpointStatus
+    status: str
     """The current status of the AgentCore Runtime endpoint deletion."""
 
     agent_runtime_id: str | None = None
@@ -3482,7 +3482,7 @@ class GetAgentRuntimeEndpointOutput:
     agent_runtime_arn: str
     """The Amazon Resource Name (ARN) of the AgentCore Runtime."""
 
-    status: AgentRuntimeEndpointStatus
+    status: str
     """The current status of the AgentCore Runtime endpoint."""
 
     created_at: datetime
@@ -3794,7 +3794,7 @@ class AgentRuntimeEndpoint:
     endpoint.
     """
 
-    status: AgentRuntimeEndpointStatus
+    status: str
     """The current status of the agent runtime endpoint."""
 
     id: str
@@ -4188,7 +4188,7 @@ class UpdateAgentRuntimeEndpointOutput:
     agent_runtime_arn: str
     """The Amazon Resource Name (ARN) of the AgentCore Runtime."""
 
-    status: AgentRuntimeEndpointStatus
+    status: str
     """The current status of the updated AgentCore Runtime endpoint."""
 
     created_at: datetime
@@ -4561,7 +4561,7 @@ class CodeConfiguration:
     code: Code
     """The source code location and configuration details."""
 
-    runtime: AgentManagedRuntimeType
+    runtime: str
     """
     The runtime environment for executing the agent code. Specify the
     programming language and version to use for the agent runtime. For valid
@@ -5193,7 +5193,7 @@ class AuthorizingClaimMatchValueType:
     claim_match_value: ClaimMatchValueType
     """The value or values to match for."""
 
-    claim_match_operator: ClaimMatchOperatorType
+    claim_match_operator: str
     """
     Defines the relationship between the claim field value and the value or
     values you're matching for.
@@ -5271,7 +5271,7 @@ class CustomClaimValidationType:
     inbound_token_claim_name: str
     """The name of the custom claim field to check."""
 
-    inbound_token_claim_value_type: InboundTokenClaimValueType
+    inbound_token_claim_value_type: str
     """
     The data type of the claim value to check for.
 
@@ -5456,7 +5456,7 @@ class ManagedVpcResource:
     placed.
     """
 
-    endpoint_ip_address_type: EndpointIpAddressType
+    endpoint_ip_address_type: str
     """The IP address type for the resource configuration endpoint."""
 
     security_group_ids: list[str] | None = None
@@ -6941,7 +6941,7 @@ class VpcConfig:
 class NetworkConfiguration:
     """SecurityConfig for the Agent."""
 
-    network_mode: NetworkMode
+    network_mode: str
     """The network mode for the AgentCore Runtime."""
 
     network_mode_config: VpcConfig | None = None
@@ -7007,7 +7007,7 @@ class ProtocolConfiguration:
     how the agent runtime communicates with clients.
     """
 
-    server_protocol: ServerProtocol
+    server_protocol: str
     """
     The server protocol for the agent runtime. This field specifies which
     protocol the agent runtime uses to communicate with clients.
@@ -7496,7 +7496,7 @@ class CreateAgentRuntimeOutput:
     created_at: datetime
     """The timestamp when the AgentCore Runtime was created."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the AgentCore Runtime."""
 
     workload_identity_details: WorkloadIdentityDetails | None = None
@@ -7715,7 +7715,7 @@ class DeleteAgentRuntimeInput:
 class DeleteAgentRuntimeOutput:
     """Dataclass for DeleteAgentRuntimeOutput structure."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the AgentCore Runtime deletion."""
 
     agent_runtime_id: str | None = None
@@ -7946,7 +7946,7 @@ class GetAgentRuntimeOutput:
     role_arn: str
     """The IAM role ARN that provides permissions for the AgentCore Runtime."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the AgentCore Runtime."""
 
     lifecycle_configuration: LifecycleConfiguration
@@ -8375,7 +8375,7 @@ class AgentRuntime:
     last_updated_at: datetime
     """The timestamp when the agent runtime was last updated."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the agent runtime."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9021,7 +9021,7 @@ class UpdateAgentRuntimeOutput:
     last_updated_at: datetime
     """The timestamp when the AgentCore Runtime was last updated."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the updated AgentCore Runtime."""
 
     workload_identity_details: WorkloadIdentityDetails | None = None
@@ -9188,7 +9188,7 @@ class AgentRuntimeVersionSummary:
     agent_runtime_version: str
     """The version of the agent runtime."""
 
-    status: AgentRuntimeStatus
+    status: str
     """The current status of the agent runtime version."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -9644,7 +9644,7 @@ class CreateApiKeyCredentialProviderInput:
     `apiKeySecretSource` is set to `EXTERNAL`.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -9817,7 +9817,7 @@ class CreateApiKeyCredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -10308,7 +10308,7 @@ class GetApiKeyCredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -10774,7 +10774,7 @@ class UpdateApiKeyCredentialProviderInput:
     `apiKeySecretSource` is set to `EXTERNAL`.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -10884,7 +10884,7 @@ class UpdateApiKeyCredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -11189,7 +11189,7 @@ class CreateBrowserProfileOutput:
     created_at: datetime
     """The timestamp when the browser profile was created."""
 
-    status: BrowserProfileStatus
+    status: str
     """The current status of the browser profile."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -11367,7 +11367,7 @@ class DeleteBrowserProfileOutput:
     profile_arn: str
     """The Amazon Resource Name (ARN) of the deleted browser profile."""
 
-    status: BrowserProfileStatus
+    status: str
     """The current status of the browser profile deletion."""
 
     last_updated_at: datetime
@@ -11548,7 +11548,7 @@ class GetBrowserProfileOutput:
     name: str
     """The name of the browser profile."""
 
-    status: BrowserProfileStatus
+    status: str
     """The current status of the browser profile."""
 
     created_at: datetime
@@ -11826,7 +11826,7 @@ class BrowserProfileSummary:
     name: str
     """The name of the browser profile."""
 
-    status: BrowserProfileStatus
+    status: str
     """
     The current status of the browser profile. Possible values include
     READY, SAVING, DELETING, and DELETED.
@@ -12427,7 +12427,7 @@ class BrowserEnterprisePolicy:
     location: ResourceLocation
     """The location of the enterprise policy file."""
 
-    type: BrowserEnterprisePolicyType | None = None
+    type: str | None = None
     """
     The type of browser enterprise policy. Available values are `MANAGED`
     and `RECOMMENDED`.
@@ -12826,7 +12826,7 @@ class BrowserNetworkConfiguration:
     browser connects to the network.
     """
 
-    network_mode: BrowserNetworkMode = BrowserNetworkMode("PUBLIC")
+    network_mode: str = BrowserNetworkMode("PUBLIC")
     """
     The network mode for the browser. This field specifies how the browser
     connects to the network.
@@ -13173,7 +13173,7 @@ class CreateBrowserOutput:
     created_at: datetime
     """The timestamp when the browser was created."""
 
-    status: BrowserStatus
+    status: str
     """The current status of the browser."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -13339,7 +13339,7 @@ class DeleteBrowserOutput:
     browser_id: str
     """The unique identifier of the deleted browser."""
 
-    status: BrowserStatus
+    status: str
     """The current status of the browser deletion."""
 
     last_updated_at: datetime
@@ -13544,7 +13544,7 @@ class GetBrowserOutput:
     browser connects to the network.
     """
 
-    status: BrowserStatus
+    status: str
     """The current status of the browser."""
 
     created_at: datetime
@@ -13830,7 +13830,7 @@ class ListBrowsersInput:
     results.
     """
 
-    type: ResourceType | None = None
+    type: str | None = None
     """
     The type of browsers to list. If not specified, all browser types are
     returned.
@@ -13900,7 +13900,7 @@ class BrowserSummary:
     browser_arn: str
     """The Amazon Resource Name (ARN) of the browser."""
 
-    status: BrowserStatus
+    status: str
     """The current status of the browser."""
 
     created_at: datetime
@@ -14189,7 +14189,7 @@ class CapacityReservationTarget:
 class CapacityReservationSpecification:
     """The Capacity Reservation targeting option for the instances."""
 
-    capacity_reservation_preference: CapacityReservationPreference | None = None
+    capacity_reservation_preference: str | None = None
     """The Capacity Reservation preference for the instances."""
 
     capacity_reservation_target: CapacityReservationTarget | None = None
@@ -14273,7 +14273,7 @@ class EphemeralEBSVolumeConfiguration:
     configurations for a capacity provider.
     """
 
-    volume_type: EbsVolumeType = EbsVolumeType("gp3")
+    volume_type: str = EbsVolumeType("gp3")
     """
     The Amazon EBS volume type. If you do not specify a type, the default is
     `gp3`.
@@ -14723,7 +14723,7 @@ class LaunchParameters:
     provider.
     """
 
-    operating_system: OperatingSystem
+    operating_system: str
     """The operating system and CPU architecture for the instances."""
 
     instance_requirements: InstanceRequirements
@@ -14735,7 +14735,7 @@ class LaunchParameters:
     can specify up to five mappings.
     """
 
-    monitoring: Monitoring | None = None
+    monitoring: str | None = None
     """The monitoring level for the instances."""
 
     license_specifications: list[LicenseSpecification] | None = None
@@ -15056,7 +15056,7 @@ class RootVolumeConfiguration:
     changed.
     """
 
-    volume_type: EbsVolumeType = EbsVolumeType("gp3")
+    volume_type: str = EbsVolumeType("gp3")
     """
     The Amazon EBS volume type. If you do not specify a type, the default is
     `gp3`.
@@ -15196,7 +15196,7 @@ class EbsVolumeConfiguration:
     size_gi_b: int
     """The size of the volume, in GiB."""
 
-    volume_type: EbsVolumeType = EbsVolumeType("gp3")
+    volume_type: str = EbsVolumeType("gp3")
     """
     The Amazon EBS volume type. If you do not specify a type, the default is
     `gp3`.
@@ -15988,7 +15988,7 @@ class CreateCapacityProviderOutput:
     name: str
     """The name of the capacity provider."""
 
-    status: CapacityProviderStatus
+    status: str
     """
     The current status of the capacity provider. For possible values, see
     `CapacityProviderStatus`.
@@ -16227,7 +16227,7 @@ class DeleteCapacityProviderOutput:
     capacity_provider_id: str
     """The unique identifier of the deleted capacity provider."""
 
-    status: CapacityProviderStatus
+    status: str
     """
     The current status of the capacity provider. For possible values, see
     `CapacityProviderStatus`.
@@ -16405,7 +16405,7 @@ class GetCapacityProviderOutput:
     name: str
     """The name of the capacity provider."""
 
-    status: CapacityProviderStatus
+    status: str
     """
     The current status of the capacity provider. For possible values, see
     `CapacityProviderStatus`.
@@ -16426,7 +16426,7 @@ class GetCapacityProviderOutput:
     description: str | None = field(repr=False, default=None)
     """The description of the capacity provider, if one was provided."""
 
-    status_code: CapacityProviderStatusCode | None = None
+    status_code: str | None = None
     """
     A reason code for a capacity provider that is not in the `READY` state.
     Use this code for programmatic error handling.
@@ -16914,7 +16914,7 @@ class CapacityProviderSummary:
     name: str
     """The name of the capacity provider."""
 
-    status: CapacityProviderStatus
+    status: str
     """
     The current status of the capacity provider. For possible values, see
     `CapacityProviderStatus`.
@@ -17257,7 +17257,7 @@ class UpdateCapacityProviderOutput:
     name: str
     """The name of the capacity provider."""
 
-    status: CapacityProviderStatus
+    status: str
     """
     The current status of the capacity provider. For possible values, see
     `CapacityProviderStatus`.
@@ -17420,7 +17420,7 @@ class CodeInterpreterNetworkConfiguration:
     how the code interpreter connects to the network.
     """
 
-    network_mode: CodeInterpreterNetworkMode = CodeInterpreterNetworkMode("SANDBOX")
+    network_mode: str = CodeInterpreterNetworkMode("SANDBOX")
     """
     The network mode for the code interpreter. This field specifies how the
     code interpreter connects to the network.
@@ -17678,7 +17678,7 @@ class CreateCodeInterpreterOutput:
     created_at: datetime
     """The timestamp when the code interpreter was created."""
 
-    status: CodeInterpreterStatus
+    status: str
     """The current status of the code interpreter."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -17860,7 +17860,7 @@ class DeleteCodeInterpreterOutput:
     code_interpreter_id: str
     """The unique identifier of the deleted code interpreter."""
 
-    status: CodeInterpreterStatus
+    status: str
     """The current status of the code interpreter deletion."""
 
     last_updated_at: datetime
@@ -18028,7 +18028,7 @@ class GetCodeInterpreterOutput:
     how the code interpreter connects to the network.
     """
 
-    status: CodeInterpreterStatus
+    status: str
     """The current status of the code interpreter."""
 
     created_at: datetime
@@ -18267,7 +18267,7 @@ class ListCodeInterpretersInput:
     next_token: str | None = None
     """A token to retrieve the next page of results."""
 
-    type: ResourceType | None = None
+    type: str | None = None
     """The type of code interpreters to list."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -18340,7 +18340,7 @@ class CodeInterpreterSummary:
     code_interpreter_arn: str
     """The Amazon Resource Name (ARN) of the code interpreter."""
 
-    status: CodeInterpreterStatus
+    status: str
     """The current status of the code interpreter."""
 
     created_at: datetime
@@ -19061,7 +19061,7 @@ class DeleteConfigurationBundleOutput:
     bundle_id: str
     """The unique identifier of the deleted configuration bundle."""
 
-    status: ConfigurationBundleStatus
+    status: str
     """The status of the configuration bundle deletion operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -20880,7 +20880,7 @@ class CreateDatasetInput:
     pointing to a JSONL file.
     """
 
-    schema_type: DatasetSchemaType | None = None
+    schema_type: str | None = None
     """
     Versioned schema type governing the structure of examples. Immutable
     after creation.
@@ -20996,7 +20996,7 @@ class CreateDatasetOutput:
     dataset_id: str
     """The unique identifier of the created dataset."""
 
-    status: DatasetStatus
+    status: str
     """
     Always CREATING immediately after this call. Poll `GetDataset` until
     status transitions to ACTIVE or CREATE_FAILED.
@@ -21179,7 +21179,7 @@ class CreateDatasetVersionOutput:
     dataset_id: str
     """The unique identifier of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """
     Always UPDATING immediately after this call. Poll `GetDataset` until
     status transitions to ACTIVE or UPDATE_FAILED.
@@ -21378,7 +21378,7 @@ class DeleteDatasetOutput:
     dataset_id: str
     """The unique identifier of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset after the delete request."""
 
     dataset_version: str
@@ -21587,7 +21587,7 @@ class DeleteDatasetExamplesOutput:
     dataset_id: str
     """The unique identifier of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset."""
 
     deleted_count: int
@@ -21800,10 +21800,10 @@ class GetDatasetOutput:
     dataset_name: str
     """The name of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset."""
 
-    schema_type: DatasetSchemaType
+    schema_type: str
     """The schema type declared at create time. Immutable after creation."""
 
     example_count: int
@@ -21818,7 +21818,7 @@ class GetDatasetOutput:
     description: str | None = None
     """The description of the dataset."""
 
-    draft_status: DraftStatus | None = None
+    draft_status: str | None = None
     """
     Publish synchronization state. Only authoritative when status is ACTIVE.
     MODIFIED indicates DRAFT has unpublished changes. UNMODIFIED indicates
@@ -22367,10 +22367,10 @@ class DatasetSummary:
     dataset_name: str
     """The name of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset."""
 
-    schema_type: DatasetSchemaType
+    schema_type: str
     """The schema type of the dataset."""
 
     example_count: int
@@ -22385,7 +22385,7 @@ class DatasetSummary:
     description: str | None = None
     """The description of the dataset."""
 
-    draft_status: DraftStatus | None = None
+    draft_status: str | None = None
     """Publish synchronization state. Only authoritative when status is ACTIVE."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -23141,7 +23141,7 @@ class UpdateDatasetExamplesOutput:
     dataset_id: str
     """The unique identifier of the dataset."""
 
-    status: DatasetStatus
+    status: str
     """The current status of the dataset."""
 
     updated_count: int
@@ -24617,7 +24617,7 @@ class CreateEvaluatorInput:
     code-based settings with a customer-managed Lambda function.
     """
 
-    level: EvaluatorLevel | None = None
+    level: str | None = None
     """
     The evaluation level that determines the scope of evaluation. Valid
     values are `TOOL_CALL` for individual tool invocations, `TRACE` for
@@ -24758,7 +24758,7 @@ class CreateEvaluatorOutput:
     created_at: datetime
     """The timestamp when the evaluator was created."""
 
-    status: EvaluatorStatus
+    status: str
     """The status of the evaluator creation operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -24913,7 +24913,7 @@ class DeleteEvaluatorOutput:
     evaluator_id: str
     """The unique identifier of the deleted evaluator."""
 
-    status: EvaluatorStatus
+    status: str
     """The status of the evaluator deletion operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -25025,7 +25025,7 @@ class GetEvaluatorInput:
     evaluator ID (e.g., Builtin.Helpfulness) or a custom evaluator ID.
     """
 
-    included_data: IncludedData | None = None
+    included_data: str | None = None
     """
     Controls which data is returned in the response. `ALL_DATA` (default)
     returns the full evaluator including decrypted instructions and rating
@@ -25112,13 +25112,13 @@ class GetEvaluatorOutput:
     code-based settings.
     """
 
-    level: EvaluatorLevel
+    level: str
     """
     The evaluation level (`TOOL_CALL`, `TRACE`, or `SESSION`) that
     determines the scope of evaluation.
     """
 
-    status: EvaluatorStatus
+    status: str
     """The current status of the evaluator."""
 
     created_at: datetime
@@ -25130,7 +25130,7 @@ class GetEvaluatorOutput:
     description: str | None = field(repr=False, default=None)
     """The description of the evaluator."""
 
-    evaluator_type: EvaluatorType | None = None
+    evaluator_type: str | None = None
     """
     The kind of evaluator resource. Valid values:
 
@@ -25147,7 +25147,7 @@ class GetEvaluatorOutput:
       existing base evaluator.
     """
 
-    provider: Provider | None = None
+    provider: str | None = None
     """
     The source of the evaluator's logic: Amazon Web Services, a third-party
     library, or you.
@@ -25428,13 +25428,13 @@ class EvaluatorSummary:
     evaluator_name: str
     """The name of the evaluator."""
 
-    evaluator_type: EvaluatorType
+    evaluator_type: str
     """
     The type of evaluator, indicating whether it is a built-in evaluator
     provided by the service or a custom evaluator created by the user.
     """
 
-    status: EvaluatorStatus
+    status: str
     """The current status of the evaluator."""
 
     created_at: datetime
@@ -25446,13 +25446,13 @@ class EvaluatorSummary:
     description: str | None = field(repr=False, default=None)
     """The description of the evaluator."""
 
-    provider: Provider | None = None
+    provider: str | None = None
     """
     The source of the evaluator's logic: Amazon Web Services, a third-party
     library, or you.
     """
 
-    level: EvaluatorLevel | None = None
+    level: str | None = None
     """
     The evaluation level (`TOOL_CALL`, `TRACE`, or `SESSION`) that
     determines the scope of evaluation.
@@ -25759,7 +25759,7 @@ class UpdateEvaluatorInput:
     function.
     """
 
-    level: EvaluatorLevel | None = None
+    level: str | None = None
     """
     The updated evaluation level (`TOOL_CALL`, `TRACE`, or `SESSION`) that
     determines the scope of evaluation.
@@ -25872,7 +25872,7 @@ class UpdateEvaluatorOutput:
     updated_at: datetime
     """The timestamp when the evaluator was last updated."""
 
-    status: EvaluatorStatus
+    status: str
     """The status of the evaluator update operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -26031,7 +26031,7 @@ class RateConfig:
     concurrent connections allowed.
     """
 
-    period: Period
+    period: str
     """
     The time period for the rate limit. Valid values:
 
@@ -26492,7 +26492,7 @@ class GatewayRateLimitDetail:
     configurations.
     """
 
-    status: GatewayRateLimitStatus
+    status: str
     """The current status of the rate limit."""
 
     created_at: datetime
@@ -26886,7 +26886,7 @@ class CreateGatewayRateLimitOutput:
     configurations.
     """
 
-    status: GatewayRateLimitStatus
+    status: str
     """The current status of the rate limit."""
 
     created_at: datetime
@@ -27126,7 +27126,7 @@ class DeleteGatewayRateLimitOutput:
     rate_limit_id: str
     """The unique identifier of the deleted rate limit."""
 
-    status: GatewayRateLimitStatus
+    status: str
     """The current status of the rate limit deletion."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -27295,7 +27295,7 @@ class GetGatewayRateLimitOutput:
     configurations.
     """
 
-    status: GatewayRateLimitStatus
+    status: str
     """The current status of the rate limit."""
 
     created_at: datetime
@@ -27745,7 +27745,7 @@ class UpdateGatewayRateLimitOutput:
     configurations.
     """
 
-    status: GatewayRateLimitStatus
+    status: str
     """The current status of the rate limit."""
 
     created_at: datetime
@@ -27936,7 +27936,7 @@ class InterceptorPayloadExclusion(UnknownEnumMixin, StrEnum):
 class InterceptorPayloadExclusionSelectorField:
     """The field to exclude from the interceptor input."""
 
-    value: InterceptorPayloadExclusion
+    value: str
 
     def serialize(self, serializer: ShapeSerializer):
         serializer.write_struct(_SCHEMA_INTERCEPTOR_PAYLOAD_EXCLUSION_SELECTOR, self)
@@ -28176,7 +28176,7 @@ class GatewayInterceptionPoint(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_gateway_interception_points(
-    serializer: ShapeSerializer, schema: Schema, value: list[GatewayInterceptionPoint]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -28186,8 +28186,8 @@ def _serialize_gateway_interception_points(
 
 def _deserialize_gateway_interception_points(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[GatewayInterceptionPoint]:
-    result: list[GatewayInterceptionPoint] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -28337,7 +28337,7 @@ class GatewayInterceptorConfiguration:
     structure defines how the interceptor can be invoked.
     """
 
-    interception_points: list[GatewayInterceptionPoint]
+    interception_points: list[str]
     """
     The supported points of interception. This field specifies which points
     during the gateway invocation to invoke the interceptor
@@ -28460,7 +28460,7 @@ class GatewayPolicyEngineConfiguration:
     what actions on which resources as agents interact through the gateway.
     """
 
-    mode: GatewayPolicyEngineMode
+    mode: str
     """
     The enforcement mode for the policy engine. Valid values include:
 
@@ -28665,7 +28665,7 @@ class MCPGatewayConfiguration:
     instructions provide guidance on how to interact with the gateway.
     """
 
-    search_type: SearchType | None = None
+    search_type: str | None = None
     """
     The search type for the Model Context Protocol gateway. This field
     specifies how the gateway handles search operations.
@@ -28882,7 +28882,7 @@ class CreateGatewayInput:
     for the gateway to access Amazon Web Services services.
     """
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """The protocol type for the gateway."""
 
     protocol_configuration: GatewayProtocolConfiguration | None = None
@@ -28891,7 +28891,7 @@ class CreateGatewayInput:
     `protocolType` parameter.
     """
 
-    authorizer_type: AuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer to use for the gateway.
 
@@ -28929,7 +28929,7 @@ class CreateGatewayInput:
     the defined policies.
     """
 
-    exception_level: ExceptionLevel | None = None
+    exception_level: str | None = None
     """
     The level of detail in error messages returned when invoking the
     gateway.
@@ -29252,7 +29252,7 @@ class WafConfiguration:
     ACL cannot be evaluated.
     """
 
-    failure_mode: WafFailureMode | None = None
+    failure_mode: str | None = None
     """
     The failure mode that determines how the gateway handles requests when
     Amazon Web Services WAF is unreachable or times out. Valid values
@@ -29312,13 +29312,13 @@ class CreateGatewayOutput:
     updated_at: datetime
     """The timestamp when the gateway was last updated."""
 
-    status: GatewayStatus
+    status: str
     """The current status of the gateway."""
 
     name: str
     """The name of the gateway."""
 
-    authorizer_type: AuthorizerType
+    authorizer_type: str
     """The type of authorizer used by the gateway."""
 
     gateway_url: str | None = None
@@ -29336,7 +29336,7 @@ class CreateGatewayOutput:
     gateway.
     """
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """The protocol type of the gateway."""
 
     protocol_configuration: GatewayProtocolConfiguration | None = None
@@ -29366,7 +29366,7 @@ class CreateGatewayOutput:
     workload_identity_details: WorkloadIdentityDetails | None = None
     """The workload identity details for the created gateway."""
 
-    exception_level: ExceptionLevel | None = None
+    exception_level: str | None = None
     """
     The level of detail in error messages returned when invoking the
     gateway.
@@ -29733,7 +29733,7 @@ class DeleteGatewayOutput:
     gateway_id: str
     """The unique identifier of the deleted gateway."""
 
-    status: GatewayStatus
+    status: str
     """The current status of the gateway deletion."""
 
     status_reasons: list[str] | None = None
@@ -29887,13 +29887,13 @@ class GetGatewayOutput:
     updated_at: datetime
     """The timestamp when the gateway was last updated."""
 
-    status: GatewayStatus
+    status: str
     """The current status of the gateway."""
 
     name: str
     """The name of the gateway."""
 
-    authorizer_type: AuthorizerType
+    authorizer_type: str
     """Authorizer type for the gateway."""
 
     gateway_url: str | None = None
@@ -29908,7 +29908,7 @@ class GetGatewayOutput:
     role_arn: str | None = None
     """The IAM role ARN that provides permissions for the gateway."""
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """Protocol applied to a gateway."""
 
     protocol_configuration: GatewayProtocolConfiguration | None = None
@@ -29941,7 +29941,7 @@ class GetGatewayOutput:
     workload_identity_details: WorkloadIdentityDetails | None = None
     """The workload identity details for the gateway."""
 
-    exception_level: ExceptionLevel | None = None
+    exception_level: str | None = None
     """
     The level of detail in error messages returned when invoking the
     gateway.
@@ -30325,7 +30325,7 @@ class GatewaySummary:
     name: str
     """The name of the gateway."""
 
-    status: GatewayStatus
+    status: str
     """The current status of the gateway."""
 
     created_at: datetime
@@ -30334,13 +30334,13 @@ class GatewaySummary:
     updated_at: datetime
     """The timestamp when the gateway was last updated."""
 
-    authorizer_type: AuthorizerType
+    authorizer_type: str
     """The type of authorizer used by the gateway."""
 
     description: str | None = field(repr=False, default=None)
     """The description of the gateway."""
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """The protocol type used by the gateway."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -30572,7 +30572,7 @@ class UpdateGatewayInput:
     role_arn: str | None = None
     """The updated IAM role ARN that provides permissions for the gateway."""
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """The updated protocol type for the gateway."""
 
     protocol_configuration: GatewayProtocolConfiguration | None = None
@@ -30581,7 +30581,7 @@ class UpdateGatewayInput:
     gateway communicates with external services.
     """
 
-    authorizer_type: AuthorizerType | None = None
+    authorizer_type: str | None = None
     """The updated authorizer type for the gateway."""
 
     authorizer_configuration: AuthorizerConfiguration | None = None
@@ -30608,7 +30608,7 @@ class UpdateGatewayInput:
     on the defined policies.
     """
 
-    exception_level: ExceptionLevel | None = None
+    exception_level: str | None = None
     """
     The level of detail in error messages returned when invoking the
     gateway.
@@ -30819,13 +30819,13 @@ class UpdateGatewayOutput:
     updated_at: datetime
     """The timestamp when the gateway was last updated."""
 
-    status: GatewayStatus
+    status: str
     """The current status of the updated gateway."""
 
     name: str
     """The name of the gateway."""
 
-    authorizer_type: AuthorizerType
+    authorizer_type: str
     """The updated authorizer type for the gateway."""
 
     gateway_url: str | None = None
@@ -30840,7 +30840,7 @@ class UpdateGatewayOutput:
     role_arn: str | None = None
     """The updated IAM role ARN that provides permissions for the gateway."""
 
-    protocol_type: GatewayProtocolType = GatewayProtocolType("MCP")
+    protocol_type: str = GatewayProtocolType("MCP")
     """The updated protocol type for the gateway."""
 
     protocol_configuration: GatewayProtocolConfiguration | None = None
@@ -30870,7 +30870,7 @@ class UpdateGatewayOutput:
     workload_identity_details: WorkloadIdentityDetails | None = None
     """The workload identity details for the updated gateway."""
 
-    exception_level: ExceptionLevel | None = None
+    exception_level: str | None = None
     """
     The level of detail in error messages returned when invoking the
     gateway.
@@ -31279,7 +31279,7 @@ class IamPrincipal:
     operator.
     """
 
-    operator: PrincipalMatchOperator | None = None
+    operator: str | None = None
     """
     The match operator. `StringEquals` requires an exact match. `StringLike`
     supports wildcard patterns using `*` and `?`.
@@ -31798,7 +31798,7 @@ class CreateGatewayRuleOutput:
     created_at: datetime
     """The timestamp when the rule was created."""
 
-    status: GatewayRuleStatus
+    status: str
     """The current status of the rule."""
 
     conditions: list[Condition] | None = None
@@ -32029,7 +32029,7 @@ class DeleteGatewayRuleOutput:
     rule_id: str
     """The unique identifier of the deleted rule."""
 
-    status: GatewayRuleStatus
+    status: str
     """The status of the rule deletion operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -32193,7 +32193,7 @@ class GetGatewayRuleOutput:
     created_at: datetime
     """The timestamp when the rule was created."""
 
-    status: GatewayRuleStatus
+    status: str
     """The current status of the rule."""
 
     conditions: list[Condition] | None = None
@@ -32459,7 +32459,7 @@ class GatewayRuleDetail:
     created_at: datetime
     """The timestamp when the rule was created."""
 
-    status: GatewayRuleStatus
+    status: str
     """The current status of the rule."""
 
     conditions: list[Condition] | None = None
@@ -32843,7 +32843,7 @@ class UpdateGatewayRuleOutput:
     created_at: datetime
     """The timestamp when the rule was created."""
 
-    status: GatewayRuleStatus
+    status: str
     """The current status of the rule."""
 
     conditions: list[Condition] | None = None
@@ -33055,7 +33055,7 @@ class GatewayApiKeyCredentialProvider:
     key when sending it to the target endpoint.
     """
 
-    credential_location: ApiKeyCredentialLocation | None = None
+    credential_location: str | None = None
     """
     The location of the API key credential. This field specifies where in
     the request the API key should be placed.
@@ -33289,7 +33289,7 @@ class OAuthCredentialProvider:
     process.
     """
 
-    grant_type: OAuthGrantType = OAuthGrantType("CLIENT_CREDENTIALS")
+    grant_type: str = OAuthGrantType("CLIENT_CREDENTIALS")
     """
     Specifies the kind of credentials to use for authorization:
 
@@ -33547,7 +33547,7 @@ class CredentialProviderConfiguration:
     the gateway authenticates with the target endpoint.
     """
 
-    credential_provider_type: CredentialProviderType
+    credential_provider_type: str
     """
     The type of credential provider. This field specifies which
     authentication method the gateway uses.
@@ -34330,7 +34330,7 @@ class PassthroughTargetConfiguration:
     passthrough target.
     """
 
-    protocol_type: PassthroughProtocolType
+    protocol_type: str
     """
     The application protocol that the passthrough target implements. This
     value is required for passthrough targets:
@@ -34366,9 +34366,7 @@ class PassthroughTargetConfiguration:
     parameters, is enforced by the service.
     """
 
-    static_query_parameter_conflict_resolution: (
-        StaticQueryParameterConflictResolution | None
-    ) = None
+    static_query_parameter_conflict_resolution: str | None = None
     """
     Controls precedence when a client request supplies a query parameter
     whose name matches a configured static query parameter. If not set,
@@ -35213,7 +35211,7 @@ class RestApiMethod(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_rest_api_methods(
-    serializer: ShapeSerializer, schema: Schema, value: list[RestApiMethod]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -35223,8 +35221,8 @@ def _serialize_rest_api_methods(
 
 def _deserialize_rest_api_methods(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[RestApiMethod]:
-    result: list[RestApiMethod] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -35253,7 +35251,7 @@ class ApiGatewayToolFilter:
     paths under `/pets`). Must match existing paths in the REST API.
     """
 
-    methods: list[RestApiMethod]
+    methods: list[str]
     """The methods to filter for."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -35336,7 +35334,7 @@ class ApiGatewayToolOverride:
     existing path in the REST API.
     """
 
-    method: RestApiMethod
+    method: str
     """The HTTP method to expose for the specified path."""
 
     description: str | None = None
@@ -36141,7 +36139,7 @@ class McpServerTargetConfiguration:
     target is configured with mcpToolSchema.
     """
 
-    listing_mode: ListingMode | None = None
+    listing_mode: str | None = None
     """
     The listing mode for the MCP server target configuration. MCP resources
     for default targets are cached at the control plane for faster access.
@@ -36550,7 +36548,7 @@ class DeleteGatewayTargetOutput:
     target_id: str
     """The unique identifier of the deleted gateway target."""
 
-    status: TargetStatus
+    status: str
     """The current status of the gateway target deletion."""
 
     status_reasons: list[str] | None = None
@@ -36817,7 +36815,7 @@ class TargetSummary:
     name: str = field(repr=False)
     """The name of the target."""
 
-    status: TargetStatus
+    status: str
     """The current status of the target."""
 
     created_at: datetime
@@ -36845,10 +36843,10 @@ class TargetSummary:
     type and requires user federation.
     """
 
-    target_type: TargetType | None = None
+    target_type: str | None = None
     """The type of the target."""
 
-    listing_mode: ListingMode | None = None
+    listing_mode: str | None = None
     """
     The listing mode for the target. MCP resources for `DEFAULT` targets are
     cached at the control plane for faster access. MCP resources for
@@ -37355,7 +37353,7 @@ class KeyType(UnknownEnumMixin, StrEnum):
 class KmsConfiguration:
     """Contains the KMS configuration for a resource."""
 
-    key_type: KeyType
+    key_type: str
     """The type of KMS key (CustomerManagedKey or ServiceManagedKey)."""
 
     kms_key_arn: str | None = None
@@ -37663,7 +37661,7 @@ class HarnessEndpoint:
     arn: str
     """The ARN of the endpoint."""
 
-    status: HarnessEndpointStatus
+    status: str
     """The status of the endpoint."""
 
     created_at: datetime
@@ -39108,9 +39106,7 @@ class HarnessManagedMemoryStrategyType(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_harness_managed_memory_strategy_list(
-    serializer: ShapeSerializer,
-    schema: Schema,
-    value: list[HarnessManagedMemoryStrategyType],
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -39120,8 +39116,8 @@ def _serialize_harness_managed_memory_strategy_list(
 
 def _deserialize_harness_managed_memory_strategy_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[HarnessManagedMemoryStrategyType]:
-    result: list[HarnessManagedMemoryStrategyType] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -39147,7 +39143,7 @@ class HarnessManagedMemoryConfiguration:
     ignored on Create/Update input.
     """
 
-    strategies: list[HarnessManagedMemoryStrategyType] | None = None
+    strategies: list[str] | None = None
     """Strategy types to enable. Defaults to [SEMANTIC, SUMMARIZATION]."""
 
     event_expiry_duration: int | None = None
@@ -39410,7 +39406,7 @@ class HarnessBedrockModelConfig:
     top_p: float | None = None
     """The topP set when calling the model."""
 
-    api_format: HarnessBedrockApiFormat | None = None
+    api_format: str | None = None
     """The API format to use when calling the Bedrock provider."""
 
     additional_params: Document | None = None
@@ -39806,7 +39802,7 @@ class HarnessOpenAiModelConfig:
     top_p: float | None = None
     """The topP set when calling the model."""
 
-    api_format: HarnessOpenAiApiFormat | None = None
+    api_format: str | None = None
     """The API format to use when calling the OpenAI provider."""
 
     additional_params: Document | None = None
@@ -41194,7 +41190,7 @@ class HarnessToolType(UnknownEnumMixin, StrEnum):
 class HarnessTool:
     """A tool available to the agent loop."""
 
-    type: HarnessToolType
+    type: str
     """The type of tool."""
 
     name: str | None = None
@@ -41528,7 +41524,7 @@ class HarnessTruncationConfiguration:
     limits.
     """
 
-    strategy: HarnessTruncationStrategy
+    strategy: str
     """The truncation strategy to use."""
 
     config: HarnessTruncationStrategyConfiguration | None = None
@@ -42153,7 +42149,7 @@ class Harness:
     arn: str
     """The ARN of the harness."""
 
-    status: HarnessStatus
+    status: str
     """The status of the harness."""
 
     execution_role_arn: str
@@ -42910,7 +42906,7 @@ class HarnessSummary:
     arn: str
     """The ARN of the harness."""
 
-    status: HarnessStatus
+    status: str
     """The current status of the harness."""
 
     created_at: datetime
@@ -43204,7 +43200,7 @@ class HarnessVersionSummary:
     harness_version: str
     """The version of the harness that this summary describes."""
 
-    status: HarnessStatus
+    status: str
     """The status of this harness version."""
 
     created_at: datetime
@@ -44107,7 +44103,7 @@ class IndexedKey:
     key: str
     """The metadata key name to index."""
 
-    type: MetadataValueType
+    type: str
     """The data type of the indexed key."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -44763,10 +44759,10 @@ class MetadataSchemaEntry:
     metadata filters.
     """
 
-    type: MetadataValueType | None = None
+    type: str | None = None
     """The MetadataValueType."""
 
-    extraction_type: ExtractionType | None = None
+    extraction_type: str | None = None
     """
     Specifies whether the metadata value is extracted by the LLM or passed
     through deterministically from the event.
@@ -47288,10 +47284,10 @@ class ContentType(UnknownEnumMixin, StrEnum):
 class ContentConfiguration:
     """Defines what content to stream and at what level of detail."""
 
-    type: ContentType
+    type: str
     """Type of content to stream."""
 
-    level: ContentLevel = ContentLevel("METADATA_ONLY")
+    level: str = ContentLevel("METADATA_ONLY")
     """Level of detail for streamed content."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -49549,7 +49545,7 @@ class OverrideType(UnknownEnumMixin, StrEnum):
 class StrategyConfiguration:
     """Contains configuration information for a memory strategy."""
 
-    type: OverrideType | None = None
+    type: str | None = None
     """The type of override for the strategy configuration."""
 
     extraction: ExtractionConfiguration | None = None
@@ -49662,7 +49658,7 @@ class MemoryStrategy:
     name: str
     """The name of the memory strategy."""
 
-    type: MemoryStrategyType
+    type: str
     """The type of the memory strategy."""
 
     namespaces: list[str]
@@ -49686,7 +49682,7 @@ class MemoryStrategy:
     updated_at: datetime | None = None
     """The timestamp when the memory strategy was last updated."""
 
-    status: MemoryStrategyStatus | None = None
+    status: str | None = None
     """The current status of the memory strategy."""
 
     memory_record_schema: MemoryRecordSchema | None = None
@@ -49859,7 +49855,7 @@ class Memory:
     event_expiry_duration: int
     """The number of days after which memory events will expire."""
 
-    status: MemoryStatus
+    status: str
     """The current status of the memory."""
 
     created_at: datetime
@@ -50305,7 +50301,7 @@ class DeleteMemoryOutput:
     memory_id: str
     """The unique identifier of the deleted AgentCore Memory resource."""
 
-    status: MemoryStatus | None = None
+    status: str | None = None
     """The current status of the AgentCore Memory resource deletion."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -50401,7 +50397,7 @@ class GetMemoryInput:
     memory_id: str | None = None
     """The unique identifier of the memory to retrieve."""
 
-    view: MemoryView = MemoryView("full")
+    view: str = MemoryView("full")
     """The level of detail to return for the memory."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -50590,7 +50586,7 @@ class MemorySummary:
     id: str | None = None
     """The unique identifier of the memory."""
 
-    status: MemoryStatus | None = None
+    status: str | None = None
     """The current status of the memory."""
 
     managed_by_resource_arn: str | None = None
@@ -52408,7 +52404,7 @@ class AtlassianOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret for the Atlassian OAuth2 provider.
     Use `MANAGED` if the secret is managed by the service, or `EXTERNAL` if
@@ -52818,7 +52814,7 @@ def _deserialize_scopes_list_type(
 class TokenExchangeGrantTypeConfigType:
     """Configuration for RFC 8693 token exchange."""
 
-    actor_token_content: ActorTokenContentType
+    actor_token_content: str
     """The content type for the actor token in the token exchange."""
 
     actor_token_scopes: list[str] | None = None
@@ -52886,7 +52882,7 @@ class TokenExchangeGrantTypeConfigType:
 class OnBehalfOfTokenExchangeConfigType:
     """Configuration for on-behalf-of token exchange."""
 
-    grant_type: OnBehalfOfTokenExchangeGrantTypeType
+    grant_type: str
     """The grant type for the on-behalf-of token exchange."""
 
     token_exchange_grant_type_config: TokenExchangeGrantTypeConfigType | None = None
@@ -53082,7 +53078,7 @@ class PrivateKeyJwtConfig:
     private_key_source: PrivateKeySource | None = None
     """The private key source for the JWT client assertion."""
 
-    signing_algorithm: SigningAlgorithm | None = None
+    signing_algorithm: str | None = None
     """
     The algorithm used to sign the JWT client assertion. Valid values are
     `RS256`, `PS256`, and `ES256`.
@@ -53199,7 +53195,7 @@ class CustomOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -53213,7 +53209,7 @@ class CustomOauth2ProviderConfigInput:
     authorization grants.
     """
 
-    client_authentication_method: ClientAuthenticationMethodType | None = None
+    client_authentication_method: str | None = None
     """
     The client authentication method to use when authenticating with the
     token endpoint.
@@ -53413,7 +53409,7 @@ class GithubOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -53511,7 +53507,7 @@ class GoogleOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -53620,7 +53616,7 @@ class IncludedOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -53790,7 +53786,7 @@ class LinkedinOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -53890,7 +53886,7 @@ class MicrosoftOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -54010,7 +54006,7 @@ class SalesforceOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -54110,7 +54106,7 @@ class SlackOauth2ProviderConfigInput:
     `clientSecretSource` is set to `EXTERNAL`.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -54517,7 +54513,7 @@ class CreateOauth2CredentialProviderInput:
     within your account.
     """
 
-    credential_provider_vendor: CredentialProviderVendorType | None = None
+    credential_provider_vendor: str | None = None
     """
     The vendor of the OAuth2 credential provider. This specifies which
     OAuth2 implementation to use.
@@ -54686,7 +54682,7 @@ class CustomOauth2ProviderConfigOutput:
     on_behalf_of_token_exchange_config: OnBehalfOfTokenExchangeConfigType | None = None
     """The configuration for on-behalf-of token exchange."""
 
-    client_authentication_method: ClientAuthenticationMethodType | None = None
+    client_authentication_method: str | None = None
     """
     The client authentication method used when authenticating with the token
     endpoint.
@@ -55580,7 +55576,7 @@ class CreateOauth2CredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -55597,7 +55593,7 @@ class CreateOauth2CredentialProviderOutput:
     oauth2_provider_config_output: Oauth2ProviderConfigOutput | None = None
     """Contains the output configuration for an OAuth2 provider."""
 
-    status: Status | None = None
+    status: str | None = None
     """The current status of the OAuth2 credential provider."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -55960,7 +55956,7 @@ class GetOauth2CredentialProviderOutput:
     credential_provider_arn: str
     """ARN of the credential provider requested."""
 
-    credential_provider_vendor: CredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor of the OAuth2 credential provider."""
 
     oauth2_provider_config_output: Oauth2ProviderConfigOutput
@@ -55978,7 +55974,7 @@ class GetOauth2CredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -55992,7 +55988,7 @@ class GetOauth2CredentialProviderOutput:
     redirects users after they complete the authorization flow.
     """
 
-    status: Status | None = None
+    status: str | None = None
     """The current status of the OAuth2 credential provider."""
 
     failure_reason: str | None = None
@@ -56301,7 +56297,7 @@ class Oauth2CredentialProviderItem:
     name: str
     """The name of the OAuth2 credential provider."""
 
-    credential_provider_vendor: CredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor of the OAuth2 credential provider."""
 
     credential_provider_arn: str
@@ -56540,7 +56536,7 @@ class UpdateOauth2CredentialProviderInput:
     name: str | None = None
     """The name of the OAuth2 credential provider to update."""
 
-    credential_provider_vendor: CredentialProviderVendorType | None = None
+    credential_provider_vendor: str | None = None
     """The vendor of the OAuth2 credential provider."""
 
     oauth2_provider_config_input: Oauth2ProviderConfigInput | None = None
@@ -56623,7 +56619,7 @@ class UpdateOauth2CredentialProviderOutput:
     name: str
     """The name of the OAuth2 credential provider."""
 
-    credential_provider_vendor: CredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor of the OAuth2 credential provider."""
 
     credential_provider_arn: str
@@ -56644,7 +56640,7 @@ class UpdateOauth2CredentialProviderOutput:
     Services Secrets Manager secret.
     """
 
-    client_secret_source: SecretSourceType | None = None
+    client_secret_source: str | None = None
     """
     The source type of the client secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -56658,7 +56654,7 @@ class UpdateOauth2CredentialProviderOutput:
     redirects users after they complete the authorization flow.
     """
 
-    status: Status | None = None
+    status: str | None = None
     """The current status of the updated OAuth2 credential provider."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -56901,7 +56897,7 @@ class ClusteringFrequency(UnknownEnumMixin, StrEnum):
 
 
 def _serialize_clustering_frequency_list(
-    serializer: ShapeSerializer, schema: Schema, value: list[ClusteringFrequency]
+    serializer: ShapeSerializer, schema: Schema, value: list[str]
 ) -> None:
     member_schema = schema.members["member"]
     with serializer.begin_list(schema, len(value)) as ls:
@@ -56911,8 +56907,8 @@ def _serialize_clustering_frequency_list(
 
 def _deserialize_clustering_frequency_list(
     deserializer: ShapeDeserializer, schema: Schema
-) -> list[ClusteringFrequency]:
-    result: list[ClusteringFrequency] = []
+) -> list[str]:
+    result: list[str] = []
     member_schema = schema.members["member"]
 
     def _read_value(d: ShapeDeserializer):
@@ -56933,7 +56929,7 @@ class ClusteringConfig:
     often clustering jobs run.
     """
 
-    frequencies: list[ClusteringFrequency]
+    frequencies: list[str]
     """
     The list of frequencies at which clustering batch evaluations are
     triggered.
@@ -57511,7 +57507,7 @@ class Filter:
     key: str
     """The key or field name to filter on within the agent trace data."""
 
-    operator: FilterOperator
+    operator: str
     """The comparison operator to use for filtering."""
 
     value: FilterValue
@@ -58128,10 +58124,10 @@ class CreateOnlineEvaluationConfigOutput:
     created_at: datetime
     """The timestamp when the online evaluation configuration was created."""
 
-    status: OnlineEvaluationConfigStatus
+    status: str
     """The status of the online evaluation configuration."""
 
-    execution_status: OnlineEvaluationExecutionStatus
+    execution_status: str
     """
     The execution status indicating whether the online evaluation is
     currently running.
@@ -58365,7 +58361,7 @@ class DeleteOnlineEvaluationConfigOutput:
     online_evaluation_config_id: str
     """The unique identifier of the deleted online evaluation configuration."""
 
-    status: OnlineEvaluationConfigStatus
+    status: str
     """The status of the online evaluation configuration deletion operation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -58550,10 +58546,10 @@ class GetOnlineEvaluationConfigOutput:
     service names to monitor.
     """
 
-    status: OnlineEvaluationConfigStatus
+    status: str
     """The status of the online evaluation configuration."""
 
-    execution_status: OnlineEvaluationExecutionStatus
+    execution_status: str
     """
     The execution status indicating whether the online evaluation is
     currently running.
@@ -58937,10 +58933,10 @@ class OnlineEvaluationConfigSummary:
     online_evaluation_config_name: str
     """The name of the online evaluation configuration."""
 
-    status: OnlineEvaluationConfigStatus
+    status: str
     """The status of the online evaluation configuration."""
 
-    execution_status: OnlineEvaluationExecutionStatus
+    execution_status: str
     """
     The execution status indicating whether the online evaluation is
     currently running.
@@ -59306,7 +59302,7 @@ class UpdateOnlineEvaluationConfigInput:
     evaluation execution.
     """
 
-    execution_status: OnlineEvaluationExecutionStatus | None = None
+    execution_status: str | None = None
     """The updated execution status to enable or disable the online evaluation."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -59483,10 +59479,10 @@ class UpdateOnlineEvaluationConfigOutput:
     updated_at: datetime
     """The timestamp when the online evaluation configuration was last updated."""
 
-    status: OnlineEvaluationConfigStatus
+    status: str
     """The status of the online evaluation configuration."""
 
-    execution_status: OnlineEvaluationExecutionStatus
+    execution_status: str
     """
     The execution status indicating whether the online evaluation is
     currently running.
@@ -59676,7 +59672,7 @@ class CoinbaseCdpConfigurationInput:
     api_key_secret: str = field(repr=False, default="")
     """The API key secret provided by Coinbase Developer Platform."""
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret for the Coinbase Developer
     Platform. Use `MANAGED` if the secret is managed by the service, or
@@ -59695,7 +59691,7 @@ class CoinbaseCdpConfigurationInput:
     wallet_secret: str = field(repr=False, default="")
     """The wallet secret provided by Coinbase Developer Platform."""
 
-    wallet_secret_source: SecretSourceType | None = None
+    wallet_secret_source: str | None = None
     """
     The source type of the wallet secret for the Coinbase Developer
     Platform. Use `MANAGED` if the secret is managed by the service, or
@@ -59824,7 +59820,7 @@ class StripePrivyConfigurationInput:
     app_secret: str = field(repr=False, default="")
     """The app secret provided by Privy."""
 
-    app_secret_source: SecretSourceType | None = None
+    app_secret_source: str | None = None
     """
     The source type of the app secret. Use `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if you manage the secret yourself
@@ -59842,7 +59838,7 @@ class StripePrivyConfigurationInput:
     authorization_private_key: str = field(repr=False, default="")
     """The authorization private key for the Stripe Privy integration."""
 
-    authorization_private_key_source: SecretSourceType | None = None
+    authorization_private_key_source: str | None = None
     """
     The source type of the authorization private key. Use `MANAGED` if the
     secret is managed by the service, or `EXTERNAL` if you manage the secret
@@ -60114,7 +60110,7 @@ class CreatePaymentCredentialProviderInput:
     name: str | None = None
     """Unique name for the payment credential provider."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType | None = None
+    credential_provider_vendor: str | None = None
     """
     The vendor type for the payment credential provider (e.g., CoinbaseCDP,
     StripePrivy).
@@ -60232,7 +60228,7 @@ class CoinbaseCdpConfigurationOutput:
     Web Services Secrets Manager secret.
     """
 
-    api_key_secret_source: SecretSourceType | None = None
+    api_key_secret_source: str | None = None
     """
     The source type of the API key secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -60245,7 +60241,7 @@ class CoinbaseCdpConfigurationOutput:
     Services Secrets Manager secret.
     """
 
-    wallet_secret_source: SecretSourceType | None = None
+    wallet_secret_source: str | None = None
     """
     The source type of the wallet secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -60392,7 +60388,7 @@ class StripePrivyConfigurationOutput:
     Services Secrets Manager secret.
     """
 
-    app_secret_source: SecretSourceType | None = None
+    app_secret_source: str | None = None
     """
     The source type of the app secret. Either `MANAGED` if the secret is
     managed by the service, or `EXTERNAL` if managed by the user in Amazon
@@ -60405,7 +60401,7 @@ class StripePrivyConfigurationOutput:
     the Amazon Web Services Secrets Manager secret.
     """
 
-    authorization_private_key_source: SecretSourceType | None = None
+    authorization_private_key_source: str | None = None
     """
     The source type of the authorization private key. Either `MANAGED` if
     the secret is managed by the service, or `EXTERNAL` if managed by the
@@ -60674,7 +60670,7 @@ class CreatePaymentCredentialProviderOutput:
     name: str
     """The name of the created payment credential provider."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor type for the created payment credential provider."""
 
     credential_provider_arn: str
@@ -60998,7 +60994,7 @@ class GetPaymentCredentialProviderOutput:
     credential_provider_arn: str
     """The Amazon Resource Name (ARN) of the payment credential provider."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor type for the payment credential provider."""
 
     provider_configuration_output: PaymentProviderConfigurationOutput
@@ -61251,7 +61247,7 @@ class PaymentCredentialProviderItem:
     name: str
     """The name of the payment credential provider."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor type for the payment credential provider."""
 
     credential_provider_arn: str
@@ -61494,7 +61490,7 @@ class UpdatePaymentCredentialProviderInput:
     name: str | None = None
     """The name of the payment credential provider to update."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType | None = None
+    credential_provider_vendor: str | None = None
     """
     The vendor type for the payment credential provider (e.g., CoinbaseCDP,
     StripePrivy).
@@ -61576,7 +61572,7 @@ class UpdatePaymentCredentialProviderOutput:
     name: str
     """The name of the updated payment credential provider."""
 
-    credential_provider_vendor: PaymentCredentialProviderVendorType
+    credential_provider_vendor: str
     """The vendor type for the updated payment credential provider."""
 
     credential_provider_arn: str
@@ -61785,7 +61781,7 @@ class CreatePaymentManagerInput:
     description: str | None = None
     """A description of the payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer to use for the payment manager.
 
@@ -61961,7 +61957,7 @@ class CreatePaymentManagerOutput:
     name: str
     """The name of the created payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType
+    authorizer_type: str
     """The type of authorizer for the created payment manager."""
 
     role_arn: str
@@ -61973,7 +61969,7 @@ class CreatePaymentManagerOutput:
     created_at: datetime
     """The timestamp when the payment manager was created."""
 
-    status: PaymentManagerStatus
+    status: str
     """
     The current status of the payment manager. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -62259,7 +62255,7 @@ class DeletePaymentManagerInput:
 class DeletePaymentManagerOutput:
     """Dataclass for DeletePaymentManagerOutput structure."""
 
-    status: PaymentManagerStatus
+    status: str
     """
     The current status of the payment manager, set to `DELETING` when
     deletion is initiated. Possible values include `CREATING`, `READY`,
@@ -62406,7 +62402,7 @@ class GetPaymentManagerOutput:
     name: str
     """The name of the payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType
+    authorizer_type: str
     """
     The type of authorizer used by the payment manager.
 
@@ -62427,7 +62423,7 @@ class GetPaymentManagerOutput:
     last_updated_at: datetime
     """The timestamp when the payment manager was last updated."""
 
-    status: PaymentManagerStatus
+    status: str
     """
     The current status of the payment manager. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -62733,7 +62729,7 @@ class PaymentManagerSummary:
     name: str
     """The name of the payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType
+    authorizer_type: str
     """
     The type of authorizer used by the payment manager.
 
@@ -62748,7 +62744,7 @@ class PaymentManagerSummary:
     payment manager.
     """
 
-    status: PaymentManagerStatus
+    status: str
     """
     The current status of the payment manager. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -63257,7 +63253,7 @@ class CreatePaymentConnectorInput:
     description: str | None = None
     """A description of the payment connector."""
 
-    type: PaymentConnectorType | None = None
+    type: str | None = None
     """
     The type of payment connector, which determines the payment provider
     integration.
@@ -63272,7 +63268,7 @@ class CreatePaymentConnectorInput:
     provider.
     """
 
-    provision_mode: PaymentConnectorProvisionMode | None = None
+    provision_mode: str | None = None
     """
     The provision mode for creating the payment connector. If you don't
     specify a value, the default is `MANUAL`.
@@ -63436,7 +63432,7 @@ class CreatePaymentConnectorOutput:
     name: str
     """The name of the created payment connector."""
 
-    type: PaymentConnectorType
+    type: str
     """The type of the created payment connector."""
 
     credential_provider_configurations: list[CredentialsProviderConfiguration]
@@ -63448,7 +63444,7 @@ class CreatePaymentConnectorOutput:
     created_at: datetime
     """The timestamp when the payment connector was created."""
 
-    status: PaymentConnectorStatus
+    status: str
     """
     The current status of the payment connector. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -63791,7 +63787,7 @@ class DeletePaymentConnectorInput:
 class DeletePaymentConnectorOutput:
     """Dataclass for DeletePaymentConnectorOutput structure."""
 
-    status: PaymentConnectorStatus
+    status: str
     """
     The current status of the payment connector, set to `DELETING` when
     deletion is initiated. Possible values include `CREATING`, `READY`,
@@ -63953,7 +63949,7 @@ class GetPaymentConnectorOutput:
     name: str
     """The name of the payment connector."""
 
-    type: PaymentConnectorType
+    type: str
     """
     The type of the payment connector, which determines the payment provider
     integration.
@@ -63968,7 +63964,7 @@ class GetPaymentConnectorOutput:
     last_updated_at: datetime
     """The timestamp when the payment connector was last updated."""
 
-    status: PaymentConnectorStatus
+    status: str
     """
     The current status of the payment connector. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -64243,13 +64239,13 @@ class PaymentConnectorSummary:
     name: str
     """The name of the payment connector."""
 
-    type: PaymentConnectorType
+    type: str
     """
     The type of the payment connector, which determines the payment provider
     integration.
     """
 
-    status: PaymentConnectorStatus
+    status: str
     """
     The current status of the payment connector. Possible values include
     `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -64475,7 +64471,7 @@ class UpdatePaymentConnectorInput:
     description: str | None = None
     """The updated description of the payment connector."""
 
-    type: PaymentConnectorType | None = None
+    type: str | None = None
     """The updated type of the payment connector."""
 
     credential_provider_configurations: (
@@ -64611,7 +64607,7 @@ class UpdatePaymentConnectorOutput:
     name: str
     """The name of the updated payment connector."""
 
-    type: PaymentConnectorType
+    type: str
     """The type of the updated payment connector."""
 
     credential_provider_configurations: list[CredentialsProviderConfiguration]
@@ -64623,7 +64619,7 @@ class UpdatePaymentConnectorOutput:
     last_updated_at: datetime
     """The timestamp when the payment connector was last updated."""
 
-    status: PaymentConnectorStatus
+    status: str
     """
     The current status of the updated payment connector. Possible values
     include `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -64821,7 +64817,7 @@ class UpdatePaymentManagerInput:
     description: str | None = None
     """The updated description of the payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType | None = None
+    authorizer_type: str | None = None
     """The updated authorizer type for the payment manager."""
 
     authorizer_configuration: AuthorizerConfiguration | None = None
@@ -64965,7 +64961,7 @@ class UpdatePaymentManagerOutput:
     name: str
     """The name of the updated payment manager."""
 
-    authorizer_type: PaymentsAuthorizerType
+    authorizer_type: str
     """The type of authorizer for the updated payment manager."""
 
     role_arn: str
@@ -64977,7 +64973,7 @@ class UpdatePaymentManagerOutput:
     last_updated_at: datetime
     """The timestamp when the payment manager was last updated."""
 
-    status: PaymentManagerStatus
+    status: str
     """
     The current status of the updated payment manager. Possible values
     include `CREATING`, `READY`, `UPDATING`, `DELETING`, `CREATE_FAILED`,
@@ -65360,7 +65356,7 @@ class CreatePolicyEngineOutput:
     IAM policy statements.
     """
 
-    status: PolicyEngineStatus
+    status: str
     """
     The current status of the policy engine. A status of `ACTIVE` indicates
     the policy engine is ready for use.
@@ -65616,7 +65612,7 @@ class DeletePolicyEngineOutput:
     successfully removed.
     """
 
-    status: PolicyEngineStatus
+    status: str
     """
     The status of the policy engine deletion operation. This provides status
     about any issues that occurred during the deletion process.
@@ -65875,7 +65871,7 @@ class GetPolicyEngineOutput:
     policy statements.
     """
 
-    status: PolicyEngineStatus
+    status: str
     """The current status of the policy engine."""
 
     status_reasons: list[str]
@@ -66118,7 +66114,7 @@ class GetPolicyEngineSummaryOutput:
     policy_engine_arn: str
     """The Amazon Resource Name (ARN) of the policy engine."""
 
-    status: PolicyEngineStatus
+    status: str
     """The current status of the policy engine."""
 
     encryption_key_arn: str | None = None
@@ -66381,7 +66377,7 @@ class PolicyEngine:
     policy statements.
     """
 
-    status: PolicyEngineStatus
+    status: str
     """The current status of the policy engine."""
 
     status_reasons: list[str]
@@ -66722,7 +66718,7 @@ class PolicyEngineSummary:
     policy_engine_arn: str
     """The Amazon Resource Name (ARN) of the policy engine."""
 
-    status: PolicyEngineStatus
+    status: str
     """The current status of the policy engine."""
 
     encryption_key_arn: str | None = None
@@ -67020,7 +67016,7 @@ class UpdatePolicyEngineOutput:
     policy_engine_arn: str
     """The ARN of the updated policy engine."""
 
-    status: PolicyEngineStatus
+    status: str
     """The current status of the updated policy engine."""
 
     status_reasons: list[str]
@@ -67404,7 +67400,7 @@ class GetPolicyGenerationOutput:
     the progress of the generation process and any status changes.
     """
 
-    status: PolicyGenerationStatus
+    status: str
     """
     The current status of the policy generation. This indicates whether the
     generation is in progress, completed successfully, or failed during
@@ -67690,7 +67686,7 @@ class GetPolicyGenerationSummaryOutput:
     updated_at: datetime
     """The timestamp when the policy generation was last updated."""
 
-    status: PolicyGenerationStatus
+    status: str
     """The current status of the policy generation request."""
 
     findings: str | None = None
@@ -68310,7 +68306,7 @@ class Finding:
     ensure they match your security requirements.
     """
 
-    type: FindingType | None = None
+    type: str | None = None
     """
     The type or category of the finding. This classifies the finding as an
     error, warning, recommendation, or informational message to help users
@@ -68755,7 +68751,7 @@ class PolicyGeneration:
     updated_at: datetime
     """The timestamp when this policy generation was last updated."""
 
-    status: PolicyGenerationStatus
+    status: str
     """The current status of this policy generation request."""
 
     status_reasons: list[str]
@@ -69131,7 +69127,7 @@ class PolicyGenerationSummary:
     updated_at: datetime
     """The timestamp when this policy generation was last updated."""
 
-    status: PolicyGenerationStatus
+    status: str
     """The current status of this policy generation request."""
 
     findings: str | None = None
@@ -69612,7 +69608,7 @@ class StartPolicyGenerationOutput:
     updated_at: datetime
     """The timestamp when the policy generation was last updated."""
 
-    status: PolicyGenerationStatus
+    status: str
     """The initial status of the policy generation request."""
 
     status_reasons: list[str]
@@ -69846,7 +69842,7 @@ class CreatePolicyInput:
     troubleshooting.
     """
 
-    validation_mode: PolicyValidationMode = PolicyValidationMode("FAIL_ON_ANY_FINDINGS")
+    validation_mode: str = PolicyValidationMode("FAIL_ON_ANY_FINDINGS")
     """
     The validation mode for the policy creation. Determines how Cedar
     analyzer validation results are handled during policy creation.
@@ -69860,7 +69856,7 @@ class CreatePolicyInput:
     understand and accept the analyzer findings.
     """
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """
     The enforcement mode for the policy. Run this policy in `LOG_ONLY` mode
     to collect data on how it affects your application. Once you are
@@ -70036,7 +70032,7 @@ class CreatePolicyOutput:
     policy statements.
     """
 
-    status: PolicyStatus
+    status: str
     """
     The current status of the policy. A status of `ACTIVE` indicates the
     policy is ready for use.
@@ -70055,7 +70051,7 @@ class CreatePolicyOutput:
     about any failures or the current state of the policy creation process.
     """
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The enforcement mode of the created policy."""
 
     description: str | None = field(repr=False, default=None)
@@ -70342,7 +70338,7 @@ class DeletePolicyOutput:
     removed.
     """
 
-    status: PolicyStatus
+    status: str
     """
     The status of the policy deletion operation. This provides information
     about any issues that occurred during the deletion process.
@@ -70361,7 +70357,7 @@ class DeletePolicyOutput:
     about the deletion process or any issues that may have occurred.
     """
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The enforcement mode of the deleted policy."""
 
     description: str | None = field(repr=False, default=None)
@@ -70638,7 +70634,7 @@ class GetPolicyOutput:
     statements.
     """
 
-    status: PolicyStatus
+    status: str
     """The current status of the policy."""
 
     definition: PolicyDefinition
@@ -70654,7 +70650,7 @@ class GetPolicyOutput:
     about any failures or the current state of the policy.
     """
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The current enforcement mode of the policy."""
 
     description: str | None = field(repr=False, default=None)
@@ -70913,10 +70909,10 @@ class GetPolicySummaryOutput:
     policy_arn: str
     """The Amazon Resource Name (ARN) of the policy."""
 
-    status: PolicyStatus
+    status: str
     """The current status of the policy."""
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The current enforcement mode of the policy."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -71212,7 +71208,7 @@ class Policy:
     statements.
     """
 
-    status: PolicyStatus
+    status: str
     """The current status of the policy."""
 
     definition: PolicyDefinition
@@ -71228,7 +71224,7 @@ class Policy:
     about any failures or the current state of the policy lifecycle.
     """
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The current enforcement mode of the policy."""
 
     description: str | None = field(repr=False, default=None)
@@ -71595,10 +71591,10 @@ class PolicySummary:
     policy_arn: str
     """The Amazon Resource Name (ARN) of the policy."""
 
-    status: PolicyStatus
+    status: str
     """The current status of the policy."""
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The current enforcement mode of the policy."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -71856,7 +71852,7 @@ class UpdatePolicyInput:
     maintaining the policy's identity.
     """
 
-    validation_mode: PolicyValidationMode = PolicyValidationMode("FAIL_ON_ANY_FINDINGS")
+    validation_mode: str = PolicyValidationMode("FAIL_ON_ANY_FINDINGS")
     """
     The validation mode for the policy update. Determines how Cedar analyzer
     validation results are handled during policy updates.
@@ -71868,7 +71864,7 @@ class UpdatePolicyInput:
     especially when modifying policy logic or conditions.
     """
 
-    enforcement_mode: EnforcementMode | None = None
+    enforcement_mode: str | None = None
     """
     The enforcement mode for the policy. Run this policy in `LOG_ONLY` mode
     to collect data on how it affects your application. Once you are
@@ -71984,7 +71980,7 @@ class UpdatePolicyOutput:
     policy_arn: str
     """The ARN of the updated policy."""
 
-    status: PolicyStatus
+    status: str
     """The current status of the updated policy."""
 
     definition: PolicyDefinition
@@ -71993,7 +71989,7 @@ class UpdatePolicyOutput:
     status_reasons: list[str]
     """Additional information about the update status."""
 
-    enforcement_mode: EnforcementMode = EnforcementMode("ACTIVE")
+    enforcement_mode: str = EnforcementMode("ACTIVE")
     """The current enforcement mode of the updated policy."""
 
     description: str | None = field(repr=False, default=None)
@@ -72778,7 +72774,7 @@ class RegistryRecordOAuthCredentialProvider:
     resource.
     """
 
-    grant_type: RegistryRecordOAuthGrantType | None = None
+    grant_type: str | None = None
     """The OAuth grant type. Currently only `CLIENT_CREDENTIALS` is supported."""
 
     scopes: list[str] | None = None
@@ -73020,7 +73016,7 @@ class RegistryRecordCredentialProviderConfiguration:
     details for authenticating with external sources.
     """
 
-    credential_provider_type: RegistryRecordCredentialProviderType
+    credential_provider_type: str
     """
     The type of credential provider.
 
@@ -73259,7 +73255,7 @@ class CreateRegistryRecordInput:
     description: str | None = field(repr=False, default=None)
     """A description of the registry record."""
 
-    descriptor_type: DescriptorType | None = None
+    descriptor_type: str | None = None
     """
     The descriptor type of the registry record.
 
@@ -73288,7 +73284,7 @@ class CreateRegistryRecordInput:
     of the record's content.
     """
 
-    synchronization_type: SynchronizationType | None = None
+    synchronization_type: str | None = None
     """
     The type of synchronization to use for keeping the record metadata up to
     date from an external source. Possible values include `FROM_URL` and
@@ -73459,7 +73455,7 @@ class CreateRegistryRecordOutput:
     record_arn: str
     """The Amazon Resource Name (ARN) of the created registry record."""
 
-    status: RegistryRecordStatus
+    status: str
     """
     The status of the registry record. Set to `CREATING` while the
     asynchronous workflow is in progress.
@@ -73758,7 +73754,7 @@ class GetRegistryRecordOutput:
     name: str
     """The name of the registry record."""
 
-    descriptor_type: DescriptorType
+    descriptor_type: str
     """
     The descriptor type of the registry record. Possible values are `MCP`,
     `A2A`, `CUSTOM`, and `AGENT_SKILLS`.
@@ -73770,7 +73766,7 @@ class GetRegistryRecordOutput:
     schema and metadata. For details, see the `Descriptors` data type.
     """
 
-    status: RegistryRecordStatus
+    status: str
     """
     The current status of the registry record. Possible values include
     `CREATING`, `DRAFT`, `APPROVED`, `PENDING_APPROVAL`, `REJECTED`,
@@ -73798,7 +73794,7 @@ class GetRegistryRecordOutput:
     failure state.
     """
 
-    synchronization_type: SynchronizationType | None = None
+    synchronization_type: str | None = None
     """The type of synchronization used for this record."""
 
     synchronization_configuration: SynchronizationConfiguration | None = None
@@ -74050,14 +74046,14 @@ class ListRegistryRecordsInput:
     name: str | None = None
     """Filter registry records by name."""
 
-    status: RegistryRecordStatus | None = None
+    status: str | None = None
     """
     Filter registry records by their current status. Possible values include
     `CREATING`, `DRAFT`, `APPROVED`, `PENDING_APPROVAL`, `REJECTED`,
     `DEPRECATED`, `UPDATING`, `CREATE_FAILED`, and `UPDATE_FAILED`.
     """
 
-    descriptor_type: DescriptorType | None = None
+    descriptor_type: str | None = None
     """
     Filter registry records by their descriptor type. Possible values are
     `MCP`, `A2A`, `CUSTOM`, and `AGENT_SKILLS`.
@@ -74172,7 +74168,7 @@ class RegistryRecordSummary:
     name: str
     """The name of the registry record."""
 
-    descriptor_type: DescriptorType
+    descriptor_type: str
     """
     The descriptor type of the registry record. Possible values are `MCP`,
     `A2A`, `CUSTOM`, and `AGENT_SKILLS`.
@@ -74181,7 +74177,7 @@ class RegistryRecordSummary:
     record_version: str
     """The version of the registry record."""
 
-    status: RegistryRecordStatus
+    status: str
     """
     The current status of the registry record. Possible values include
     `CREATING`, `DRAFT`, `APPROVED`, `PENDING_APPROVAL`, `REJECTED`,
@@ -74536,7 +74532,7 @@ class SubmitRegistryRecordForApprovalOutput:
     record_id: str
     """The unique identifier of the registry record."""
 
-    status: RegistryRecordStatus
+    status: str
     """The resulting status of the registry record after submission."""
 
     updated_at: datetime
@@ -75286,7 +75282,7 @@ class UpdatedSynchronizationType:
     be matched with `UpdatedSynchronizationConfiguration`.
     """
 
-    optional_value: SynchronizationType | None = None
+    optional_value: str | None = None
     """The updated synchronization type value."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -75353,7 +75349,7 @@ class UpdateRegistryRecordInput:
     `optionalValue` not specified.
     """
 
-    descriptor_type: DescriptorType | None = None
+    descriptor_type: str | None = None
     """
     The updated descriptor type for the registry record. Changing the
     descriptor type may require updating the `descriptors` field to match
@@ -75541,7 +75537,7 @@ class UpdateRegistryRecordOutput:
     name: str
     """The name of the updated registry record."""
 
-    descriptor_type: DescriptorType
+    descriptor_type: str
     """
     The descriptor type of the updated registry record. Possible values are
     `MCP`, `A2A`, `CUSTOM`, and `AGENT_SKILLS`.
@@ -75553,7 +75549,7 @@ class UpdateRegistryRecordOutput:
     record. For details, see the `Descriptors` data type.
     """
 
-    status: RegistryRecordStatus
+    status: str
     """
     The current status of the updated registry record. Possible values
     include `CREATING`, `DRAFT`, `APPROVED`, `PENDING_APPROVAL`, `REJECTED`,
@@ -75575,7 +75571,7 @@ class UpdateRegistryRecordOutput:
     status_reason: str | None = None
     """The reason for the current status of the updated registry record."""
 
-    synchronization_type: SynchronizationType | None = None
+    synchronization_type: str | None = None
     """The synchronization type of the updated registry record."""
 
     synchronization_configuration: SynchronizationConfiguration | None = None
@@ -75818,7 +75814,7 @@ class UpdateRegistryRecordStatusInput:
     specify either the Amazon Resource Name (ARN) or the ID of the record.
     """
 
-    status: RegistryRecordStatus | None = None
+    status: str | None = None
     """The target status for the registry record."""
 
     status_reason: str | None = None
@@ -75915,7 +75911,7 @@ class UpdateRegistryRecordStatusOutput:
     record_id: str
     """The unique identifier of the registry record."""
 
-    status: RegistryRecordStatus
+    status: str
     """The resulting status of the registry record."""
 
     status_reason: str
@@ -76128,7 +76124,7 @@ class CreateRegistryInput:
     description: str | None = field(repr=False, default=None)
     """A description of the registry."""
 
-    authorizer_type: RegistryAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer to use for the registry. This controls the
     authorization method for the Search and Invoke APIs used by consumers,
@@ -76384,7 +76380,7 @@ class RegistryStatus(UnknownEnumMixin, StrEnum):
 class DeleteRegistryOutput:
     """Dataclass for DeleteRegistryOutput structure."""
 
-    status: RegistryStatus
+    status: str
     """
     The current status of the registry, set to `DELETING` when deletion is
     initiated. For a list of all possible registry statuses, see the
@@ -76517,7 +76513,7 @@ class GetRegistryOutput:
     registry_arn: str
     """The Amazon Resource Name (ARN) of the registry."""
 
-    status: RegistryStatus
+    status: str
     """
     The current status of the registry. Possible values include `CREATING`,
     `READY`, `UPDATING`, `CREATE_FAILED`, `UPDATE_FAILED`, `DELETING`, and
@@ -76533,7 +76529,7 @@ class GetRegistryOutput:
     description: str | None = field(repr=False, default=None)
     """The description of the registry."""
 
-    authorizer_type: RegistryAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer used by the registry. This controls the
     authorization method for the Search and Invoke APIs used by consumers.
@@ -76751,14 +76747,14 @@ class ListRegistriesInput:
     field in the response in this field to return the next batch of results.
     """
 
-    status: RegistryStatus | None = None
+    status: str | None = None
     """
     Filter registries by their current status. Possible values include
     `CREATING`, `READY`, `UPDATING`, `CREATE_FAILED`, `UPDATE_FAILED`,
     `DELETING`, and `DELETE_FAILED`.
     """
 
-    authorizer_type: RegistryAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     Filter registries by their authorizer type. Possible values are
     `CUSTOM_JWT` and `AWS_IAM`. For more information about authorizer types,
@@ -76842,7 +76838,7 @@ class RegistrySummary:
     registry_arn: str
     """The Amazon Resource Name (ARN) of the registry."""
 
-    status: RegistryStatus
+    status: str
     """
     The current status of the registry. Possible values include `CREATING`,
     `READY`, `UPDATING`, `CREATE_FAILED`, `UPDATE_FAILED`, `DELETING`, and
@@ -76858,7 +76854,7 @@ class RegistrySummary:
     description: str | None = field(repr=False, default=None)
     """The description of the registry."""
 
-    authorizer_type: RegistryAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer used by the registry. This controls the
     authorization method for the Search and Invoke APIs used by consumers.
@@ -77267,7 +77263,7 @@ class UpdateRegistryOutput:
     registry_arn: str
     """The Amazon Resource Name (ARN) of the updated registry."""
 
-    status: RegistryStatus
+    status: str
     """
     The current status of the updated registry. Possible values include
     `CREATING`, `READY`, `UPDATING`, `CREATE_FAILED`, `UPDATE_FAILED`,
@@ -77283,7 +77279,7 @@ class UpdateRegistryOutput:
     description: str | None = field(repr=False, default=None)
     """The description of the updated registry."""
 
-    authorizer_type: RegistryAuthorizerType | None = None
+    authorizer_type: str | None = None
     """
     The type of authorizer used by the updated registry. This controls the
     authorization method for the Search and Invoke APIs used by consumers.
@@ -78944,7 +78940,7 @@ class SchemaDefinition:
     structure of the API that the target exposes.
     """
 
-    type: SchemaType
+    type: str
     """
     The type of the schema definition. This field specifies the data type of
     the schema.
@@ -79909,7 +79905,7 @@ class CreateGatewayTargetOutput:
     updated_at: datetime
     """The timestamp when the target was last updated."""
 
-    status: TargetStatus
+    status: str
     """The current status of the target."""
 
     name: str = field(repr=False)
@@ -79952,7 +79948,7 @@ class CreateGatewayTargetOutput:
     authorization code grant type and requires user federation.
     """
 
-    protocol_type: TargetProtocolType | None = None
+    protocol_type: str | None = None
     """The protocol type of the created gateway target."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -80188,7 +80184,7 @@ class GatewayTarget:
     updated_at: datetime
     """The date and time at which the target was updated."""
 
-    status: TargetStatus
+    status: str
     """The status of the gateway target."""
 
     name: str = field(repr=False)
@@ -80238,7 +80234,7 @@ class GatewayTarget:
     authorization code grant type and requires user federation.
     """
 
-    protocol_type: TargetProtocolType | None = None
+    protocol_type: str | None = None
     """The protocol type of the gateway target."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -80454,7 +80450,7 @@ class GetGatewayTargetOutput:
     updated_at: datetime
     """The timestamp when the gateway target was last updated."""
 
-    status: TargetStatus
+    status: str
     """The current status of the gateway target."""
 
     name: str = field(repr=False)
@@ -80500,7 +80496,7 @@ class GetGatewayTargetOutput:
     authorization code grant type and requires user federation.
     """
 
-    protocol_type: TargetProtocolType | None = None
+    protocol_type: str | None = None
     """The protocol type of the gateway target."""
 
     def serialize(self, serializer: ShapeSerializer):
@@ -80887,7 +80883,7 @@ class UpdateGatewayTargetOutput:
     updated_at: datetime
     """The timestamp when the gateway target was last updated."""
 
-    status: TargetStatus
+    status: str
     """The current status of the updated gateway target."""
 
     name: str = field(repr=False)
@@ -80930,7 +80926,7 @@ class UpdateGatewayTargetOutput:
     authorization code grant type and requires user federation.
     """
 
-    protocol_type: TargetProtocolType | None = None
+    protocol_type: str | None = None
     """The protocol type of the updated gateway target."""
 
     def serialize(self, serializer: ShapeSerializer):
