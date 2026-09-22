@@ -35,7 +35,7 @@ you the option to install only what fits your needs.
 
 **Choose [Boto3](https://github.com/boto/boto3) if you** need production stability, full AWS service coverage, synchronous workloads, or features like paginators, waiters, and presigned URLs.
 
-**Choose this AWS SDK for Python (Version 4) if you** are evaluating native async capabilities, building high-throughput async prototypes, working with streaming services in test environments, or want to provide feedback to shape the GA release.
+**Choose the AWS SDK for Python (Version 4) if you** are evaluating native async capabilities, building high-throughput async prototypes, working with streaming services in test environments, or want to provide feedback to shape the GA release.
 
 ## Installation
 
