@@ -5,11 +5,9 @@
 [apache-url]: https://github.com/aws/aws-sdk-python/blob/main/LICENSE
 
 > [!WARNING]
-> **Experimental — Not for production use**
+> The AWS SDK for Python (Version 4) is **experimental** and in early development. It is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
 >
-> The SDK for Python (Version 4) is **experimental**, non-GA software in early development. It is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
->
-> **For production deployments, use [Boto3](https://github.com/boto/boto3)** — the established, generally available AWS SDK for Python with full coverage of all AWS services.
+> **For production deployments, use [Boto3](https://github.com/boto/boto3)**: the established, generally available AWS SDK for Python with full coverage of all AWS services.
 
 This repository contains the next-generation AWS SDK for Python (Version 4), rebuilt from
 the ground up with an async-first, modular architecture. These new clients allow
@@ -19,16 +17,16 @@ you the option to install only what fits your needs.
 
 ### Key features
 
-+ **Native asynchronous APIs** — Service clients use Python `async` and `await` for non-blocking operations and concurrent I/O.
-+ **Bidirectional streaming** — Supported clients can send and receive event streams concurrently over HTTP/2.
-+ **Modular packages** — Each service client is available as a separate package (e.g., `aws-sdk-dynamodb`), reducing the dependencies you install and deploy.
-+ **Generated types** — Type annotations provide editor completion and static-analysis support.
++ **Native asynchronous APIs**: Service clients use Python `async` and `await` for non-blocking operations and concurrent I/O.
++ **Bidirectional streaming**: Supported clients can send and receive event streams concurrently over HTTP/2.
++ **Modular packages**: Each service client is available as a separate package (e.g., `aws-sdk-dynamodb`), reducing the dependencies you install and deploy.
++ **Generated types**: Type annotations provide editor completion and static-analysis support.
 
 ### When to use this SDK vs. Boto3
 
 | | **AWS SDK for Python (Version 4)** | **[Boto3](https://github.com/boto/boto3)** |
 | --- | --- | --- |
-| Release status | Experimental (not GA) | General Availability (Production ready) |
+| Release status | Experimental | General Availability |
 | Production use | Not recommended | Yes |
 | Architecture | Async-first, modular per-service packages | Synchronous, monolithic package |
 | Service coverage | 24 services (expanding) | All AWS services |
