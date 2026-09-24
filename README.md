@@ -1,15 +1,15 @@
-## AWS SDK for Python (Version 4)
+## AWS SDK for Python v4
 [![Apache 2 licensed][apache-badge]][apache-url]
 
 [apache-badge]: https://img.shields.io/badge/license-APACHE2-blue.svg
 [apache-url]: https://github.com/aws/aws-sdk-python/blob/main/LICENSE
 
 > [!WARNING]
-> The AWS SDK for Python (Version 4) is **experimental** and in early development. It is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
+> The AWS SDK for Python v4 is **experimental** and in early development. It is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
 >
 > **For production deployments, use [Boto3](https://github.com/boto/boto3)**: the established, generally available AWS SDK for Python with full coverage of all AWS services.
 
-This repository contains the next-generation AWS SDK for Python (Version 4), rebuilt from
+This repository contains the next-generation AWS SDK for Python v4, rebuilt from
 the ground up with an async-first, modular architecture. These new clients allow
 you to interact with select AWS services using Python's native `async`/`await`
 functionality. Unlike Boto3, these clients are distributed per-service, leaving
@@ -24,7 +24,7 @@ you the option to install only what fits your needs.
 
 ### When to use this SDK vs. Boto3
 
-| | **AWS SDK for Python (Version 4)** | **[Boto3](https://github.com/boto/boto3)** |
+| | **AWS SDK for Python v4** | **[Boto3](https://github.com/boto/boto3)** |
 | --- | --- | --- |
 | Release status | Experimental | General Availability |
 | Production use | Not recommended | Yes |
@@ -33,7 +33,7 @@ you the option to install only what fits your needs.
 
 **Choose [Boto3](https://github.com/boto/boto3) if you** need production stability, full AWS service coverage, synchronous workloads, or features like paginators, waiters, and presigned URLs.
 
-**Choose the AWS SDK for Python (Version 4) if you** are evaluating native async capabilities, building high-throughput async prototypes, working with streaming services in test environments, or want to provide feedback to shape the GA release.
+**Choose the AWS SDK for Python v4 if you** are evaluating native async capabilities, building high-throughput async prototypes, working with streaming services in test environments, or want to provide feedback to shape the GA release.
 
 ## Installation
 
