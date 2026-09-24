@@ -5,9 +5,9 @@
 [apache-url]: https://github.com/aws/aws-sdk-python/blob/main/LICENSE
 
 > [!WARNING]
-> **Developer Preview — Not for production use**
+> **Experimental — Not for production use**
 >
-> The SDK for Python (Version 4) is in **Developer Preview** and is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
+> The SDK for Python (Version 4) is **experimental**, non-GA software in early development. It is intended for evaluation and testing in pre-production environments only. Do not use it for production workloads. APIs and behavior might change before general availability.
 >
 > **For production deployments, use [Boto3](https://github.com/boto/boto3)** — the established, generally available AWS SDK for Python with full coverage of all AWS services.
 
@@ -28,7 +28,7 @@ you the option to install only what fits your needs.
 
 | | **AWS SDK for Python (Version 4)** | **[Boto3](https://github.com/boto/boto3)** |
 | --- | --- | --- |
-| Release status | Developer Preview | General Availability (Production ready) |
+| Release status | Experimental (not GA) | General Availability (Production ready) |
 | Production use | Not recommended | Yes |
 | Architecture | Async-first, modular per-service packages | Synchronous, monolithic package |
 | Service coverage | 24 services (expanding) | All AWS services |
@@ -87,7 +87,7 @@ aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
 aws_session_token = YOUR_SESSION_TOKEN
 ```
 
-For the credential sources that the Developer Preview supports, see
+For the credential sources that the experimental SDK supports, see
 [Credential providers](https://docs.aws.amazon.com/sdk-for-python/v4/guide/credential-providers.html)
 in the developer guide.
 
